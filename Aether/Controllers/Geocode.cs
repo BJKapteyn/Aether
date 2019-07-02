@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Aether.Models;
 
 namespace Aether.Controllers
 {
@@ -33,6 +34,34 @@ namespace Aether.Controllers
         private static double degreesToRadians(double deg)
         {
             return deg * (Math.PI / 180);
+        }
+
+        public static List<Sensor> OrderedSensors(List<Sensor> sensors, string address)
+        {
+            for (int i = 0; i < sensors.Count; i++)
+            {
+                List<double> userLocation = ParseUserLocation(address);
+                sensors[i].Distance = LatLongDistance(userLocation[0], userLocation[1], sensors[i].Lat, sensors[i].Long);
+            }
+
+            sensors.OrderBy(x => x.Distance).ToList();
+
+            return sensors;
+        }
+
+        public static List<double> ParseUserLocation(string address)
+        {
+            //List<Sensor> sensors = Sensor.GetSensors();
+            //List<Sensor> shortSensors = new List<Sensor>();
+            //Changes the Address to a longitude and latitude coordinate from the google geocode API
+            //JToken jsonAddress = GoogleMapDAL.GoogleJson(address);
+
+            //double addressLat = double.Parse(jsonAddress["results"][0]["geometry"]["location"]["lat"].ToString());
+            //double addressLng = double.Parse(jsonAddress["results"][0]["geometry"]["location"]["lng"].ToString());
+
+            List<double> userLocation = new List<double>(); //{ addressLat, addressLng };
+
+            return userLocation;
         }
     }
 }
