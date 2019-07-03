@@ -1,5 +1,5 @@
-﻿@{
-    var hour = DateTime.Now.Hour;
+﻿
+@{
+    int O3AQI = (int)ViewBag.CurrentO3AQI;
 }
-
-<h1>@hour</h1>
+<h1>The Current O3 AQI is @O3AQI</h1>

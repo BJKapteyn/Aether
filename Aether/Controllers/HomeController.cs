@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Aether.Models;
+using Newtonsoft.Json.Linq;
 
 namespace Aether.Controllers
 {
@@ -12,6 +13,11 @@ namespace Aether.Controllers
     {
         public IActionResult Index()
         {
+            JToken jt = ParseAPI.APICall();
+
+            int CurrentAQI = (int)jt[1]["AQI"];
+            ViewBag.CurrentO3AQI = CurrentAQI;
+
             return View();
         }
 
