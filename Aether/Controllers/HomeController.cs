@@ -14,9 +14,28 @@ namespace Aether.Controllers
         public IActionResult Index()
         {
             JToken jt = ParseAPI.APICall();
+            List<AQIs> ListOfAQIs = new List<AQIs>();
 
-            int CurrentAQI = (int)jt[1]["AQI"];
-            ViewBag.CurrentO3AQI = CurrentAQI;
+            int count = jt.Count();
+
+            if (jt == null)
+            {
+                // content to come
+            }
+            else if (jt.Count() == 1)
+            {
+                ListOfAQIs.Add(new AQIs(jt, 1));
+            }
+            else
+            {
+                for (int i = 0; i < jt.Count(); i++)
+                {
+                    ListOfAQIs.Add(new AQIs(jt, i));
+                }
+            }
+
+            ViewBag.CurrentO3AQI = count;
+            ViewBag.JTokenCount = ListOfAQIs.Count();
 
             return View();
         }
