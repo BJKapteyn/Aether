@@ -20,11 +20,7 @@ namespace Aether.Controllers
 
             if (jt == null)
             {
-                // content to come
-            }
-            else if (jt.Count() == 1)
-            {
-                ListOfAQIs.Add(new AQIs(jt, 1));
+                ViewBag.Message = "Ooops. That didn't work.";
             }
             else
             {
@@ -34,8 +30,7 @@ namespace Aether.Controllers
                 }
             }
 
-            ViewBag.CurrentO3AQI = count;
-            ViewBag.JTokenCount = ListOfAQIs.Count();
+            ViewBag.AQIList = ListOfAQIs;
 
             return View();
         }

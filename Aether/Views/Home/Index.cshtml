@@ -1,6 +1,16 @@
-﻿
+﻿@model Aether.Models.AQIs
+
+<h1 style="color:red">@ViewBag.Message</h1>
+
 @{
-    int O3AQI = (int)ViewBag.CurrentO3AQI;
-    int count = (int)ViewBag.JTokenCount;
+    foreach (AQIs a in (List<AQIs>)ViewBag.AQIList)
+    {
+        <p>@a.Pollutant AQI: <b>@a.AQI</b></p>
+    }
+
+    string currentTime = DateTime.Now.ToString("yyyy-MM-ddTHH");
+
+
 }
-<h1>The JToken count is: @count</h1>
+
+<p>@currentTime</p>
