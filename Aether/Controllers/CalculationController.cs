@@ -10,6 +10,55 @@ namespace Aether.Controllers
     public class CalculationController : Controller
     {
         public static List<BreakPointTable> breakPointTable = BreakPointTable.GetPollutantTypes();
+        public static List<double> pollutantAverages = new List<double>();
+        
+        //sensor s
+        public static void SumAndAveragePollutantReadings(Sensor s)
+        {
+            string sensorLocation = s.Name;
+
+            if (sensorLocation.Contains("graq"))
+            {
+                double ostO3Sum = (double)PollutantController.pollutantData.Sum(x => x.O3);
+                double ostO3Average = Math.Round(ostO3Sum / PollutantController.pollutantData.Count, 3);
+
+                double ostPM25Sum = (double)PollutantController.pollutantData.Sum(x => x.Pm25);
+                double ostPM25Average = (double)Math.Round(ostPM25Sum / PollutantController.pollutantData.Count, 1);
+
+                double ostPM10Sum = (double)PollutantController.pollutantData.Sum(x => x.PM10);
+                double ostPM10Average = (double)Math.Round(ostPM10Sum / PollutantController.pollutantData.Count, 0);
+
+                pollutantAverages.Add(ostO3Average); //index[0] O3 ppm
+                pollutantAverages.Add(ostPM25Average); //index[1] PM2.5 ug/m3
+                pollutantAverages.Add(ostPM10Average); //index[2] PM10 ug/m3
+
+            }
+            else
+            {
+                double simmsO3Sum = (double)PollutantController.pollutantData.Sum(x => x.O3);
+                double simmsO3Average = Math.Round(simmsO3Sum / PollutantController.pollutantData.Count, 3);
+
+                double simmsPM25Sum = (double)PollutantController.pollutantData.Sum(x => x.Pm25);
+                double simmsPM25Average = (double)Math.Round(simmsPM25Sum / PollutantController.pollutantData.Count, 1);
+
+                double simmsCOSum = (double)PollutantController.pollutantData.Sum(x => x.CO);
+                double simmsCOAverage = (double)Math.Round(simmsCOSum / PollutantController.pollutantData.Count, 1);
+
+                double simmsNO2Sum = (double)PollutantController.pollutantData.Sum(x => x.NO2);
+                double simmsNO2Average = (double)Math.Round(simmsNO2Sum / PollutantController.pollutantData.Count, 1);
+
+                double simmsSO2Sum = (double)PollutantController.pollutantData.Sum(x => x.SO2);
+                double simmsSO2Average = (double)Math.Round(simmsSO2Sum / PollutantController.pollutantData.Count, 1);
+
+                pollutantAverages.Add(simmsO3Average); //index[0] O3 ppm
+                pollutantAverages.Add(simmsPM25Average); //index[1] PM2.5 ug/m3
+                pollutantAverages.Add(0); //index[2] 
+                pollutantAverages.Add(simmsCOAverage); //index[3] 8 hr
+                pollutantAverages.Add(simmsNO2Average);  //index[4] ppb 1 hr
+                pollutantAverages.Add(simmsSO2Average);  //index[5] ppb 1 hr
+            }
+               
+        }
 
         public static double ConvertPPBtoPPM(double PollutantPPB)
         {
@@ -82,6 +131,50 @@ namespace Aether.Controllers
 
             double AQIForPollutant = ((Ihi - Ilo) / (BPhi - BPlow)) * (Cp - BPlow) + Ilo;
             return AQIForPollutant;
+        }
+
+        public static string ColorWarning(double reading)
+        {
+            if (reading >= 0 && reading < 51)
+            {
+                return "limegreen";
+            }
+            else if (reading >= 51 && reading < 101)
+            {
+                return "yellow";
+            }
+            else if (reading >= 101 && reading < 151)
+            {
+                return "orange";
+            }
+            else if (reading >= 151 && reading < 201)
+            {
+                return "red";
+            }
+            else if (reading >= 201 && reading < 301)
+            {
+                return "purple";
+            }
+            else
+            {
+                return "maroon";
+            }
+
+        }
+        public static string ColorWarningEO(double reading)
+        {
+            if (reading >= 0 && reading < 0.18)
+            {
+                return "limegreen";
+            }
+            else if (reading >= 0.18 && reading <= 1)
+            {
+                return "yellow";
+            }
+            else
+            {
+                return "red";
+            }
         }
     }
 }
