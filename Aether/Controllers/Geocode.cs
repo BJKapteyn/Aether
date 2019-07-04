@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Aether.Models;
 using Newtonsoft.Json.Linq;
 using System.Net.Http;
+using Newtonsoft.Json;
 
 namespace Aether.Controllers
 {
@@ -42,8 +43,8 @@ namespace Aether.Controllers
         {
             for (int i = 0; i < sensors.Count; i++)
             {
-                List<double> userLocation = ParseUserLocation(address);
-                sensors[i].Distance = LatLongDistance(userLocation[0], userLocation[1], sensors[i].Lat, sensors[i].Long);
+                UserLatLng userLocation = UserLocation(address);
+                sensors[i].Distance = LatLongDistance(userLocation.Lat, userLocation.Lng, sensors[i].Lat, sensors[i].Long);
             }
 
             sensors.OrderBy(x => x.Distance).ToList();
@@ -51,8 +52,13 @@ namespace Aether.Controllers
             return sensors;
         }
 
-        public static List<double> ParseUserLocation(string address)
+        public static async UserLatLng UserLocation(string address)
         {
+            UserLatLng userLocation = new UserLatLng();
+
+            var jsonAddress = (JToken)GeocodeingAPI.UserAddress(address);
+
+            userLocation.Lat = double.Parse(jsonAddress["results"][0]["geometry"]["location"]["lat"].ToString());
             //List<Sensor> sensors = Sensor.GetSensors();
             //List<Sensor> shortSensors = new List<Sensor>();
             //Changes the Address to a longitude and latitude coordinate from the google geocode API
@@ -61,9 +67,23 @@ namespace Aether.Controllers
             //double addressLat = double.Parse(jsonAddress["results"][0]["geometry"]["location"]["lat"].ToString());
             //double addressLng = double.Parse(jsonAddress["results"][0]["geometry"]["location"]["lng"].ToString());
 
-            List<double> userLocation = new List<double>(); //{ addressLat, addressLng };
+            //{ addressLat, addressLng };
 
             return userLocation;
+        }
+
+        public static string GoogleAddress(string streetAddress)
+        {
+            string[] addressArr = streetAddress.Split(' ');
+            string googleAddress = "";
+
+            for (int i = 0; i < addressArr.Length; i++)
+            {
+                googleAddress += addressArr[i] + "+";
+            }
+            googleAddress += ",+Grand+Rapids,+MI";
+
+            return googleAddress;
         }
     }
 }
