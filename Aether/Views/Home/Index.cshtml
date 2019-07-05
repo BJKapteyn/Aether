@@ -7,7 +7,7 @@
     string city = theList[0].City;
 }
 
-<p style="font-size:8rem; padding:10px; background-color:@ViewBag.AQIColor">The AQI in @city is <b>@ViewBag.highestAQI</b></p>
+<p style="font-size:8rem; padding:10px; background-color:#@ViewBag.AQIColor">The AQI in @city is <b>@ViewBag.highestAQI</b></p>
 
 
 @{
@@ -17,7 +17,7 @@
     }
 
     string currentTime = DateTime.Now.ToString("yyyy-MM-ddTHH");
-
+    
 
 }
 

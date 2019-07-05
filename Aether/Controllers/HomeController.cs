@@ -28,7 +28,6 @@ namespace Aether.Controllers
                 }
             }
 
-
             // Find highest AQI
             int highestAQI = 0;
             foreach(AQIs a in ListOfAQIs)
@@ -40,7 +39,21 @@ namespace Aether.Controllers
             }
 
             // Get AQI Color
-            string colorAQI = returnHexColor(highestAQI);
+            int AQIIndex;
+            if (highestAQI > 200 && highestAQI <= 300)
+            {
+                AQIIndex = 4;
+            }
+            else if (highestAQI > 300)
+            {
+                AQIIndex = 5;
+            }
+            else
+            {
+                AQIIndex = (highestAQI + 1) / 50;
+            }
+
+            string colorAQI = returnHexColor(AQIIndex);
 
             ViewBag.highestAQI = highestAQI;
             ViewBag.AQIColor = colorAQI;
@@ -77,37 +90,35 @@ namespace Aether.Controllers
 
 
 
-        public static string returnHexColor(int highestAQI)
+        public static string returnHexColor(int index)
         {
             string[] hexColors = { "00e400", "ffff00", "ff7e00", "ff0000", "8f3f97", "7e0023" };
 
-            if (highestAQI <= 50)
-            {
-                return "limegreen"; // GREEN 00e400
-            }
-            else if (highestAQI > 50 && highestAQI <= 100)
-            {
-                return "yellow"; // YELLOW ffff00
-            }
-            else if (highestAQI > 100 && highestAQI <= 150)
-            {
-                return "orange"; // ORANGE ff7e00
-            }
-            else if (highestAQI > 150 && highestAQI <= 200)
-            {
-                return "red"; // RED ff0000
-            }
-            else if (highestAQI > 200 && highestAQI <= 300)
-            {
-                return "purple"; // PURPLE 8f3f97
-            }
-            else
-            {
-                return "maroon"; // MAROON 7e0023
-            }
+            return hexColors[index];
+
+            //if (highestAQI <= 50)
+            //{
+            //    return "limegreen"; // GREEN 00e400 0
+            //}
+            //else if (highestAQI > 50 && highestAQI <= 100)
+            //{
+            //    return "yellow"; // YELLOW ffff00 1
+            //}
+            //else if (highestAQI > 100 && highestAQI <= 150)
+            //{
+            //    return "orange"; // ORANGE ff7e00 2
+            //}
+            //else if (highestAQI > 150 && highestAQI <= 200)
+            //{
+            //    return "red"; // RED ff0000 3
+            //}
+            //else if (highestAQI > 200 && highestAQI <= 300)
+            //{
+            //    return "purple"; // PURPLE 8f3f97 4
+            //}
+            //else
+            //{
+            //    return "maroon"; // MAROON 7e0023 5
         }
     }
-
-
-
 }

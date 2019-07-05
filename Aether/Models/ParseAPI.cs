@@ -15,7 +15,7 @@ namespace Aether.Models
             // DETROIT 48127
             // KZOO 49001
             // GR 49503
-            string zipCode = "49503";
+            string zipCode = "48127";
             string key = APIKeys.AirNowAPI; // key hidden in APIKeys Model
             
             string URL = $"http://www.airnowapi.org/aq/observation/zipCode/current/?format=application/json&zipCode={zipCode}&distance=10&API_KEY={key}";
