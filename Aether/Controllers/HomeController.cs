@@ -80,11 +80,9 @@ namespace Aether.Controllers
 
         public IActionResult About()
         {
-            //My Key
+            // METHOD FOR GETTING WEATHE FORECASTS
             string key = APIKeys.WeatherAPI;
-            //City code for Grand Rapids
             string cityCode = "4994358";
-
             string URL = $"http://api.openweathermap.org/data/2.5/forecast?id={cityCode}&APPID={key}";
 
             JToken jt = ParseAPI.APICall(URL);
