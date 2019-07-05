@@ -3,7 +3,15 @@
 <h1 style="color:red">@ViewBag.Message</h1>
 
 @{
-    foreach (AQIs a in (List<AQIs>)ViewBag.AQIList)
+    List<AQIs> theList = (List<AQIs>)ViewBag.AQIList;
+    string city = theList[0].City;
+}
+
+<p style="font-size:8rem; padding:10px; background-color:@ViewBag.AQIColor">The AQI in @city is <b>@ViewBag.highestAQI</b></p>
+
+
+@{
+    foreach (AQIs a in theList)
     {
         <p>@a.Pollutant AQI: <b>@a.AQI</b></p>
     }

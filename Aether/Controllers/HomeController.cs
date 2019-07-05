@@ -16,8 +16,6 @@ namespace Aether.Controllers
             JToken jt = ParseAPI.APICall();
             List<AQIs> ListOfAQIs = new List<AQIs>();
 
-            int count = jt.Count();
-
             if (jt == null)
             {
                 ViewBag.Message = "Ooops. That didn't work.";
@@ -30,10 +28,27 @@ namespace Aether.Controllers
                 }
             }
 
+
+            // Find highest AQI
+            int highestAQI = 0;
+            foreach(AQIs a in ListOfAQIs)
+            {
+                if (a.AQI > highestAQI)
+                {
+                    highestAQI = a.AQI;
+                }
+            }
+
+            // Get AQI Color
+            string colorAQI = returnHexColor(highestAQI);
+
+            ViewBag.highestAQI = highestAQI;
+            ViewBag.AQIColor = colorAQI;
             ViewBag.AQIList = ListOfAQIs;
 
             return View();
         }
+
 
         public IActionResult About()
         {
@@ -59,5 +74,40 @@ namespace Aether.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
+
+
+
+        public static string returnHexColor(int highestAQI)
+        {
+            string[] hexColors = { "00e400", "ffff00", "ff7e00", "ff0000", "8f3f97", "7e0023" };
+
+            if (highestAQI <= 50)
+            {
+                return "limegreen"; // GREEN 00e400
+            }
+            else if (highestAQI > 50 && highestAQI <= 100)
+            {
+                return "yellow"; // YELLOW ffff00
+            }
+            else if (highestAQI > 100 && highestAQI <= 150)
+            {
+                return "orange"; // ORANGE ff7e00
+            }
+            else if (highestAQI > 150 && highestAQI <= 200)
+            {
+                return "red"; // RED ff0000
+            }
+            else if (highestAQI > 200 && highestAQI <= 300)
+            {
+                return "purple"; // PURPLE 8f3f97
+            }
+            else
+            {
+                return "maroon"; // MAROON 7e0023
+            }
+        }
     }
+
+
+
 }
