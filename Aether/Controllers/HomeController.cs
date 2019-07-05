@@ -16,11 +16,8 @@ namespace Aether.Controllers
             // FROM OLD METHOD OF CALLING API BY AREA AND THIS ALSO REQUIRED A TIME
             //DateTime nowHour = DateTime.Now.AddHours(4); // to add 4 hours to UTC for EDT
             //string currentTime = nowHour.ToString("yyyy-MM-ddTHH");
-
-            // DETROIT 48127
-            // KZOO 49001
-            // GR 49503
-            string zipCode = "49503";
+            
+            string zipCode = "49503";  // GR 49503 - KZOO 49001 - DETROIT 48127
             string key = APIKeys.AirNowAPI; // key hidden in APIKeys Model
 
             // URL to get area with historic data via datetime
@@ -83,7 +80,30 @@ namespace Aether.Controllers
 
         public IActionResult About()
         {
-            ViewData["Message"] = "Your application description page.";
+            //My Key
+            string key = APIKeys.WeatherAPI;
+            //City code for Grand Rapids
+            string cityCode = "4994358";
+
+            string URL = $"http://api.openweathermap.org/data/2.5/forecast?id={cityCode}&APPID={key}";
+
+            JToken jt = ParseAPI.APICall(URL);
+
+            // Forecast readings are every 3h: 8=1 day, 24=3days, 39=5days minus 3h
+            List<int> indexes = new List<int>() { 0, 8, 24, 39 };
+
+            List<WeatherDataFromAPI> weatherForecast = new List<WeatherDataFromAPI>();
+
+            foreach (int index in indexes)
+            {
+                WeatherDataFromAPI wd = new WeatherDataFromAPI(jt, index);
+                wd.TemperatureC = wd.TemperatureK - 273.15;
+                wd.TemperatureF = (wd.TemperatureC) * 9 / 5 + 32;
+
+                weatherForecast.Add(wd);
+            }
+
+            ViewBag.WeatherForecast = weatherForecast;
 
             return View();
         }

@@ -1,1 +1,12 @@
-﻿
+﻿@model Aether.Models.WeatherDataFromAPI
+
+
+@{
+    List<WeatherDataFromAPI> wd = (List<WeatherDataFromAPI>)ViewBag.WeatherForecast;
+
+    foreach (WeatherDataFromAPI w in wd)
+    {
+        <p>@w.Clouds - @Math.Round(w.TemperatureC) °C - @w.WindSpeed m/s</p>
+    }
+}
+
