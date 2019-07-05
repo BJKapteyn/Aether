@@ -9,53 +9,61 @@ namespace Aether.Controllers
 {
     public class CalculationController : Controller
     {
-        public static List<BreakPointTable> breakPointTable = BreakPointTable.GetPollutantTypes();
         public static List<double> pollutantAverages = new List<double>();
-        
+        public static List<int> breakPointIndexes = new List<int>();
+         public static List<BreakPointTable> breakPointTable = BreakPointTable.GetPollutantTypes();
+        public static List<double> pollutantAQIs = new List<double>();
+
+
         //sensor s
-        public static void SumAndAveragePollutantReadings(Sensor s)
+        public static void SumAndAveragePollutantReadings()
         {
-            string sensorLocation = s.Name;
+            string sensorLocation = "graq0107";
 
             if (sensorLocation.Contains("graq"))
             {
-                double ostO3Sum = (double)PollutantController.pollutantData.Sum(x => x.O3);
-                double ostO3Average = Math.Round(ostO3Sum / PollutantController.pollutantData.Count, 3);
+                double ostO3Sum = (double)HomeController.pollutantData.Sum(x => x.O3);
+                double ostO3Average = Math.Round(ostO3Sum / HomeController.pollutantData.Count, 3);
 
-                double ostPM25Sum = (double)PollutantController.pollutantData.Sum(x => x.Pm25);
-                double ostPM25Average = (double)Math.Round(ostPM25Sum / PollutantController.pollutantData.Count, 1);
+                double ostPM25Sum = (double)HomeController.pollutantData.Sum(x => x.Pm25);
+                double ostPM25Average = (double)Math.Round(ostPM25Sum / HomeController.pollutantData.Count, 1);
 
-                double ostPM10Sum = (double)PollutantController.pollutantData.Sum(x => x.PM10);
-                double ostPM10Average = (double)Math.Round(ostPM10Sum / PollutantController.pollutantData.Count, 0);
+                double ostPM10Sum = (double)HomeController.pollutantData.Sum(x => x.PM10);
+                double ostPM10Average = (double)Math.Round(ostPM10Sum / HomeController.pollutantData.Count, 0);
 
                 pollutantAverages.Add(ostO3Average); //index[0] O3 ppm
-                pollutantAverages.Add(ostPM25Average); //index[1] PM2.5 ug/m3
+                pollutantAverages.Add(0); // blank index
                 pollutantAverages.Add(ostPM10Average); //index[2] PM10 ug/m3
+                pollutantAverages.Add(ostPM25Average); //index[3] PM2.5 ug/m3
+                pollutantAverages.Add(0); // blank index
+                pollutantAverages.Add(0); // blank index
+                pollutantAverages.Add(0); // blank index
 
             }
             else
             {
-                double simmsO3Sum = (double)PollutantController.pollutantData.Sum(x => x.O3);
-                double simmsO3Average = Math.Round(simmsO3Sum / PollutantController.pollutantData.Count, 3);
+                double simmsO3Sum = (double)HomeController.pollutantData.Sum(x => x.O3);
+                double simmsO3Average = Math.Round(simmsO3Sum / HomeController.pollutantData.Count, 3);
 
-                double simmsPM25Sum = (double)PollutantController.pollutantData.Sum(x => x.Pm25);
-                double simmsPM25Average = (double)Math.Round(simmsPM25Sum / PollutantController.pollutantData.Count, 1);
+                double simmsPM25Sum = (double)HomeController.pollutantData.Sum(x => x.Pm25);
+                double simmsPM25Average = (double)Math.Round(simmsPM25Sum / HomeController.pollutantData.Count, 1);
 
-                double simmsCOSum = (double)PollutantController.pollutantData.Sum(x => x.CO);
-                double simmsCOAverage = (double)Math.Round(simmsCOSum / PollutantController.pollutantData.Count, 1);
+                double simmsCOSum = (double)HomeController.pollutantData.Sum(x => x.CO);
+                double simmsCOAverage = (double)Math.Round(simmsCOSum / HomeController.pollutantData.Count, 1);
 
-                double simmsNO2Sum = (double)PollutantController.pollutantData.Sum(x => x.NO2);
-                double simmsNO2Average = (double)Math.Round(simmsNO2Sum / PollutantController.pollutantData.Count, 1);
+                double simmsSO2Sum = (double)HomeController.pollutantData.Sum(x => x.SO2);
+                double simmsSO2Average = (double)Math.Round(simmsSO2Sum / HomeController.pollutantData.Count, 1);
 
-                double simmsSO2Sum = (double)PollutantController.pollutantData.Sum(x => x.SO2);
-                double simmsSO2Average = (double)Math.Round(simmsSO2Sum / PollutantController.pollutantData.Count, 1);
+                double simmsNO2Sum = (double)HomeController.pollutantData.Sum(x => x.NO2);
+                double simmsNO2Average = (double)Math.Round(simmsNO2Sum / HomeController.pollutantData.Count, 1);
 
                 pollutantAverages.Add(simmsO3Average); //index[0] O3 ppm
-                pollutantAverages.Add(simmsPM25Average); //index[1] PM2.5 ug/m3
-                pollutantAverages.Add(0); //index[2] 
-                pollutantAverages.Add(simmsCOAverage); //index[3] 8 hr
-                pollutantAverages.Add(simmsNO2Average);  //index[4] ppb 1 hr
+                pollutantAverages.Add(0); // blank index
+                pollutantAverages.Add(simmsPM25Average); //index[2] PM2.5 ug/m3
+                pollutantAverages.Add(0); //blank index 
+                pollutantAverages.Add(simmsCOAverage); //index[4] 8 hr
                 pollutantAverages.Add(simmsSO2Average);  //index[5] ppb 1 hr
+                pollutantAverages.Add(simmsNO2Average);  //index[6] ppb 1 hr
             }
                
         }
@@ -101,7 +109,7 @@ namespace Aether.Controllers
         }
 
         //Calculate what breakpoint index to use
-        public static int BreakpointIndex(double Pollutant, int pollutantIndex)
+        public static int BreakpointIndexCalculation(double Pollutant, int pollutantIndex)
         {
             int breakPointIndex = 0;
 
@@ -120,7 +128,27 @@ namespace Aether.Controllers
             return breakPointIndex;
         }
 
-        public static double CalculateAQI(double pollutantReading, int breakpointIndex, int pollutantIndex)
+        public static void BreakPointIndex()
+        {
+            if (pollutantAverages[0] < 0.125)
+            {
+                breakPointIndexes.Add(BreakpointIndexCalculation(pollutantAverages[0], 0));
+            }
+            else
+            {
+                breakPointIndexes.Add(BreakpointIndexCalculation(pollutantAverages[0], 1));
+            }
+
+            breakPointIndexes.Add(BreakpointIndexCalculation(pollutantAverages[2], 2));
+            breakPointIndexes.Add(BreakpointIndexCalculation(pollutantAverages[3], 3));
+            breakPointIndexes.Add(BreakpointIndexCalculation(pollutantAverages[4], 4));
+            breakPointIndexes.Add(BreakpointIndexCalculation(pollutantAverages[5], 5));
+            breakPointIndexes.Add(BreakpointIndexCalculation(pollutantAverages[6], 6));
+
+            //o3 8hr = 0, o3 1hr = 1, pm10 = 2, pm2.5 = 3, co = 4, so2 = 5, no2 = 6
+        }
+
+        public static double AQIEquation(double pollutantReading, int breakpointIndex, int pollutantIndex)
         {
             //index 7 in breakpoint table is the AQI
             double Ihi = breakPointTable[7].High[breakpointIndex];
@@ -133,48 +161,31 @@ namespace Aether.Controllers
             return AQIForPollutant;
         }
 
-        public static string ColorWarning(double reading)
+        public static double CalculateAQI(double pollutantPPM, int breakpointIndex, int pollutantIndex)
         {
-            if (reading >= 0 && reading < 51)
-            {
-                return "limegreen";
-            }
-            else if (reading >= 51 && reading < 101)
-            {
-                return "yellow";
-            }
-            else if (reading >= 101 && reading < 151)
-            {
-                return "orange";
-            }
-            else if (reading >= 151 && reading < 201)
-            {
-                return "red";
-            }
-            else if (reading >= 201 && reading < 301)
-            {
-                return "purple";
-            }
-            else
-            {
-                return "maroon";
-            }
+            // using 1h reading
+            double airQuailtyIndex = CalculationController.AQIEquation(pollutantPPM, breakpointIndex, pollutantIndex);
 
+            return airQuailtyIndex;
         }
-        public static string ColorWarningEO(double reading)
+
+        public static void AQI()
         {
-            if (reading >= 0 && reading < 0.18)
-            {
-                return "limegreen";
-            }
-            else if (reading >= 0.18 && reading <= 1)
-            {
-                return "yellow";
-            }
-            else
-            {
-                return "red";
-            }
+
+            double O3AQI = Math.Round(CalculateAQI(pollutantAverages[0], breakPointIndexes[0], 0),0);
+            double PM10AQI = Math.Round(CalculateAQI(pollutantAverages[2], breakPointIndexes[1], 1), 0);
+            double PM25AQI = Math.Round(CalculateAQI(pollutantAverages[3], breakPointIndexes[2], 2), 0);
+            double COAQI = Math.Round(CalculateAQI(pollutantAverages[4], breakPointIndexes[3], 3), 0);
+            double SO2AQI = Math.Round(CalculateAQI(pollutantAverages[5], breakPointIndexes[4], 4), 0);
+            double NO2AQI = Math.Round(CalculateAQI(pollutantAverages[6], breakPointIndexes[5], 5), 0);
+
+            pollutantAQIs.Add(O3AQI);
+            pollutantAQIs.Add(PM10AQI);
+            pollutantAQIs.Add(PM25AQI);
+            pollutantAQIs.Add(COAQI);
+            pollutantAQIs.Add(SO2AQI);
+            pollutantAQIs.Add(NO2AQI);
+
         }
     }
 }
