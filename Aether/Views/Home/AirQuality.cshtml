@@ -1,4 +1,11 @@
 ﻿
 @model DisplayToUserInformation
 
-The Air Quality(AQI) For Your Location is <span><b>@Model.AQIFirstO3</b></span>
+<p>The Air Quality(AQI) For Your Location is @Model.AQIToday</p><br>
+
+<p>O3: @Model.AQIO3</p><br>
+<p>PM 10: @Model.AQIPM10</p><br>
+<p>PM 2.5: @Model.AQIPM25</p><br>
+<p>CO: @Model.AQICO</p><br>
+<p>SO2: @Model.AQISO2</p><br>
+<p>NO2: @Model.AQINO2</p>

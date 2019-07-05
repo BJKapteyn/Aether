@@ -8,9 +8,8 @@ namespace Aether.Models
     public class DisplayToUserInformation
     {
         public string PollutantWarning { get; set; }
-        public double AQIFirstO3 { get; set; }
-        public double AQISecondO3 { get; set; }
-        public double AQIThirdO3{ get; set; }
+        public double AQIToday { get; set; }
+        public double AQIO3 { get; set; }
         public double AQIPM10 { get; set; }
         public double AQIPM25 { get; set; }
         public double AQICO { get; set; }
