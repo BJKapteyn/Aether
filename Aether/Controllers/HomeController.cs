@@ -29,9 +29,12 @@ namespace Aether.Controllers
             return View();
         }
 
-        public IActionResult Test()
+        public IActionResult Test(string address)
         {
-            return View();
+            List<Sensor> sensors = Sensor.GetSensors();
+            UserLatLng latLng = Geocode.UserLocation(address).Result;
+            //ViewData.Model = latLng;
+            return View(latLng);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
