@@ -7,7 +7,11 @@
 
     if (theList.Count() != 0)
     {
-        <p style="font-size:6rem; padding:10px; background-color:#@ViewBag.AQIColor">The AQI <b>@ViewBag.highestAQI</b></p>
+        <h1 style="padding:10px; background-color:#@ViewBag.AQIColor">The AQI for Grand Rapids is currently <b>@ViewBag.highestAQI</b></h1>
+    }
+    else
+    {
+        <h1 style="color: red">Oops. The API didn't return anything.</h1>
     }
 }
 
@@ -17,7 +21,7 @@
     {
         if (a.AQI == ViewBag.highestAQI)
         {
-            <p style="font-size: 4rem">Your weather quality is @a.Rating</p>
+            <h2>Your weather quality is @a.Rating</h2>
         }
     }
 }

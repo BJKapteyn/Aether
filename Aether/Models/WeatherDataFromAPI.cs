@@ -21,9 +21,9 @@ namespace Aether.Models
         public WeatherDataFromAPI(JToken weather, int index)
         {
             TemperatureK = (double)weather["list"][index]["main"]["temp"];
-            Pressure = (double)weather["list"][index]["main"]["pressure"];
+            Pressure = (double)weather["list"][index]["main"]["grnd_level"]; // changed to ground level from sea level 19-07-07
             Humidity = (int)weather["list"][index]["main"]["humidity"];
-            Clouds = weather["list"][index]["weather"][0]["description"].ToString();
+            Clouds = weather["list"][index]["weather"][0]["description"].ToString(); // sky conditions
             WindSpeed = (double)weather["list"][index]["wind"]["speed"];
             WindDirection = (double)weather["list"][index]["wind"]["deg"];
         }

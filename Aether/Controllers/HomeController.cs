@@ -12,64 +12,14 @@ namespace Aether.Controllers
     public class HomeController : Controller
     {
         public IActionResult Index()
-        {            
-            string zipCode = "49503";  // GR 49503 - KZOO 49001 - DETROIT 48127
-            string key = APIKeys.AirNowAPI; // key hidden in APIKeys Model
-            string dateTime = "2019-07-04T00-0000";
-
-            // URL to get historic data via Zip Code
-            string URL = $"http://www.airnowapi.org/aq/observation/zipCode/historical/?format=application/json&zipCode={zipCode}&date={dateTime}&distance=25&API_KEY={key}";
-
-            // URL to get data via Zip Code
-            //string URL = $"http://www.airnowapi.org/aq/observation/zipCode/current/?format=application/json&zipCode={zipCode}&distance=10&API_KEY={key}";
-
-            JToken jt = ParseAPI.APICall(URL);
-            List<AQIs> ListOfAQIs = new List<AQIs>();
-
-            if (jt.Count() == 0)
-            {
-                ViewBag.Message = "Ooops. The API is Down.";
-            }
-            else
-            {
-                for (int i = 0; i < jt.Count(); i++)
-                {
-                    ListOfAQIs.Add(new AQIs(jt, i));
-                }
-            }
-
-            // Find highest AQI
-            int highestAQI = 0;
-            foreach(AQIs a in ListOfAQIs)
-            {
-                if (a.AQI > highestAQI)
-                {
-                    highestAQI = a.AQI;
-                }
-            }
-
-            // Get AQI Color
-            int AQIIndex;
-            if (highestAQI > 200)
-            {
-                AQIIndex = (highestAQI - 1) / 100 + 2;
-            }
-            else
-            {
-                AQIIndex = (highestAQI - 1) / 50;
-            }
-
-            // In case AQI gets over 400, set index to 5
-            if (AQIIndex > 5)
-            {
-                AQIIndex = 5;
-            }
-
-            string colorAQI = returnHexColor(AQIIndex);
+        {
+            List<AQIs> AQIList = APIController.GetListAQI();
+            int highestAQI = getHighestAQI(AQIList);
+            int AQIIndex = getAQIIndexPosition(highestAQI);
 
             ViewBag.highestAQI = highestAQI;
-            ViewBag.AQIColor = colorAQI;
-            ViewBag.AQIList = ListOfAQIs;
+            ViewBag.AQIColor = returnHexColor(AQIIndex);
+            ViewBag.AQIList = AQIList;
 
             return View();
         }
@@ -131,6 +81,54 @@ namespace Aether.Controllers
             string[] hexColors = { "00e400", "ffff00", "ff7e00", "ff0000", "8f3f97", "7e0023" };
             //                      Green     Yellow    Orange    Red       Purple    Maroon
             return hexColors[index];
+
+        }
+
+
+        public static int getHighestAQI(List<AQIs> AQIList)
+        {
+            int highestAQI = 0;
+
+            foreach (AQIs a in AQIList)
+            {
+                if (a.AQI > highestAQI)
+                {
+                    highestAQI = a.AQI;
+                }
+            }
+
+            return highestAQI;
+        }
+
+
+        public static int getAQIIndexPosition(int highestAQI)
+        {
+            int AQIIndex;
+
+            if (highestAQI > 200)
+            {       
+                AQIIndex = (highestAQI - 1) / 100 + 2;
+                if (AQIIndex > 5)
+                {
+                    AQIIndex = 5;
+                }
+            }
+            else
+            {
+                AQIIndex = (highestAQI - 1) / 50;
+            }
+
+            return AQIIndex;
+
+        }
+
+
+        public static double WeatherForecastEquation(List<WeatherDataFromAPI> weatherTime, int index, double eightHourO3)
+        {
+            double FutureAQI1Day = (double)(5.3 * weatherTime[index].WindSpeed) + (double)(0.4 * weatherTime[index].TemperatureC) +
+                (double)(0.1 * weatherTime[index].Humidity) + ((double)0.7 * eightHourO3);
+
+            return FutureAQI1Day;
 
         }
     }
