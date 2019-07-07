@@ -7,7 +7,6 @@ namespace Aether.Models
     {
         public string Pollutant { get; set; }
         public int AQI { get; set; }
-        public string City { get; set; }
         public string Rating { get; set; }
 
         public AQIs()
@@ -18,7 +17,6 @@ namespace Aether.Models
         {
             Pollutant = jt[index]["ParameterName"].ToString();
             AQI = (int)jt[index]["AQI"];
-            City = jt[index]["ReportingArea"].ToString();
             Rating = jt[index]["Category"]["Name"].ToString();
         }
 

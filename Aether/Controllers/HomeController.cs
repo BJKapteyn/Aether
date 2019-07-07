@@ -12,26 +12,23 @@ namespace Aether.Controllers
     public class HomeController : Controller
     {
         public IActionResult Index()
-        {
-            // FROM OLD METHOD OF CALLING API BY AREA AND THIS ALSO REQUIRED A TIME
-            //DateTime nowHour = DateTime.Now.AddHours(4); // to add 4 hours to UTC for EDT
-            //string currentTime = nowHour.ToString("yyyy-MM-ddTHH");
-            
+        {            
             string zipCode = "49503";  // GR 49503 - KZOO 49001 - DETROIT 48127
             string key = APIKeys.AirNowAPI; // key hidden in APIKeys Model
+            string dateTime = "2019-07-04T00-0000";
 
-            // URL to get area with historic data via datetime
-            //string URL = $"http://www.airnowapi.org/aq/data/?startDate=2019-07-04T07&endDate=2019-07-04T07&parameters=OZONE,PM25,PM10,CO,NO2,SO2&BBOX=-85.826092,42.825368,-85.386639,43.082676&dataType=A&format=application/json&verbose=0&nowcastonly=0&API_KEY={key}";
+            // URL to get historic data via Zip Code
+            string URL = $"http://www.airnowapi.org/aq/observation/zipCode/historical/?format=application/json&zipCode={zipCode}&date={dateTime}&distance=25&API_KEY={key}";
 
             // URL to get data via Zip Code
-            string URL = $"http://www.airnowapi.org/aq/observation/zipCode/current/?format=application/json&zipCode={zipCode}&distance=10&API_KEY={key}";
+            //string URL = $"http://www.airnowapi.org/aq/observation/zipCode/current/?format=application/json&zipCode={zipCode}&distance=10&API_KEY={key}";
 
             JToken jt = ParseAPI.APICall(URL);
             List<AQIs> ListOfAQIs = new List<AQIs>();
 
-            if (jt == null)
+            if (jt.Count() == 0)
             {
-                ViewBag.Message = "Ooops. That didn't work.";
+                ViewBag.Message = "Ooops. The API is Down.";
             }
             else
             {
@@ -80,7 +77,7 @@ namespace Aether.Controllers
 
         public IActionResult About()
         {
-            // METHOD FOR GETTING WEATHE FORECASTS
+            // METHOD FOR GETTING WEATHER FORECASTS
             string key = APIKeys.WeatherAPI;
             string cityCode = "4994358";
             string URL = $"http://api.openweathermap.org/data/2.5/forecast?id={cityCode}&APPID={key}";
@@ -106,6 +103,7 @@ namespace Aether.Controllers
             return View();
         }
 
+
         public IActionResult Contact()
         {
             ViewData["Message"] = "Your contact page.";
@@ -113,10 +111,12 @@ namespace Aether.Controllers
             return View();
         }
 
+
         public IActionResult Privacy()
         {
             return View();
         }
+
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
@@ -132,54 +132,6 @@ namespace Aether.Controllers
             //                      Green     Yellow    Orange    Red       Purple    Maroon
             return hexColors[index];
 
-            //if (highestAQI <= 50)
-            //{
-            //    return "limegreen"; // GREEN 00e400 0
-            //}
-            //else if (highestAQI > 50 && highestAQI <= 100)
-            //{
-            //    return "yellow"; // YELLOW ffff00 1
-            //}
-            //else if (highestAQI > 100 && highestAQI <= 150)
-            //{
-            //    return "orange"; // ORANGE ff7e00 2
-            //}
-            //else if (highestAQI > 150 && highestAQI <= 200)
-            //{
-            //    return "red"; // RED ff0000 3
-            //}
-            //else if (highestAQI > 200 && highestAQI <= 300)
-            //{
-            //    return "purple"; // PURPLE 8f3f97 4
-            //}
-            //else
-            //{
-            //    return "maroon"; // MAROON 7e0023 5
         }
     }
-
-    //public static List<WeatherDataFromAPI> WeatherData()
-    //{
-    //    //bringing in windspeed, temperature JTokens etc. from the API 
-    //    JToken weather = WeatherAPIDAL.Json();
-
-    //    // Forecast (with an 'e') readings are every 3h: 8=1 day, 24=3days, 39=5days minus 3h
-    //    List<int> indexes = new List<int>() { 0, 8, 24, 39 };
-
-    //    List<WeatherDataFromAPI> weatherTime = new List<WeatherDataFromAPI>();
-
-    //    //converting temperature from Kelvin to Celsius and Fahrenheit
-    //    foreach (int index in indexes)
-    //    {
-    //        WeatherDataFromAPI wd = new WeatherDataFromAPI(weather, index);
-    //        wd.TemperatureC = wd.TemperatureK - 273.15;
-    //        wd.TemperatureF = (wd.TemperatureC) * 9 / 5 + 32;
-
-    //        weatherTime.Add(wd);
-    //    }
-
-    //    return weatherTime;
-    //}
-
-
 }
