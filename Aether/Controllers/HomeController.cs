@@ -27,26 +27,7 @@ namespace Aether.Controllers
 
         public IActionResult About()
         {
-            // METHOD FOR GETTING WEATHER FORECASTS
-            string key = APIKeys.WeatherAPI;
-            string cityCode = "4994358";
-            string URL = $"http://api.openweathermap.org/data/2.5/forecast?id={cityCode}&APPID={key}";
-
-            JToken jt = ParseAPI.APICall(URL);
-
-            // Forecast readings are every 3h: 8=1 day, 24=3days, 39=5days minus 3h
-            List<int> indexes = new List<int>() { 0, 8, 24, 39 };
-
-            List<WeatherDataFromAPI> weatherForecast = new List<WeatherDataFromAPI>();
-
-            foreach (int index in indexes)
-            {
-                WeatherDataFromAPI wd = new WeatherDataFromAPI(jt, index);
-                wd.TemperatureC = wd.TemperatureK - 273.15;
-                wd.TemperatureF = (wd.TemperatureC) * 9 / 5 + 32;
-
-                weatherForecast.Add(wd);
-            }
+            List<WeatherDataFromAPI> weatherForecast = APIController.GetWeatherForcast();
 
             ViewBag.WeatherForecast = weatherForecast;
 
@@ -56,7 +37,6 @@ namespace Aether.Controllers
 
         public IActionResult Contact()
         {
-            ViewData["Message"] = "Your contact page.";
 
             return View();
         }
@@ -123,12 +103,12 @@ namespace Aether.Controllers
         }
 
 
-        public static double WeatherForecastEquation(List<WeatherDataFromAPI> weatherTime, int index, double eightHourO3)
+        public static int WeatherForecastEquation(List<WeatherDataFromAPI> weatherTime, int index, double eightHourO3)
         {
-            double FutureAQI1Day = (double)(5.3 * weatherTime[index].WindSpeed) + (double)(0.4 * weatherTime[index].TemperatureC) +
+            double FutureAQI = (double)(5.3 * weatherTime[index].WindSpeed) + (double)(0.4 * weatherTime[index].TemperatureC) +
                 (double)(0.1 * weatherTime[index].Humidity) + ((double)0.7 * eightHourO3);
 
-            return FutureAQI1Day;
+            return (int)Math.Round(FutureAQI);
 
         }
     }
