@@ -62,7 +62,7 @@ namespace Aether.Controllers
                 string pastTime = pastHrs.ToString("HH:MM");
 
                 //pulls closest sensor name
-                string sensorLocation = "graqm0107";
+                string sensorLocation = "0004a30b0023acbc";
                 string connectionstring = configuration.GetConnectionString("DefaultConnectionstring");
                 SqlConnection connection = new SqlConnection(connectionstring);
 
@@ -119,7 +119,7 @@ namespace Aether.Controllers
             string pastTime = pastHrs.ToString("HH:MM");
 
             //pulls closest sensor name
-            string sensorLocation = "graqm0107";
+            string sensorLocation = "0004a30b0023acbc";
             string connectionstring = configuration.GetConnectionString("DefaultConnectionstring");
             SqlConnection connection = new SqlConnection(connectionstring);
 
@@ -175,7 +175,7 @@ namespace Aether.Controllers
             string currentHour = nowDay.ToString("HH:MM");
 
             //pulls closest sensor name
-            string sensorLocation = "graqm0107";
+            string sensorLocation = "0004a30b0023acbc";
             string connectionstring = configuration.GetConnectionString("DefaultConnectionstring");
             SqlConnection connection = new SqlConnection(connectionstring);
 

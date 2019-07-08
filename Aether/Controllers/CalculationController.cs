@@ -101,18 +101,6 @@ namespace Aether.Controllers
             return PPM;
         }
 
-        //Which breakpoint to use for ozone - 8 hr vs. 1 hr
-        public static int OzoneOneHourOrEightHour(double O3Reading)
-        {
-            if (O3Reading <= (double)0.125)
-            {
-                return 0;
-            }
-            else
-            {
-                return 1;
-            }
-        }
 
         //Calculate what breakpoint index to use
         public static int BreakpointIndexCalculation(double Pollutant, int pollutantIndex)
