@@ -2,3 +2,44 @@
     <input name="address" type="text" />
     <input type="submit" />
 </form>
+﻿@model Aether.Models.AQIs
+
+<h1 style="color:red">@ViewBag.Message</h1>
+
+@{
+    List<AQIs> theList = (List<AQIs>)ViewBag.AQIList;
+
+    if (theList.Count() != 0)
+    {
+        <h1 style="padding:10px; background-color:#@ViewBag.AQIColor">The AQI for Grand Rapids is currently <b>@ViewBag.highestAQI</b></h1>
+    }
+    else
+    {
+        <h1 style="color: red">Oops. The API didn't return anything.</h1>
+    }
+}
+
+
+@{
+    foreach (AQIs a in theList)
+    {
+        if (a.AQI == ViewBag.highestAQI)
+        {
+            <h2>Your weather quality is @a.Rating</h2>
+        }
+    }
+}
+
+
+@{
+    foreach (AQIs a in theList)
+    {
+        <p>@a.Pollutant AQI: <b>@a.AQI</b></p>
+    }
+
+    string currentTime = DateTime.Now.ToString("yyyy-MM-ddTHH");
+    
+
+}
+
+<p>@currentTime</p>
