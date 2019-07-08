@@ -254,10 +254,17 @@ namespace Aether.Controllers
             return View();
         }
 
+        public IActionResult Test(string address)
+        {
+            return View();
+        }
 
         public IActionResult Privacy()
         {
-            return View();
+            List<Sensor> sensors = Sensor.GetSensors();
+            UserLatLng latLng = Geocode.UserLocation(address).Result;
+            //ViewData.Model = latLng;
+            return View(latLng);
         }
 
 

@@ -2,6 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Aether.Models;
+using Newtonsoft.Json.Linq;
+using System.Net.Http;
+using Newtonsoft.Json;
 
 namespace Aether.Controllers
 {
@@ -34,5 +38,42 @@ namespace Aether.Controllers
         {
             return deg * (Math.PI / 180);
         }
+
+        public static List<Sensor> OrderedSensors(List<Sensor> sensors, string address)
+        {
+            for (int i = 0; i < sensors.Count; i++)
+            {
+                var userLocation = UserLocation(address).Result;
+                sensors[i].Distance = LatLongDistance(userLocation.Lat, userLocation.Lng, sensors[i].Lat, sensors[i].Long);
+            }
+
+            sensors.OrderBy(x => x.Distance).ToList();
+
+            return sensors;
+        }
+
+        public static async Task<UserLatLng> UserLocation(string address)
+        {
+            UserLatLng userLocation = new UserLatLng();
+
+            var jsonAddress = await GeocodeingAPI.UserAddress(address);
+
+            userLocation.Lat = double.Parse(jsonAddress["results"][0]["geometry"]["location"]["lat"].ToString());
+            userLocation.Lng = double.Parse(jsonAddress["results"][0]["geometry"]["location"]["lng"].ToString());
+
+            return userLocation;
+            //List<Sensor> sensors = Sensor.GetSensors();
+            //List<Sensor> shortSensors = new List<Sensor>();
+            //Changes the Address to a longitude and latitude coordinate from the google geocode API
+            //JToken jsonAddress = GoogleMapDAL.GoogleJson(address);
+
+            //double addressLat = double.Parse(jsonAddress["results"][0]["geometry"]["location"]["lat"].ToString());
+            //double addressLng = double.Parse(jsonAddress["results"][0]["geometry"]["location"]["lng"].ToString());
+
+            //{ addressLat, addressLng };
+
+        }
+
+
     }
 }
