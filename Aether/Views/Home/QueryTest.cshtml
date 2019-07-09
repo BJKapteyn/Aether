@@ -1,0 +1,42 @@
+﻿@model IEnumerable<Aether.Models.PollutantData1Hr>
+
+@{
+    ViewData["Title"] = "QueryTest";
+}
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Dev_id)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Time)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.O3)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Pm25)
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Dev_id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Time)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.O3)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Pm25)
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
