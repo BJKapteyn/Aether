@@ -11,6 +11,7 @@ namespace Aether.Models
         public string City { get; set; }
         public string Date { get; set; }
         public string Time { get; set; }
+        public string Hour { get; set; }
 
         public AQIs()
         {

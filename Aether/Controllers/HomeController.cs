@@ -16,6 +16,7 @@ namespace Aether.Controllers
         public static List<PollutantData1Hr> pollutantData1Hr = new List<PollutantData1Hr>();
         public static List<PollutantData8Hr> pollutantData8Hr = new List<PollutantData8Hr>();
         public static List<PollutantData24Hr> pollutantData24Hr = new List<PollutantData24Hr>();
+        public static List<Sensor> userSensors = new List<Sensor>();
         private readonly IConfiguration configuration;
 
         public HomeController(IConfiguration config)
@@ -25,9 +26,11 @@ namespace Aether.Controllers
 
         public IActionResult AirQuality()
         {
-            Pull1hrData();
-            Pull8hrData();
-            Pull24hrData();
+            //just put the default list in for now.
+            List<Sensor> sensors = new List<Sensor>();
+            Pull1hrData(sensors[0]);
+            Pull8hrData(sensors[0]);
+            Pull24hrData(sensors[0]);
             CalculationController.SumAndAveragePollutantReadings();
 
             CalculationController.BreakPointIndex();
@@ -55,7 +58,7 @@ namespace Aether.Controllers
             return View(rv);
         }
             //sensor s and number of hours past 
-        public void Pull8hrData()
+        public void Pull8hrData(Sensor s)
         {
                 DateTime nowDay = DateTime.Now;
                 string currentHour = nowDay.ToString("HH:MM");
@@ -63,7 +66,7 @@ namespace Aether.Controllers
                 string pastTime = pastHrs.ToString("HH:MM");
 
                 //pulls closest sensor name
-                string sensorLocation = "0004a30b0023acbc";
+                string sensorLocation = s.Name;
                 string connectionstring = configuration.GetConnectionString("DefaultConnectionstring");
                 SqlConnection connection = new SqlConnection(connectionstring);
 
@@ -112,7 +115,7 @@ namespace Aether.Controllers
             connection.Close();
         }
 
-        public void Pull1hrData()
+        public void Pull1hrData(Sensor s)
         {
             DateTime nowDay = DateTime.Now;
             string currentHour = nowDay.ToString("HH:MM");
@@ -120,7 +123,7 @@ namespace Aether.Controllers
             string pastTime = pastHrs.ToString("HH:MM");
 
             //pulls closest sensor name
-            string sensorLocation = "0004a30b0023acbc";
+            string sensorLocation = s.Name;
             string connectionstring = configuration.GetConnectionString("DefaultConnectionstring");
             SqlConnection connection = new SqlConnection(connectionstring);
 
@@ -170,13 +173,13 @@ namespace Aether.Controllers
             connection.Close();
         }
 
-        public void Pull24hrData()
+        public void Pull24hrData(Sensor s)
         {
             DateTime nowDay = DateTime.Now;
             string currentHour = nowDay.ToString("HH:MM");
 
             //pulls closest sensor name
-            string sensorLocation = "0004a30b0023acbc";
+            string sensorLocation = s.Name;
             string connectionstring = configuration.GetConnectionString("DefaultConnectionstring");
             SqlConnection connection = new SqlConnection(connectionstring);
 
@@ -256,15 +259,18 @@ namespace Aether.Controllers
 
         public IActionResult Test(string address)
         {
-            return View();
+            List<Sensor> s = Sensor.GetSensors();
+            userSensors = Geocode.OrderedSensors(s, address);
+
+
+            return View(userSensors);
         }
 
         public IActionResult Privacy()
         {
-            List<Sensor> sensors = Sensor.GetSensors();
-            UserLatLng latLng = Geocode.UserLocation(address).Result;
+            
             //ViewData.Model = latLng;
-            return View(latLng);
+            return View();
         }
 
 
