@@ -200,5 +200,18 @@ namespace Aether.Controllers
 
             return maxAQI;
         }
+
+
+        public static int WeatherForecastEquation(List<WeatherDataFromAPI> weatherTime, int index, double eightHourO3)
+        {
+
+            double FutureAQI = (double)(5.3 * weatherTime[index].WindSpeed) + (double)(0.4 * weatherTime[index].TemperatureC) +
+                (double)(0.1 * weatherTime[index].Humidity) + ((double)0.7 * eightHourO3);
+
+            return (int)Math.Round(FutureAQI);
+
+        }
+
     }
+
 }

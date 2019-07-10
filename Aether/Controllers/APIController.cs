@@ -54,7 +54,7 @@ namespace Aether.Controllers
         public static List<WeatherDataFromAPI> GetWeatherForcast()
         {
             string key = APIKeys.WeatherAPI;
-            string cityCode = "4994358";
+            string cityCode = "4994358"; // Grand Rapids
             string URL = $"http://api.openweathermap.org/data/2.5/forecast?id={cityCode}&APPID={key}";
 
             JToken jt = ParseAPI.APICall(URL);
