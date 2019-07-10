@@ -39,8 +39,9 @@ namespace Aether.Controllers
             return deg * (Math.PI / 180);
         }
 
-        public static List<Sensor> OrderedSensors(List<Sensor> sensors, string address)
+        public static List<Sensor> OrderedSensors(string address)
         {
+            List<Sensor> sensors = Sensor.GetSensors();
             var userLocation = UserLocation(address).Result;
 
             for (int i = 0; i < sensors.Count; i++)
