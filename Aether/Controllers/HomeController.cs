@@ -158,13 +158,13 @@ namespace Aether.Controllers
                     }
                     else
                     {
-                        var pollutant = new PollutantData8Hr
-                        {
+                        var pollutant = new PollutantData8Hr { 
+
                             Dev_id = (string)rdr["dev_id"],
                             Time = (DateTime)rdr["time"],
                             O3 = Math.Round(AQICalculations.UGM3ConvertToPPM((double)rdr["o3"], 48), 3), //ppm
-                            CO = Math.Round((double)rdr["co"], 1), //ugm3
-                            Id = (int)rdr["id"]
+                            //CO = (double?)rdr["co"],  //ugm3
+                            Id = (int)rdr["id"],
                         };
 
                         pollutantData8Hr.Add(pollutant);
