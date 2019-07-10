@@ -12,14 +12,15 @@ namespace Aether.Controllers
     {
         public static List<double> pollutantAverages = new List<double>();
         public static List<int> breakPointIndexes = new List<int>();
-         public static List<BreakPointTable> breakPointTable = BreakPointTable.GetPollutantTypes();
+        public static List<BreakPointTable> breakPointTable = BreakPointTable.GetPollutantTypes();
         public static List<double> pollutantAQIs = new List<double>();
 
 
         //sensor s
         public static void SumAndAveragePollutantReadings()
         {
-            string sensorLocation = "graq0107";
+            List<Sensor> sensors = Sensor.GetSensors();
+            string sensorLocation = sensors[6].Name;
 
             if (sensorLocation.Contains("graq"))
             {
