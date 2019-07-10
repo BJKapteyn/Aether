@@ -27,10 +27,10 @@ namespace Aether.Controllers
         public IActionResult AirQuality()
         {
             //just put the default list in for now.
-            List<Sensor> sensors = new List<Sensor>();
-            Pull1hrData(sensors[0]);
-            Pull8hrData(sensors[0]);
-            Pull24hrData(sensors[0]);
+            List<Sensor> sensors = Sensor.GetSensors();
+            Pull1hrData(sensors[6]);
+            Pull8hrData(sensors[6]);
+            Pull24hrData(sensors[6]);
             AQICalculations.SumAndAveragePollutantReadings();
 
             AQICalculations.BreakPointIndex();
