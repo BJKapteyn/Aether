@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Aether.Controllers
 {
     //Lisa
-    public class CalculationController : Controller
+    public class AQICalculations : Controller
     {
         public static List<double> pollutantAverages = new List<double>();
         public static List<int> breakPointIndexes = new List<int>();
@@ -161,7 +161,7 @@ namespace Aether.Controllers
         public static double CalculateAQI(double pollutantPPM, int breakpointIndex, int pollutantIndex)
         {
             // using 1h reading
-            double airQuailtyIndex = CalculationController.AQIEquation(pollutantPPM, breakpointIndex, pollutantIndex);
+            double airQuailtyIndex = AQIEquation(pollutantPPM, breakpointIndex, pollutantIndex);
 
             return airQuailtyIndex;
         }

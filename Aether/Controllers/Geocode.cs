@@ -41,12 +41,12 @@ namespace Aether.Controllers
 
         public static List<Sensor> OrderedSensors(List<Sensor> sensors, string address)
         {
+            var userLocation = UserLocation(address).Result;
+
             for (int i = 0; i < sensors.Count; i++)
             {
-                var userLocation = UserLocation(address).Result;
                 sensors[i].Distance = LatLongDistance(userLocation.Lat, userLocation.Lng, sensors[i].Lat, sensors[i].Long);
             }
-
             sensors.OrderBy(x => x.Distance).ToList();
 
             return sensors;
