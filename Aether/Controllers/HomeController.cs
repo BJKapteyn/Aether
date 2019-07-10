@@ -27,10 +27,10 @@ namespace Aether.Controllers
         public IActionResult AirQuality()
         {
             //just put the default list in for now.
-            List<Sensor> sensors = new List<Sensor>();
-            Pull1hrData(sensors[0]);
-            Pull8hrData(sensors[0]);
-            Pull24hrData(sensors[0]);
+            List<Sensor> sensors = Sensor.GetSensors();
+            Pull1hrData(sensors[6]);
+            Pull8hrData(sensors[6]);
+            Pull24hrData(sensors[6]);
             AQICalculations.SumAndAveragePollutantReadings();
 
             AQICalculations.BreakPointIndex();
@@ -158,13 +158,13 @@ namespace Aether.Controllers
                     }
                     else
                     {
-                        var pollutant = new PollutantData8Hr
-                        {
+                        var pollutant = new PollutantData8Hr { 
+
                             Dev_id = (string)rdr["dev_id"],
                             Time = (DateTime)rdr["time"],
                             O3 = Math.Round(AQICalculations.UGM3ConvertToPPM((double)rdr["o3"], 48), 3), //ppm
-                            CO = Math.Round((double)rdr["co"], 1), //ugm3
-                            Id = (int)rdr["id"]
+                            //CO = (double?)rdr["co"],  //ugm3
+                            Id = (int)rdr["id"],
                         };
 
                         pollutantData8Hr.Add(pollutant);

@@ -19,7 +19,8 @@ namespace Aether.Controllers
         //sensor s
         public static void SumAndAveragePollutantReadings()
         {
-            string sensorLocation = "graq0107";
+            List<Sensor> sensors = Sensor.GetSensors();
+            string sensorLocation = sensors[6].Name;
 
             if (sensorLocation.Contains("graq"))
             {
@@ -66,7 +67,7 @@ namespace Aether.Controllers
 
                 pollutantAverages.Add(simmsO38hrAverage); //index[0] O3 8hr ppm
                 pollutantAverages.Add(simmsO31hrAverage); // index[1] O3 1hr ppm
-                pollutantAverages.Add(0); // blank index
+                pollutantAverages.Add(0);                  // blank index
                 pollutantAverages.Add(simmsPM25Average); //index[2] PM2.5 ug/m3
                 pollutantAverages.Add(simmsCOAverage); //index[4] CO 8 hr
                 pollutantAverages.Add(simmsSO2Average);  //index[5] SO2 ppb 1 hr
