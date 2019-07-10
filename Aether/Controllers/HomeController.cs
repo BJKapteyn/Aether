@@ -24,13 +24,13 @@ namespace Aether.Controllers
             this.configuration = config;
         }
 
-        public IActionResult AirQuality()
+        public IActionResult AirQuality(string address)
         {
             //just put the default list in for now.
-            List<Sensor> sensors = Sensor.GetSensors();
-            Pull1hrData(sensors[6]);
-            Pull8hrData(sensors[6]);
-            Pull24hrData(sensors[6]);
+            List<Sensor> sensors = Geocode.OrderedSensors(address);
+            Pull1hrData(sensors[0]);
+            Pull8hrData(sensors[0]);
+            Pull24hrData(sensors[0]);
             AQICalculations.SumAndAveragePollutantReadings();
 
             AQICalculations.BreakPointIndex();
