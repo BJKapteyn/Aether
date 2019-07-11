@@ -1,18 +1,2 @@
 ﻿@using Aether.Models;
-@model List<Sensor>
 
-﻿@{
-    var hour = DateTime.Now;
-}
-
-<h1>@hour</h1>
-
-@{ 
-    foreach(Sensor s in Model)
-    {
-        <h4>@s.Name</h4>
-        <h4>@s.Distance</h4>
-        <p>@s.Lat</p>
-        <p>@s.Long</p>
-    }
-}

@@ -27,9 +27,9 @@ namespace Aether.Controllers
         {
             //just put the default list in for now.
             List<Sensor> sensors = Geocode.OrderedSensors(address);
-            Pull1hrData(sensors[0]);
-            Pull8hrData(sensors[0]);
-            Pull24hrData(sensors[0]);
+            //Pull1hrData(sensors[0]);
+            //Pull8hrData(sensors[0]);
+            //Pull24hrData(sensors[0]);
             
             AQICalculations.SumAndAveragePollutantReadings(sensors[0]);
 
@@ -62,179 +62,196 @@ namespace Aether.Controllers
 
             return View(rv);
         }
-            //sensor s and number of hours past 
-        
+        //sensor s and number of hours past 
 
-        
-        public void Pull8hrData(Sensor s)
-        {
-                DateTime nowDay = DateTime.Now;
-                string currentHour = nowDay.ToString("HH:MM");
-                DateTime pastHrs = nowDay.AddHours(-8);
-                string pastTime = pastHrs.ToString("HH:MM");
+        //   8hr/1hr ost         var pollutant = new PollutantData
+        //            {
+        //                Dev_id = (string)rdr["dev_id"],
+        //                Time = (DateTime)rdr["time"],
+        //                O3 = Math.Round(AQICalculations.UGM3ConvertToPPM((double)rdr["o3"], 48), 3), //ppm
+        //                Id = (int)rdr["id"]
+        //            };
+        //            pollutantData1Hr.Add(pollutant);
 
-                //pulls closest sensor name
-                string sensorLocation = s.Name;
-                string connectionstring = configuration.GetConnectionString("DefaultConnectionstring");
-                SqlConnection connection = new SqlConnection(connectionstring);
+        //     24       var pollutant = new PollutantData24Hr
+        //            {
+        //                Dev_id = (string)rdr["dev_id"],
+        //                Time = (DateTime)rdr["time"],
+        //                Pm25 = Math.Round((double)rdr["pm25"], 1), //ugm3
+        //                PM10 = Math.Round((double)rdr["pm10Average"], 1), //ugm3
+        //                Id = (int)rdr["id"]
+        //            };
 
-                connection.Open();
 
-                string sql;
+        //public void Pull8hrData(Sensor s)
+        //{
+        //        DateTime nowDay = DateTime.Now;
+        //        string currentHour = nowDay.ToString("HH:MM");
+        //        DateTime pastHrs = nowDay.AddHours(-8);
+        //        string pastTime = pastHrs.ToString("HH:MM");
 
-                if (sensorLocation.Contains("graq"))
-                {
-                    sql = $"EXEC OSTSelectReadings @dev_id = '{sensorLocation}', @time = '2019-03-28 {pastTime}', @endtime = '2019-03-28 {currentHour}';";
-                }
-                else
-                {
-                    sql = $"EXEC SimmsSelectReadings @dev_id = '{sensorLocation}', @time = '2019-03-28 {pastTime}', @endtime = '2019-03-28 {currentHour}';";
-                }
+        //        //pulls closest sensor name
+        //        string sensorLocation = s.Name;
+        //        string connectionstring = configuration.GetConnectionString("DefaultConnectionstring");
+        //        SqlConnection connection = new SqlConnection(connectionstring);
 
-                SqlCommand com = new SqlCommand(sql, connection);
-                SqlDataReader rdr = com.ExecuteReader();
-                while (rdr.Read())
-                {
-                    if (sensorLocation.Contains("graq"))
-                    {
-                        var pollutant = new PollutantData8Hr
-                        {
-                            Dev_id = (string)rdr["dev_id"],
-                            Time = (DateTime)rdr["time"],
-                            O3 = Math.Round(AQICalculations.UGM3ConvertToPPM((double)rdr["o3"], 48), 3), //ppm
-                            Id = (int)rdr["id"]
-                        };
-                        pollutantData8Hr.Add(pollutant);
-                    }
-                    else
-                    {
-                        var pollutant = new PollutantData8Hr { 
+        //        connection.Open();
 
-                            Dev_id = (string)rdr["dev_id"],
-                            Time = (DateTime)rdr["time"],
-                            O3 = Math.Round(AQICalculations.UGM3ConvertToPPM((double)rdr["o3"], 48), 3), //ppm
-                            //CO = (double?)rdr["co"],  //ugm3
-                            Id = (int)rdr["id"],
-                        };
+        //        string sql;
 
-                        pollutantData8Hr.Add(pollutant);
-                    }
-                }
-            connection.Close();
-        }
+        //        if (sensorLocation.Contains("graq"))
+        //        {
+        //            sql = $"EXEC OSTSelectReadings @dev_id = '{sensorLocation}', @time = '2019-03-28 {pastTime}', @endtime = '2019-03-28 {currentHour}';";
+        //        }
+        //        else
+        //        {
+        //            sql = $"EXEC SimmsSelectReadings @dev_id = '{sensorLocation}', @time = '2019-03-28 {pastTime}', @endtime = '2019-03-28 {currentHour}';";
+        //        }
 
-        public void Pull1hrData(Sensor s)
-        {
-            DateTime nowDay = DateTime.Now;
-            string currentHour = nowDay.ToString("HH:MM");
-            DateTime pastHrs = nowDay.AddHours(-1);
-            string pastTime = pastHrs.ToString("HH:MM");
+        //        SqlCommand com = new SqlCommand(sql, connection);
+        //        SqlDataReader rdr = com.ExecuteReader();
+        //        while (rdr.Read())
+        //        {
+        //            if (sensorLocation.Contains("graq"))
+        //            {
+        //                var pollutant = new PollutantData8Hr
+        //                {
+        //                    Dev_id = (string)rdr["dev_id"],
+        //                    Time = (DateTime)rdr["time"],
+        //                    O3 = Math.Round(AQICalculations.UGM3ConvertToPPM((double)rdr["o3"], 48), 3), //ppm
+        //                    Id = (int)rdr["id"]
+        //                };
+        //                pollutantData8Hr.Add(pollutant);
+        //            }
+        //            else
+        //            {
+        //                var pollutant = new PollutantData8Hr { 
 
-            //pulls closest sensor name
-            string sensorLocation = s.Name;
-            string connectionstring = configuration.GetConnectionString("DefaultConnectionstring");
-            SqlConnection connection = new SqlConnection(connectionstring);
+        //                    Dev_id = (string)rdr["dev_id"],
+        //                    Time = (DateTime)rdr["time"],
+        //                    O3 = Math.Round(AQICalculations.UGM3ConvertToPPM((double)rdr["o3"], 48), 3), //ppm
+        //                    //CO = (double?)rdr["co"],  //ugm3
+        //                    Id = (int)rdr["id"],
+        //                };
 
-            connection.Open();
+        //                pollutantData8Hr.Add(pollutant);
+        //            }
+        //        }
+        //    connection.Close();
+        //}
 
-            string sql;
+        //public void Pull1hrData(Sensor s)
+        //{
+        //    DateTime nowDay = DateTime.Now;
+        //    string currentHour = nowDay.ToString("HH:MM");
+        //    DateTime pastHrs = nowDay.AddHours(-1);
+        //    string pastTime = pastHrs.ToString("HH:MM");
 
-            if (sensorLocation.Contains("graq"))
-            {
-                sql = $"EXEC OSTSelectReadings @dev_id = '{sensorLocation}', @time = '2019-03-28 {pastTime}', @endtime = '2019-03-28 {currentHour}';";
-            }
-            else
-            {
-                sql = $"EXEC SimmsSelectReadings @dev_id = '{sensorLocation}', @time = '2019-03-28 {pastTime}', @endtime = '2019-03-28 {currentHour}';";
-            }
+        //    //pulls closest sensor name
+        //    string sensorLocation = s.Name;
+        //    string connectionstring = configuration.GetConnectionString("DefaultConnectionstring");
+        //    SqlConnection connection = new SqlConnection(connectionstring);
 
-            SqlCommand com = new SqlCommand(sql, connection);
-            SqlDataReader rdr = com.ExecuteReader();
-            while (rdr.Read())
-            {
-                if (sensorLocation.Contains("graq"))
-                {
-                    var pollutant = new PollutantData
-                    {
-                        Dev_id = (string)rdr["dev_id"],
-                        Time = (DateTime)rdr["time"],
-                        O3 = Math.Round(AQICalculations.UGM3ConvertToPPM((double)rdr["o3"], 48), 3), //ppm
-                        Id = (int)rdr["id"]
-                    };
-                    pollutantData1Hr.Add(pollutant);
-                }
-                else
-                {
-                    var pollutant = new PollutantData
-                    {
-                        Dev_id = (string)rdr["dev_id"],
-                        Time = (DateTime)rdr["time"],
-                        O3 = Math.Round(AQICalculations.UGM3ConvertToPPM((double)rdr["o3"], 48), 3), //ppm
-                        NO2 = Math.Round((double)rdr["no2"], 0), //ugm3
-                        SO2 = Math.Round((double)rdr["so2"], 0), //ugm3
-                        Id = (int)rdr["id"]
-                    };
+        //    connection.Open();
 
-                    pollutantData1Hr.Add(pollutant);
-                }
-            }
-            connection.Close();
-        }
+        //    string sql;
 
-        public void Pull24hrData(Sensor s)
-        {
-            DateTime nowDay = DateTime.Now;
-            string currentHour = nowDay.ToString("HH:MM");
+        //    if (sensorLocation.Contains("graq"))
+        //    {
+        //        sql = $"EXEC OSTSelectReadings @dev_id = '{sensorLocation}', @time = '2019-03-28 {pastTime}', @endtime = '2019-03-28 {currentHour}';";
+        //    }
+        //    else
+        //    {
+        //        sql = $"EXEC SimmsSelectReadings @dev_id = '{sensorLocation}', @time = '2019-03-28 {pastTime}', @endtime = '2019-03-28 {currentHour}';";
+        //    }
 
-            //pulls closest sensor name
-            string sensorLocation = s.Name;
-            string connectionstring = configuration.GetConnectionString("DefaultConnectionstring");
-            SqlConnection connection = new SqlConnection(connectionstring);
+        //    SqlCommand com = new SqlCommand(sql, connection);
+        //    SqlDataReader rdr = com.ExecuteReader();
+        //    while (rdr.Read())
+        //    {
+        //        if (sensorLocation.Contains("graq"))
+        //        {
+        //            var pollutant = new PollutantData
+        //            {
+        //                Dev_id = (string)rdr["dev_id"],
+        //                Time = (DateTime)rdr["time"],
+        //                O3 = Math.Round(AQICalculations.UGM3ConvertToPPM((double)rdr["o3"], 48), 3), //ppm
+        //                Id = (int)rdr["id"]
+        //            };
+        //            pollutantData1Hr.Add(pollutant);
+        //        }
+        //        else
+        //        {
+        //            var pollutant = new PollutantData
+        //            {
+        //                Dev_id = (string)rdr["dev_id"],
+        //                Time = (DateTime)rdr["time"],
+        //                O3 = Math.Round(AQICalculations.UGM3ConvertToPPM((double)rdr["o3"], 48), 3), //ppm
+        //                NO2 = Math.Round((double)rdr["no2"], 0), //ugm3
+        //                SO2 = Math.Round((double)rdr["so2"], 0), //ugm3
+        //                Id = (int)rdr["id"]
+        //            };
 
-            connection.Open();
+        //            pollutantData1Hr.Add(pollutant);
+        //        }
+        //    }
+        //    connection.Close();
+        //}
 
-            string sql;
+        //public void Pull24hrData(Sensor s)
+        //{
+        //    DateTime nowDay = DateTime.Now;
+        //    string currentHour = nowDay.ToString("HH:MM");
 
-            if (sensorLocation.Contains("graq"))
-            {
-                sql = $"EXEC OSTSelectReadings @dev_id = '{sensorLocation}', @time = '2019-03-27 {currentHour}', @endtime = '2019-03-28 {currentHour}';";
-            }
-            else
-            {
-                sql = $"EXEC SimmsSelectReadings @dev_id = '{sensorLocation}', @time = '2019-03-27 {currentHour}', @endtime = '2019-03-28 {currentHour}';";
-            }
+        //    //pulls closest sensor name
+        //    string sensorLocation = s.Name;
+        //    string connectionstring = configuration.GetConnectionString("DefaultConnectionstring");
+        //    SqlConnection connection = new SqlConnection(connectionstring);
 
-            SqlCommand com = new SqlCommand(sql, connection);
-            SqlDataReader rdr = com.ExecuteReader();
-            while (rdr.Read())
-            {
-                if (sensorLocation.Contains("graq"))
-                {
-                    var pollutant = new PollutantData24Hr
-                    {
-                        Dev_id = (string)rdr["dev_id"],
-                        Time = (DateTime)rdr["time"],
-                        Pm25 = Math.Round((double)rdr["pm25"], 1), //ugm3
-                        PM10 = Math.Round((double)rdr["pm10Average"], 1), //ugm3
-                        Id = (int)rdr["id"]
-                    };
-                    pollutantData24Hr.Add(pollutant);
-                }
-                else
-                {
-                    var pollutant = new PollutantData24Hr
-                    {
-                        Dev_id = (string)rdr["dev_id"],
-                        Time = (DateTime)rdr["time"],
-                        Pm25 = Math.Round((double)rdr["pm25"], 1), //ugm3
-                        Id = (int)rdr["id"]
-                    };
+        //    connection.Open();
 
-                    pollutantData24Hr.Add(pollutant);
-                }
-            }
-            connection.Close();
-        }
+        //    string sql;
+
+        //    if (sensorLocation.Contains("graq"))
+        //    {
+        //        sql = $"EXEC OSTSelectReadings @dev_id = '{sensorLocation}', @time = '2019-03-27 {currentHour}', @endtime = '2019-03-28 {currentHour}';";
+        //    }
+        //    else
+        //    {
+        //        sql = $"EXEC SimmsSelectReadings @dev_id = '{sensorLocation}', @time = '2019-03-27 {currentHour}', @endtime = '2019-03-28 {currentHour}';";
+        //    }
+
+        //    SqlCommand com = new SqlCommand(sql, connection);
+        //    SqlDataReader rdr = com.ExecuteReader();
+        //    while (rdr.Read())
+        //    {
+        //        if (sensorLocation.Contains("graq"))
+        //        {
+        //            var pollutant = new PollutantData24Hr
+        //            {
+        //                Dev_id = (string)rdr["dev_id"],
+        //                Time = (DateTime)rdr["time"],
+        //                Pm25 = Math.Round((double)rdr["pm25"], 1), //ugm3
+        //                PM10 = Math.Round((double)rdr["pm10Average"], 1), //ugm3
+        //                Id = (int)rdr["id"]
+        //            };
+        //            pollutantData24Hr.Add(pollutant);
+        //        }
+        //        else
+        //        {
+        //            var pollutant = new PollutantData24Hr
+        //            {
+        //                Dev_id = (string)rdr["dev_id"],
+        //                Time = (DateTime)rdr["time"],
+        //                Pm25 = Math.Round((double)rdr["pm25"], 1), //ugm3
+        //                Id = (int)rdr["id"]
+        //            };
+
+        //            pollutantData24Hr.Add(pollutant);
+        //        }
+        //    }
+        //    connection.Close();
+        //}
         public IActionResult Index()
         {
             List<AQIs> AQIList = APIController.GetListAQI("48127");
