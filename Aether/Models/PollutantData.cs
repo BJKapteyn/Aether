@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Aether.Models
 {
-    public class PollutantData24Hr
+    public class PollutantData
     {
         public string Dev_id { get; set; }
         public DateTime Time { get; set; }

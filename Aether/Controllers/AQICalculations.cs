@@ -16,11 +16,22 @@ namespace Aether.Controllers
         public static List<double> pollutantAQIs = new List<double>();
 
 
-        //sensor s
-        public static void SumAndAveragePollutantReadings()
+        public static List<double> PollutantAveragesOST(Sensor s)
         {
-            List<Sensor> sensors = Sensor.GetSensors();
-            string sensorLocation = sensors[6].Name;
+
+        }
+
+        //public static List<double> PollutantAveragesSimms(List<PollutantData> PD)
+        //{
+        //    List<double> PollutantAverages = new List<double>();
+
+        //    double o3Sum = (double)PD.Sum(x => x.O3);
+        //    double o3Average = Math.Round((o3Sum / PD.Count), 3);
+        //}
+        
+        public static void SumAndAveragePollutantReadings(Sensor s)
+        {
+            string sensorLocation = s.Name;
 
             if (sensorLocation.Contains("graq"))
             {
