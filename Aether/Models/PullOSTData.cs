@@ -7,16 +7,20 @@ using Microsoft.Extensions.Configuration;
 
 namespace Aether.Models
 {
-    public class PullData
+    public class PullOSTData
     {
         private readonly IConfiguration configuration;
 
-        public PullData(IConfiguration config)
+        public PullOSTData(IConfiguration config)
         {
             configuration = config;
         }
 
-        public SqlDataReader PullOSTData(Sensor s, int hours)
+        public PullOSTData()
+        {
+        }
+
+        public SqlDataReader PullData(Sensor s, int hours)
         {
             //will add hours soon
             DateTime nowDay = DateTime.Now;
@@ -50,7 +54,7 @@ namespace Aether.Models
 
         public List<PollutantData> OSTData(Sensor s, int hours)
         {
-            SqlDataReader rdr = PullOSTData(s, hours);
+            SqlDataReader rdr = PullData(s, hours);
             List<PollutantData> ostData = new List<PollutantData>();
 
             while (rdr.Read())

@@ -16,7 +16,7 @@ namespace Aether.Controllers
         public static List<PollutantData> pollutantData1Hr = new List<PollutantData>();
         //public static List<PollutantData8Hr> pollutantData8Hr = new List<PollutantData8Hr>();
         //public static List<PollutantData24Hr> pollutantData24Hr = new List<PollutantData24Hr>();
-        private readonly IConfiguration configuration;
+        
 
         //public HomeController(IConfiguration config)
         //{
@@ -31,7 +31,7 @@ namespace Aether.Controllers
             //Pull8hrData(sensors[0]);
             //Pull24hrData(sensors[0]);
             
-            AQICalculations.SumAndAveragePollutantReadings(sensors[0]);
+            //AQICalculations.SumAndAveragePollutantReadings(sensors[0]);
 
             AQICalculations.BreakPointIndex();
 
@@ -62,25 +62,7 @@ namespace Aether.Controllers
 
             return View(rv);
         }
-        //sensor s and number of hours past 
 
-        //   8hr/1hr ost         var pollutant = new PollutantData
-        //            {
-        //                Dev_id = (string)rdr["dev_id"],
-        //                Time = (DateTime)rdr["time"],
-        //                O3 = Math.Round(AQICalculations.UGM3ConvertToPPM((double)rdr["o3"], 48), 3), //ppm
-        //                Id = (int)rdr["id"]
-        //            };
-        //            pollutantData1Hr.Add(pollutant);
-
-        //     24       var pollutant = new PollutantData24Hr
-        //            {
-        //                Dev_id = (string)rdr["dev_id"],
-        //                Time = (DateTime)rdr["time"],
-        //                Pm25 = Math.Round((double)rdr["pm25"], 1), //ugm3
-        //                PM10 = Math.Round((double)rdr["pm10Average"], 1), //ugm3
-        //                Id = (int)rdr["id"]
-        //            };
 
 
         //public void Pull8hrData(Sensor s)
@@ -282,11 +264,14 @@ namespace Aether.Controllers
             return View();
         }
 
-        public IActionResult Test(string address)
+        public IActionResult Test()
         {
-            PullData pullData = new PullData(configuration);
+            List<Sensor> sensors = Sensor.GetSensors();
+            PullOSTData pullData = new PullOSTData();
+            List<PollutantData> data = pullData.OSTData(sensors[0], 8);
 
-            return View();
+
+            return View(data);
         }
 
         //public IActionResult Privacy()

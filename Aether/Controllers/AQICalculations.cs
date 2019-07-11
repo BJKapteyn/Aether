@@ -18,7 +18,8 @@ namespace Aether.Controllers
 
         public static List<double> PollutantAveragesOST(Sensor s)
         {
-
+            List<double> pollutantAverage = new List<double>();
+            return pollutantAverage;
         }
 
         //public static List<double> PollutantAveragesSimms(List<PollutantData> PD)
@@ -29,63 +30,63 @@ namespace Aether.Controllers
         //    double o3Average = Math.Round((o3Sum / PD.Count), 3);
         //}
         
-        public static void SumAndAveragePollutantReadings(Sensor s)
-        {
-            string sensorLocation = s.Name;
+        //public static void SumAndAveragePollutantReadings(Sensor s)
+        //{
+        //    string sensorLocation = s.Name;
 
-            if (sensorLocation.Contains("graq"))
-            {
-                double ostO38hrSum = (double)HomeController.pollutantData8Hr.Sum(x => x.O3);
-                double ostO38hrAverage = Math.Round(ostO38hrSum / HomeController.pollutantData8Hr.Count, 3);
+        //    if (sensorLocation.Contains("graq"))
+        //    {
+        //        double ostO38hrSum = (double)HomeController.pollutantData8Hr.Sum(x => x.O3);
+        //        double ostO38hrAverage = Math.Round(ostO38hrSum / HomeController.pollutantData8Hr.Count, 3);
 
-                double ostO31hrSum = (double)HomeController.pollutantData1Hr.Sum(x => x.O3);
-                double ostO31hrAverage = Math.Round(ostO31hrSum / HomeController.pollutantData1Hr.Count, 3);
+        //        double ostO31hrSum = (double)HomeController.pollutantData1Hr.Sum(x => x.O3);
+        //        double ostO31hrAverage = Math.Round(ostO31hrSum / HomeController.pollutantData1Hr.Count, 3);
 
-                double ostPM25Sum = (double)HomeController.pollutantData24Hr.Sum(x => x.Pm25);
-                double ostPM25Average = (double)Math.Round(ostPM25Sum / HomeController.pollutantData24Hr.Count, 1);
+        //        double ostPM25Sum = (double)HomeController.pollutantData24Hr.Sum(x => x.Pm25);
+        //        double ostPM25Average = (double)Math.Round(ostPM25Sum / HomeController.pollutantData24Hr.Count, 1);
 
-                double ostPM10Sum = (double)HomeController.pollutantData24Hr.Sum(x => x.PM10);
-                double ostPM10Average = (double)Math.Round(ostPM10Sum / HomeController.pollutantData24Hr.Count, 0);
+        //        double ostPM10Sum = (double)HomeController.pollutantData24Hr.Sum(x => x.PM10);
+        //        double ostPM10Average = (double)Math.Round(ostPM10Sum / HomeController.pollutantData24Hr.Count, 0);
 
-                pollutantAverages.Add(ostO38hrAverage); //index[0] O3 8hr ppm
-                pollutantAverages.Add(ostO31hrAverage); // index[1] O3 1hr ppm
-                pollutantAverages.Add(ostPM10Average); //index[2] PM10 ug/m3
-                pollutantAverages.Add(ostPM25Average); //index[3] PM2.5 ug/m3
-                pollutantAverages.Add(0); // blank index
-                pollutantAverages.Add(0); // blank index
-                pollutantAverages.Add(0); // blank index
+        //        pollutantAverages.Add(ostO38hrAverage); //index[0] O3 8hr ppm
+        //        pollutantAverages.Add(ostO31hrAverage); // index[1] O3 1hr ppm
+        //        pollutantAverages.Add(ostPM10Average); //index[2] PM10 ug/m3
+        //        pollutantAverages.Add(ostPM25Average); //index[3] PM2.5 ug/m3
+        //        pollutantAverages.Add(0); // blank index
+        //        pollutantAverages.Add(0); // blank index
+        //        pollutantAverages.Add(0); // blank index
 
-            }
-            else
-            {
-                double simmsO38hrSum = (double)HomeController.pollutantData8Hr.Sum(x => x.O3);
-                double simmsO38hrAverage = Math.Round(simmsO38hrSum / HomeController.pollutantData8Hr.Count, 3);
+        //    }
+        //    else
+        //    {
+        //        double simmsO38hrSum = (double)HomeController.pollutantData8Hr.Sum(x => x.O3);
+        //        double simmsO38hrAverage = Math.Round(simmsO38hrSum / HomeController.pollutantData8Hr.Count, 3);
 
-                double simmsO31hrSum = (double)HomeController.pollutantData8Hr.Sum(x => x.O3);
-                double simmsO31hrAverage = Math.Round(simmsO31hrSum / HomeController.pollutantData8Hr.Count, 3);
+        //        double simmsO31hrSum = (double)HomeController.pollutantData8Hr.Sum(x => x.O3);
+        //        double simmsO31hrAverage = Math.Round(simmsO31hrSum / HomeController.pollutantData8Hr.Count, 3);
 
-                double simmsPM25Sum = (double)HomeController.pollutantData24Hr.Sum(x => x.Pm25);
-                double simmsPM25Average = (double)Math.Round(simmsPM25Sum / HomeController.pollutantData24Hr.Count, 1);
+        //        double simmsPM25Sum = (double)HomeController.pollutantData24Hr.Sum(x => x.Pm25);
+        //        double simmsPM25Average = (double)Math.Round(simmsPM25Sum / HomeController.pollutantData24Hr.Count, 1);
 
-                double simmsCOSum = (double)HomeController.pollutantData8Hr.Sum(x => x.CO);
-                double simmsCOAverage = (double)Math.Round(simmsCOSum / HomeController.pollutantData8Hr.Count, 1);
+        //        double simmsCOSum = (double)HomeController.pollutantData8Hr.Sum(x => x.CO);
+        //        double simmsCOAverage = (double)Math.Round(simmsCOSum / HomeController.pollutantData8Hr.Count, 1);
 
-                double simmsSO2Sum = (double)HomeController.pollutantData1Hr.Sum(x => x.SO2);
-                double simmsSO2Average = (double)Math.Round(simmsSO2Sum / HomeController.pollutantData1Hr.Count, 1);
+        //        double simmsSO2Sum = (double)HomeController.pollutantData1Hr.Sum(x => x.SO2);
+        //        double simmsSO2Average = (double)Math.Round(simmsSO2Sum / HomeController.pollutantData1Hr.Count, 1);
 
-                double simmsNO2Sum = (double)HomeController.pollutantData1Hr.Sum(x => x.NO2);
-                double simmsNO2Average = (double)Math.Round(simmsNO2Sum / HomeController.pollutantData1Hr.Count, 1);
+        //        double simmsNO2Sum = (double)HomeController.pollutantData1Hr.Sum(x => x.NO2);
+        //        double simmsNO2Average = (double)Math.Round(simmsNO2Sum / HomeController.pollutantData1Hr.Count, 1);
 
-                pollutantAverages.Add(simmsO38hrAverage); //index[0] O3 8hr ppm
-                pollutantAverages.Add(simmsO31hrAverage); // index[1] O3 1hr ppm
-                pollutantAverages.Add(0);                  // blank index
-                pollutantAverages.Add(simmsPM25Average); //index[2] PM2.5 ug/m3
-                pollutantAverages.Add(simmsCOAverage); //index[4] CO 8 hr
-                pollutantAverages.Add(simmsSO2Average);  //index[5] SO2 ppb 1 hr
-                pollutantAverages.Add(simmsNO2Average);  //index[6] NO2 ppb 1 hr
-            }
+        //        pollutantAverages.Add(simmsO38hrAverage); //index[0] O3 8hr ppm
+        //        pollutantAverages.Add(simmsO31hrAverage); // index[1] O3 1hr ppm
+        //        pollutantAverages.Add(0);                  // blank index
+        //        pollutantAverages.Add(simmsPM25Average); //index[2] PM2.5 ug/m3
+        //        pollutantAverages.Add(simmsCOAverage); //index[4] CO 8 hr
+        //        pollutantAverages.Add(simmsSO2Average);  //index[5] SO2 ppb 1 hr
+        //        pollutantAverages.Add(simmsNO2Average);  //index[6] NO2 ppb 1 hr
+        //    }
                
-        }
+        //}
 
         public static double ConvertPPBtoPPM(double PollutantPPB)
         {
