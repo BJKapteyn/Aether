@@ -62,8 +62,8 @@ namespace Aether.Models
             connection.Close();
             return ostData;
 
-
         }
+
 
         //public List<PollutantData> OSTData(Sensor s, int hours, IConfiguration c)
         //{
