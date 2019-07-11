@@ -16,12 +16,13 @@ namespace Aether.Controllers
         public static List<PollutantData> pollutantData1Hr = new List<PollutantData>();
         //public static List<PollutantData8Hr> pollutantData8Hr = new List<PollutantData8Hr>();
         //public static List<PollutantData24Hr> pollutantData24Hr = new List<PollutantData24Hr>();
-        
+        private readonly IConfiguration configuration;
 
-        //public HomeController(IConfiguration config)
-        //{
-        //    this.configuration = config;
-        //}
+
+        public HomeController(IConfiguration config)
+        {
+            this.configuration = config;
+        }
 
         public IActionResult AirQuality(string address)
         {
@@ -268,8 +269,7 @@ namespace Aether.Controllers
         {
             List<Sensor> sensors = Sensor.GetSensors();
             PullOSTData pullData = new PullOSTData();
-            List<PollutantData> data = pullData.OSTData(sensors[0], 8);
-
+            List<PollutantData> data = pullData.PullData(sensors[0], 8, configuration);
 
             return View(data);
         }

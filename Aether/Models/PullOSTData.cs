@@ -9,26 +9,22 @@ namespace Aether.Models
 {
     public class PullOSTData
     {
-        private readonly IConfiguration configuration;
-
-        public PullOSTData(IConfiguration config)
-        {
-            configuration = config;
-        }
 
         public PullOSTData()
         {
         }
 
-        public SqlDataReader PullData(Sensor s, int hours)
+        public List<PollutantData> PullData(Sensor s, int hours, IConfiguration c)
         {
+            List<PollutantData> ostData = new List<PollutantData>();
             //will add hours soon
             DateTime nowDay = DateTime.Now;
+            string lasthour = nowDay.AddHours(-8).ToString("HH:mm");
             string currentHour = nowDay.ToString("HH:mm");
             string sql;
             //pulls closest sensor name
             string sensorLocation = s.Name;
-            string connectionstring = configuration.GetConnectionString("DefaultConnectionstring");
+            string connectionstring = c.GetConnectionString("DefaultConnectionstring");
 
             SqlConnection connection = new SqlConnection(connectionstring);
 
@@ -41,21 +37,11 @@ namespace Aether.Models
             }
             else
             {
-                sql = $"EXEC OSTSelectReadings @dev_id = '{sensorLocation}', @time = '2019-03-28 {currentHour}', @endtime = '2019-03-28 {currentHour}';";
+                sql = $"EXEC OSTSelectReadings @dev_id = '{sensorLocation}', @time = '2019-03-28 {lasthour}', @endtime = '2019-03-28 {currentHour}';";
             }
 
             SqlCommand com = new SqlCommand(sql, connection);
             SqlDataReader rdr = com.ExecuteReader();
-
-            connection.Close();
-
-            return rdr;
-        }
-
-        public List<PollutantData> OSTData(Sensor s, int hours)
-        {
-            SqlDataReader rdr = PullData(s, hours);
-            List<PollutantData> ostData = new List<PollutantData>();
 
             while (rdr.Read())
             {
@@ -64,7 +50,7 @@ namespace Aether.Models
                 pollutant.Dev_id = (string)rdr["dev_id"];
                 pollutant.Time = (DateTime)rdr["time"];
                 pollutant.Id = (int)rdr["id"];
-                if(hours >= 24)
+                if (hours >= 24)
                 {
                     pollutant.Pm25 = Math.Round((double)rdr["pm25"], 1); //ugm3
                     pollutant.PM10 = Math.Round((double)rdr["pm10Average"], 1); //ugm3
@@ -73,8 +59,35 @@ namespace Aether.Models
                 ostData.Add(pollutant);
             }
 
+            connection.Close();
             return ostData;
+
+
         }
+
+        //public List<PollutantData> OSTData(Sensor s, int hours, IConfiguration c)
+        //{
+        //    SqlDataReader rdr = PullData(s, hours, c);
+        //    List<PollutantData> ostData = new List<PollutantData>();
+
+        //    while (rdr.Read())
+        //    {
+        //        PollutantData pollutant = new PollutantData();
+
+        //        pollutant.Dev_id = (string)rdr["dev_id"];
+        //        pollutant.Time = (DateTime)rdr["time"];
+        //        pollutant.Id = (int)rdr["id"];
+        //        if(hours >= 24)
+        //        {
+        //            pollutant.Pm25 = Math.Round((double)rdr["pm25"], 1); //ugm3
+        //            pollutant.PM10 = Math.Round((double)rdr["pm10Average"], 1); //ugm3
+        //        }
+
+        //        ostData.Add(pollutant);
+        //    }
+
+        //    return ostData;
+        //}
     }
 //var pollutant = new PollutantData24Hr
 //{
