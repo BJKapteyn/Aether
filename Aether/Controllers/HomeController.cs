@@ -18,10 +18,10 @@ namespace Aether.Controllers
         //public static List<PollutantData24Hr> pollutantData24Hr = new List<PollutantData24Hr>();
         private readonly IConfiguration configuration;
 
-        public HomeController(IConfiguration config)
-        {
-            this.configuration = config;
-        }
+        //public HomeController(IConfiguration config)
+        //{
+        //    this.configuration = config;
+        //}
 
         public IActionResult AirQuality(string address)
         {
@@ -282,10 +282,12 @@ namespace Aether.Controllers
             return View();
         }
 
-        //public IActionResult Test(string address)
-        //{
-        //    return View();
-        //}
+        public IActionResult Test(string address)
+        {
+            PullData pullData = new PullData(configuration);
+
+            return View();
+        }
 
         //public IActionResult Privacy()
         //{
