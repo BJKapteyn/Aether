@@ -63,7 +63,7 @@ namespace Aether.Controllers
             return View(rv);
         }
             //sensor s and number of hours past 
-        public void Pull8hrData()
+        public void Pull8hrData(Sensor s)
         {
                 DateTime nowDay = DateTime.Now;
                 string currentHour = nowDay.ToString("HH:MM");
@@ -120,7 +120,7 @@ namespace Aether.Controllers
             connection.Close();
         }
 
-        public void Pull1hrData()
+        public void Pull1hrData(Sensor s)
         {
             DateTime nowDay = DateTime.Now;
             string currentHour = nowDay.ToString("HH:MM");
@@ -178,7 +178,7 @@ namespace Aether.Controllers
             connection.Close();
         }
 
-        public void Pull24hrData()
+        public void Pull24hrData(Sensor s)
         {
             DateTime nowDay = DateTime.Now;
             string currentHour = nowDay.ToString("HH:MM");
@@ -330,7 +330,7 @@ namespace Aether.Controllers
             List<WeatherDataFromAPI> weatherForecast = APIController.GetWeatherForcast();
 
             List<double> futureAQIs = new List<double>();
-            for (int i = 0; i < 3; i++)
+            for (int i = 1; i < 4; i++)
             {
                 futureAQIs.Add(AQICalculations.WeatherForecastEquation(weatherForecast, i, O3AQI));
             }
