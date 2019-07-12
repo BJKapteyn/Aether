@@ -55,17 +55,14 @@ namespace Aether.Controllers
                 //AQIPredicted5Day 
             };
 
-            List<double> futureO3AQIs = getFutureO3AQIs(AQICalculations.pollutantAverages[0]);
-            rv.AQIPredicted1Day = futureO3AQIs[0];
-            rv.AQIPredicted3Day = futureO3AQIs[1];
-            rv.AQIPredicted5Day = futureO3AQIs[2];
-
-            List<double> futureCOAQIs = getFutureCOAQIs(AQICalculations.pollutantAverages[4]);
-
+            List<FutureAQIs> futureAQIs = getFutureAQIs(AQICalculations.pollutantAverages[0], AQICalculations.pollutantAverages[3], AQICalculations.pollutantAverages[5]);
+            rv.FutureAQIs = futureAQIs; // sent to view as FutureAQIs object from DisplayToUserInformation model
+                                        // 3x3 list index 0 = 1 day, index 1 = 3 day, index 2 = 5 day & .O3, .CO, .NO2
 
             return View(rv);
         }
-            //sensor s and number of hours past 
+
+
         public void Pull8hrData(Sensor s)
         {
                 DateTime nowDay = DateTime.Now;
@@ -328,7 +325,7 @@ namespace Aether.Controllers
         }
 
 
-        public static List<double> getFutureO3AQIs(double O3AQI)
+        public static List<FutureAQIs> getFutureAQIs(double O3Average, double COAverage, double NO2Average)
         {
             List<WeatherDataFromAPI> weatherForecast = APIController.GetWeatherForcast();
 
@@ -336,7 +333,7 @@ namespace Aether.Controllers
 
             for (int i = 1; i < 4; i++)
             {
-                futureAQIs.Add(AQICalculations.O3ForecastEquation(weatherForecast, i, O3AQI));
+                futureAQIs.Add(AQICalculations.AQIForecastEquation(weatherForecast, i, O3Average, COAverage, NO2Average));
 
             }
 
