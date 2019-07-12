@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Aether.Models;
 using Microsoft.AspNetCore.Mvc;
+using NuGet;
 
 namespace Aether.Controllers
 {
@@ -22,14 +23,24 @@ namespace Aether.Controllers
             return pollutantAverage;
         }
 
-        //public static List<double> PollutantAveragesSimms(List<PollutantData> PD)
-        //{
-        //    List<double> PollutantAverages = new List<double>();
+        public static double PollutantAverages(List<PollutantData> PD, Func<PollutantData, IComparable> pollutant)
+        {
+            double pollutantAverage;
+            double pollutantSum;
+            PD.RemoveAll(x => (double)pollutant(x) == 0);
+            if(PD.Count > 0)
+            {
+                pollutantSum = PD.Sum(x => (double)pollutant(x));
+                pollutantAverage = Math.Round((pollutantSum / PD.Count), 3);
 
-        //    double o3Sum = (double)PD.Sum(x => x.O3);
-        //    double o3Average = Math.Round((o3Sum / PD.Count), 3);
-        //}
-        
+            }
+
+            double PM25Sum = (double)PD.Sum(x => x.Pm25);
+            double PM25Average = (double)Math.Round(PM25Sum / PD.Count, 1);
+            pollutantAverages.Add(PM25Average);
+
+        }
+
         //public static void SumAndAveragePollutantReadings(Sensor s)
         //{
         //    string sensorLocation = s.Name;
@@ -85,7 +96,7 @@ namespace Aether.Controllers
         //        pollutantAverages.Add(simmsSO2Average);  //index[5] SO2 ppb 1 hr
         //        pollutantAverages.Add(simmsNO2Average);  //index[6] NO2 ppb 1 hr
         //    }
-               
+
         //}
 
         public static double ConvertPPBtoPPM(double PollutantPPB)

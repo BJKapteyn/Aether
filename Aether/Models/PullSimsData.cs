@@ -43,6 +43,7 @@ namespace Aether.Models
 
             SqlCommand com = new SqlCommand(sql, connection);
             SqlDataReader rdr = com.ExecuteReader();
+
             while (rdr.Read())
             {
                 var pollutant = new PollutantData();
