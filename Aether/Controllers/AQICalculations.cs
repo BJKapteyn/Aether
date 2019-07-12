@@ -23,22 +23,22 @@ namespace Aether.Controllers
             return pollutantAverage;
         }
 
+        //stopped here ---------------------------------------------------------------------------------------------------
         public static double PollutantAverages(List<PollutantData> PD, Func<PollutantData, IComparable> pollutant)
         {
             double pollutantAverage;
             double pollutantSum;
+
             PD.RemoveAll(x => (double)pollutant(x) == 0);
+
             if(PD.Count > 0)
             {
                 pollutantSum = PD.Sum(x => (double)pollutant(x));
                 pollutantAverage = Math.Round((pollutantSum / PD.Count), 3);
-
+                return pollutantAverage;
             }
 
-            double PM25Sum = (double)PD.Sum(x => x.Pm25);
-            double PM25Average = (double)Math.Round(PM25Sum / PD.Count, 1);
-            pollutantAverages.Add(PM25Average);
-
+            return 0;
         }
 
         //public static void SumAndAveragePollutantReadings(Sensor s)
