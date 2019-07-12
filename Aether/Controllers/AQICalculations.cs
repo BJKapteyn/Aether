@@ -203,15 +203,35 @@ namespace Aether.Controllers
         }
 
 
-        public static int WeatherForecastEquation(List<WeatherDataFromAPI> weatherTime, int index, double eightHourO3)
+        public static int AQIForecastEquation(List<WeatherDataFromAPI> weatherTime, int index, double eightHourO3)
         {
 
-            double FutureAQI = (double)(5.3 * weatherTime[index].WindSpeed) + (double)(0.4 * weatherTime[index].TemperatureC) +
+            double FutureO3AQI = (double)(5.3 * weatherTime[index].WindSpeed) + (double)(0.4 * weatherTime[index].TemperatureC) +
                 (double)(0.1 * weatherTime[index].Humidity) + ((double)0.7 * eightHourO3);
 
-            return (int)Math.Round(FutureAQI);
+            return (int)Math.Round(FutureO3AQI);
 
         }
+
+
+        public static FutureAQIs AQIForecastEquation(List<WeatherDataFromAPI> weatherTime, int index, double eightHourO3, double eightHourCO, double eightHourNO2)
+        {
+            double FutureO3AQI = (double)(5.3 * weatherTime[index].WindSpeed) + (double)(0.4 * weatherTime[index].TemperatureC) +
+               (double)(0.1 * weatherTime[index].Humidity) + ((double)0.7 * eightHourO3);
+
+            double FutureCOAQI = -(double)(0.03 * weatherTime[index].TemperatureC) +
+                (double)(0.01 * weatherTime[index].Humidity) + ((double)0.6 * eightHourCO);
+
+            double FutureNO2AQI = 55.2 - (double)(17.5 * weatherTime[index].WindSpeed) -
+                (double)(1.6 * weatherTime[index].TemperatureC) + ((double)0.6 * eightHourNO2);
+
+            FutureAQIs futureAQI3Pollutants = new FutureAQIs((int)Math.Round(FutureO3AQI), (int)Math.Round(FutureCOAQI), (int)Math.Round(FutureNO2AQI));
+
+            return futureAQI3Pollutants;
+
+        }
+
+
 
     }
 

@@ -15,7 +15,7 @@ namespace Aether.Models
         public double AQICO { get; set; }
         public double AQISO2 { get; set; }
         public double AQINO2 { get; set; }
-        public double AQIPredictedTomorrow { get; set; }
+        public double AQIPredicted1Day { get; set; }
         public double AQIPredicted3Day { get; set; }
         public double AQIPredicted5Day { get; set; }
         public double AQIEPA { get; set; }
@@ -32,9 +32,13 @@ namespace Aether.Models
         public string Suggestion { get; set; }
         //public List<WeatherDataFromAPI> Weather { get; set; }
         //public List<Sensor> TwoClosestSensors { get; set; }
+
         public List<double> HistoricData { get; set; }
 
         public double Factorylat { get; set; }
         public double Factorylong { get; set; }
+
+        public List<FutureAQIs> FutureAQIs { get; set; } // index 0 = 1 day, index 1 = 3 day, index 2 = 5 day
+        //                                                  O3AQI, COAQI, NO2AQI
     }
 }

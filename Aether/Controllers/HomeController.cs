@@ -55,10 +55,13 @@ namespace Aether.Controllers
                 //AQIPredicted5Day 
             };
 
-            List<double> futureAQIs = getFutureAQIs(rv.AQIO3);
-            rv.AQIPredictedTomorrow = futureAQIs[0];
-            rv.AQIPredicted3Day = futureAQIs[1];
-            rv.AQIPredicted5Day = futureAQIs[2];
+            List<double> futureO3AQIs = getFutureO3AQIs(AQICalculations.pollutantAverages[0]);
+            rv.AQIPredicted1Day = futureO3AQIs[0];
+            rv.AQIPredicted3Day = futureO3AQIs[1];
+            rv.AQIPredicted5Day = futureO3AQIs[2];
+
+            List<double> futureCOAQIs = getFutureCOAQIs(AQICalculations.pollutantAverages[4]);
+
 
             return View(rv);
         }
@@ -66,9 +69,9 @@ namespace Aether.Controllers
         public void Pull8hrData(Sensor s)
         {
                 DateTime nowDay = DateTime.Now;
-                string currentHour = nowDay.ToString("HH:MM");
+                string currentHour = nowDay.ToString("HH:mm");
                 DateTime pastHrs = nowDay.AddHours(-8);
-                string pastTime = pastHrs.ToString("HH:MM");
+                string pastTime = pastHrs.ToString("HH:mm");
 
                 //pulls closest sensor name
                 string sensorLocation = "0004a30b0023acbc";
@@ -123,9 +126,9 @@ namespace Aether.Controllers
         public void Pull1hrData(Sensor s)
         {
             DateTime nowDay = DateTime.Now;
-            string currentHour = nowDay.ToString("HH:MM");
+            string currentHour = nowDay.ToString("HH:mm");
             DateTime pastHrs = nowDay.AddHours(-1);
-            string pastTime = pastHrs.ToString("HH:MM");
+            string pastTime = pastHrs.ToString("HH:mm");
 
             //pulls closest sensor name
             string sensorLocation = "0004a30b0023acbc";
@@ -181,7 +184,7 @@ namespace Aether.Controllers
         public void Pull24hrData(Sensor s)
         {
             DateTime nowDay = DateTime.Now;
-            string currentHour = nowDay.ToString("HH:MM");
+            string currentHour = nowDay.ToString("HH:mm");
 
             //pulls closest sensor name
             string sensorLocation = "0004a30b0023acbc";
@@ -325,17 +328,21 @@ namespace Aether.Controllers
         }
 
 
-        public static List<double> getFutureAQIs(double O3AQI)
+        public static List<double> getFutureO3AQIs(double O3AQI)
         {
             List<WeatherDataFromAPI> weatherForecast = APIController.GetWeatherForcast();
 
-            List<double> futureAQIs = new List<double>();
+            List<FutureAQIs> futureAQIs = new List<FutureAQIs>();
+
             for (int i = 1; i < 4; i++)
             {
-                futureAQIs.Add(AQICalculations.WeatherForecastEquation(weatherForecast, i, O3AQI));
+                futureAQIs.Add(AQICalculations.O3ForecastEquation(weatherForecast, i, O3AQI));
+
             }
 
             return futureAQIs;
         }
+
     }
+
 }
