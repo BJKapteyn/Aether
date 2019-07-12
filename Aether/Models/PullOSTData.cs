@@ -19,7 +19,7 @@ namespace Aether.Models
             List<PollutantData> ostData = new List<PollutantData>();
             //will add hours soon
             DateTime nowDay = DateTime.Now;
-            string lasthour = nowDay.AddHours(-8).ToString("HH:mm");
+            string lasthour = nowDay.AddHours(hours).ToString("HH:mm");
             string currentHour = nowDay.ToString("HH:mm");
             string sql;
             //pulls closest sensor name

@@ -63,9 +63,22 @@ namespace Aether.Controllers
 
             return View(rv);
         }
-
-
-
+        //1hr
+        //                Dev_id = (string)rdr["dev_id"],
+        //                Time = (DateTime)rdr["time"],
+        //                O3 = Math.Round(AQICalculations.UGM3ConvertToPPM((double)rdr["o3"], 48), 3), //ppm
+        //                NO2 = Math.Round((double)rdr["no2"], 0), //ugm3
+        //                SO2 = Math.Round((double)rdr["so2"], 0), //ugm3
+        //                Id = (int)rdr["id"]
+        //8hr
+        //                    Dev_id = (string)rdr["dev_id"],
+        //                    Time = (DateTime)rdr["time"],
+        //                    //CO = (double?)rdr["co"],  //ugm3
+        //                    Id = (int)rdr["id"],
+        //24hr
+        //                Dev_id = (string)rdr["dev_id"],
+        //                Time = (DateTime)rdr["time"],
+        //                Id = (int)rdr["id"]
         //public void Pull8hrData(Sensor s)
         //{
         //        DateTime nowDay = DateTime.Now;
