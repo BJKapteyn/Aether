@@ -39,6 +39,6 @@ namespace Aether.Models
         public double Factorylong { get; set; }
 
         public List<FutureAQIs> FutureAQIs { get; set; } // index 0 = 1 day, index 1 = 3 day, index 2 = 5 day
-        //                                                  O3AQI, COAQI, NO2AQI
+        //                                                  .O3AQI, .COAQI, .NO2AQI
     }
 }
