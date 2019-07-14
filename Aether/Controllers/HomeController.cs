@@ -58,6 +58,7 @@ namespace Aether.Controllers
             List<FutureAQIs> futureAQIs = getFutureAQIs(AQICalculations.pollutantAverages[0], AQICalculations.pollutantAverages[3], AQICalculations.pollutantAverages[5]);
             rv.FutureAQIs = futureAQIs; // sent to view as FutureAQIs object from DisplayToUserInformation model
                                         // 3x3 list index 0 = 1 day, index 1 = 3 day, index 2 = 5 day & .O3, .CO, .NO2
+            rv.SensorName = sensors[0].CrossStreet;
 
             return View(rv);
         }

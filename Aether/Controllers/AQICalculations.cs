@@ -20,7 +20,7 @@ namespace Aether.Controllers
         public static void SumAndAveragePollutantReadings()
         {
             List<Sensor> sensors = Sensor.GetSensors();
-            string sensorLocation = sensors[6].Name;
+            string sensorLocation = sensors[1].Name;
 
             if (sensorLocation.Contains("graq"))
             {
