@@ -14,32 +14,114 @@ namespace Aether.Models
 
         public double? PM25Average { get; set; }
         public int PM25BPIndex { get; set; }
-        public double PM25AQI { get; set; }
+        public double PM25AQI { get; set; } = 0;
 
         public double? PM10Average { get; set; }
         public int PM10BPIndex { get; set; }
-        public double PM10AQI { get; set; }
+        public double PM10AQI { get; set; } = 0;
 
         public double? COAverage { get; set; }
         public int COBPIndex { get; set; }
-        public double COAQI { get; set; }
+        public double COAQI { get; set; } = 0;
 
         public double? NO2Average { get; set; }
         public int NO2BPIndex { get; set; }
-        public double NO2AQI { get; set; }
+        public double NO2AQI { get; set; } = 0;
 
         public double? SO2Average { get; set; }
         public int SO2BPIndex { get; set; }
-        public double SO2AQI { get; set; }
+        public double SO2AQI { get; set; } = 0;
+
+        public Pollutants()
+        {
+
+        }
 
         public Pollutants(List<PollutantData> PD)
         {
             O3Average = AQICalculations.PollutantAverage(PD, x => x.O3);
+            if(O3Average > 0)
+            {
+                //if the reading is bad, the breakpoint index int will be high and out of range of the table
+                try
+                {
+                    O3BPIndex = AQICalculations.BreakpointIndexCalculation((double)O3Average, BreakPointTable.O38hr);
+                    O3AQI = AQICalculations.AQIEquation((double)O3Average, O3BPIndex, BreakPointTable.O38hr);
+                }
+                catch(IndexOutOfRangeException)
+                {
+                    O3AQI = 0;
+                }
+            }
+
             PM25Average = AQICalculations.PollutantAverage(PD, x => x.PM25);
+            if(PM25Average > 0)
+            {
+                try
+                {
+                    PM25BPIndex = AQICalculations.BreakpointIndexCalculation((double)PM25Average, BreakPointTable.PM2524hr);
+                    PM25AQI = AQICalculations.AQIEquation((double)O3Average, PM25BPIndex, BreakPointTable.PM2524hr);
+                }
+                catch(IndexOutOfRangeException)
+                {
+                    PM25AQI = 0;
+                }
+
+            }
+
             PM10Average = AQICalculations.PollutantAverage(PD, x => x.PM10);
+            if(PM10Average > 0)
+            {
+                try
+                {
+                    PM10BPIndex = AQICalculations.BreakpointIndexCalculation((double)PM10Average, BreakPointTable.PM1024hr);
+                    PM10AQI = AQICalculations.AQIEquation((double)PM10Average, PM10BPIndex, BreakPointTable.PM1024hr);
+                }
+                catch(IndexOutOfRangeException)
+                {
+                    PM10AQI = 0;
+                }
+            }
+
             COAverage = AQICalculations.PollutantAverage(PD, x => x.CO);
+            if(COAverage > 0)
+            {
+                try
+                {
+                    COBPIndex = AQICalculations.BreakpointIndexCalculation((double)COAverage, BreakPointTable.CO8hr);
+                    COAQI = AQICalculations.AQIEquation((double)COAverage, COBPIndex, BreakPointTable.CO8hr);
+                }
+                catch(IndexOutOfRangeException)
+                {
+                    COAQI = 0;
+                }
+            }
             NO2Average = AQICalculations.PollutantAverage(PD, x => x.NO2);
+            if(NO2Average > 0)
+            {
+                try
+                {
+                    NO2BPIndex = AQICalculations.BreakpointIndexCalculation((double)NO2Average, BreakPointTable.NO21hr);
+                    NO2AQI = AQICalculations.AQIEquation((double)NO2Average, NO2BPIndex, BreakPointTable.NO21hr);
+                }
+                catch (IndexOutOfRangeException)
+                {
+                    NO2AQI = 0;
+                }
+            }
             SO2Average = AQICalculations.PollutantAverage(PD, x => x.SO2);
+            if(SO2Average > 0)
+            {
+                try
+                {
+                    SO2BPIndex = AQICalculations.BreakpointIndexCalculation((double)SO2Average, BreakPointTable.SO21hr);
+                    SO2AQI = AQICalculations.AQIEquation((double)SO2Average, SO2BPIndex, BreakPointTable.SO21hr);
+                }
+                catch(IndexOutOfRangeException)
+                {
+                    SO2AQI = 0;
+                }
+            }
         }
 
         //public double DataChecker(double data)

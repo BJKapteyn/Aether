@@ -169,26 +169,26 @@ namespace Aether.Controllers
         //    //o3 8hr = 0, o3 1hr = 1, pm10 = 2, pm2.5 = 3, co = 4, so2 = 5, no2 = 6
         //}
 
-        public static double AQIEquation(double pollutantReading, int breakpointIndex, int pollutantIndex)
+        public static double AQIEquation(double pollutantReading, int breakpointIndex, BreakPointTable breakPoint)
         {
             //index 7 in breakpoint table is the AQI
             double Ihi = breakPointTable[7].High[breakpointIndex];
             double Ilo = breakPointTable[7].Low[breakpointIndex];
-            double BPhi = breakPointTable[pollutantIndex].High[breakpointIndex];
-            double BPlow = breakPointTable[pollutantIndex].Low[breakpointIndex];
+            double BPhi = breakPoint.High[breakpointIndex];
+            double BPlow = breakPoint.Low[breakpointIndex];
             double Cp = pollutantReading;
 
             double AQIForPollutant = ((Ihi - Ilo) / (BPhi - BPlow)) * (Cp - BPlow) + Ilo;
             return AQIForPollutant;
         }
 
-        public static double CalculateAQI(double pollutantPPM, int breakpointIndex, int pollutantIndex)
-        {
-            // using 1h reading
-            double airQuailtyIndex = AQIEquation(pollutantPPM, breakpointIndex, pollutantIndex);
+        //public static double CalculateAQI(double pollutantPPM, int breakpointIndex, int pollutantIndex)
+        //{
+        //    // using 1h reading
+        //    double airQuailtyIndex = AQIEquation(pollutantPPM, breakpointIndex, pollutantIndex);
 
-            return airQuailtyIndex;
-        }
+        //    return airQuailtyIndex;
+        //}
 
         //public static void AQI()
         //{

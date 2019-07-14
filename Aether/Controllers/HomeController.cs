@@ -28,18 +28,25 @@ namespace Aether.Controllers
         {
             //just put the default list in for now.
             List<Sensor> sensors = Geocode.OrderedSensors(address);
+            Pollutants pollutantAQIs = new Pollutants();
             
             if(sensors[0].Name.Contains("graq"))
             {
                 //refactor this with linq and just pull 24hrs once and add all of the readings to one object
                 PullOSTData oneHrData = new PullOSTData(sensors[0], -1, configuration);
-                Pollutants Pollutants1hr = new Pollutants(oneHrData.Data);
+                Pollutants pollutants1hr = new Pollutants(oneHrData.Data);
 
                 PullOSTData eightHrData = new PullOSTData(sensors[0], -8, configuration);
-                Pollutants Pollutants8Hr = new Pollutants(eightHrData.Data);
+                Pollutants pollutants8Hr = new Pollutants(eightHrData.Data);
+
+                if(pollutants1hr.O3Average >= 0.125)
+                {
+                    
+                }
 
                 PullOSTData fullDayData = new PullOSTData(sensors[0], -24, configuration);
-                Pollutants Pollutants24hr = new Pollutants(fullDayData.Data);
+                Pollutants pollutants24hr = new Pollutants(fullDayData.Data);
+                
             } 
             else
             {
