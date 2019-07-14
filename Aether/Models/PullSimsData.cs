@@ -1,18 +1,25 @@
-﻿using Microsoft.Extensions.Configuration;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
+using Aether.Models;
 using Aether.Controllers;
 
 namespace Aether.Models
 {
     public class PullSimsData
     {
+        public List<PollutantData> Data {get; set;}
         public PullSimsData()
         {
 
+        }
+
+        public PullSimsData(Sensor s, int hours, IConfiguration c)
+        {
+            Data = PullData(s, hours, c);
         }
 
         public List<PollutantData> PullData(Sensor s, int hours, IConfiguration configuration)

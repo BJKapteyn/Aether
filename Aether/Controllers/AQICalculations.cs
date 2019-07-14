@@ -11,29 +11,23 @@ namespace Aether.Controllers
     //Lisa
     public class AQICalculations : Controller
     {
-        public static List<double> pollutantAverages = new List<double>();
+        //public static List<double> pollutantAverages = new List<double>();
         public static List<int> breakPointIndexes = new List<int>();
         public static List<BreakPointTable> breakPointTable = BreakPointTable.GetPollutantTypes();
         public static List<double> pollutantAQIs = new List<double>();
 
-
-        public static List<double> PollutantAveragesOST(Sensor s)
-        {
-            List<double> pollutantAverage = new List<double>();
-            return pollutantAverage;
-        }
-
         //stopped here ---------------------------------------------------------------------------------------------------
-        public static double PollutantAverages(List<PollutantData> PD, Func<PollutantData, IComparable> pollutant)
+        //enter lambda expression under pollutantLamda to designate the pollutant you want averaged ex. x => x.O3
+        public static double PollutantAverage(List<PollutantData> PD, Func<PollutantData, IComparable> pollutantLamda)
         {
             double pollutantAverage;
             double pollutantSum;
 
-            PD.RemoveAll(x => (double)pollutant(x) == 0);
+            PD.RemoveAll(x => (double)pollutantLamda(x) == 0);
 
             if(PD.Count > 0)
             {
-                pollutantSum = PD.Sum(x => (double)pollutant(x));
+                pollutantSum = PD.Sum(x => (double)pollutantLamda(x));
                 pollutantAverage = Math.Round((pollutantSum / PD.Count), 3);
                 return pollutantAverage;
             }
@@ -128,46 +122,52 @@ namespace Aether.Controllers
 
 
         //Calculate what breakpoint index to use
-        public static int BreakpointIndexCalculation(double Pollutant, int pollutantIndex)
+        public static int BreakpointIndexCalculation(double Pollutant, BreakPointTable B)
         {
             int breakPointIndex = 0;
-
-            for (int i = 0; i < 6; i++)
+            if (Pollutant == 0)
             {
-                double low = breakPointTable[pollutantIndex].Low[i];
-                double high = breakPointTable[pollutantIndex].High[i];
-
-                if (Pollutant >= low && Pollutant <= high)
+                for (int i = 0; i < 6; i++)
                 {
-                    breakPointIndex = i;
-                    break;
+                    double low = B.Low[i];
+                    double high = B.High[i];
+
+                    if (Pollutant >= low && Pollutant <= high)
+                    {
+                        breakPointIndex = i;
+                        break;
+                    }
                 }
+            }
+            else
+            {
+                breakPointIndex = int.MaxValue;
             }
 
             return breakPointIndex;
         }
 
-        public static void BreakPointIndex()
-        {
-            if (pollutantAverages[1] < 0.125)
-            {
-                breakPointIndexes.Add(BreakpointIndexCalculation(pollutantAverages[0], 0));
-                breakPointIndexes.Add(0); //blank
-            }
-            else
-            {
-                breakPointIndexes.Add(0); //blank
-                breakPointIndexes.Add(BreakpointIndexCalculation(pollutantAverages[1], 1));
-            }
+        //public static void BreakPointIndex()
+        //{
+        //    if (pollutantAverages[1] < 0.125)
+        //    {
+        //        breakPointIndexes.Add(BreakpointIndexCalculation(pollutantAverages[0], 0));
+        //        breakPointIndexes.Add(0); //blank
+        //    }
+        //    else
+        //    {
+        //        breakPointIndexes.Add(0); //blank
+        //        breakPointIndexes.Add(BreakpointIndexCalculation(pollutantAverages[1], 1));
+        //    }
 
-            breakPointIndexes.Add(BreakpointIndexCalculation(pollutantAverages[2], 2));
-            breakPointIndexes.Add(BreakpointIndexCalculation(pollutantAverages[3], 3));
-            breakPointIndexes.Add(BreakpointIndexCalculation(pollutantAverages[4], 4));
-            breakPointIndexes.Add(BreakpointIndexCalculation(pollutantAverages[5], 5));
-            breakPointIndexes.Add(BreakpointIndexCalculation(pollutantAverages[6], 6));
+        //    breakPointIndexes.Add(BreakpointIndexCalculation(pollutantAverages[2], 2));
+        //    breakPointIndexes.Add(BreakpointIndexCalculation(pollutantAverages[3], 3));
+        //    breakPointIndexes.Add(BreakpointIndexCalculation(pollutantAverages[4], 4));
+        //    breakPointIndexes.Add(BreakpointIndexCalculation(pollutantAverages[5], 5));
+        //    breakPointIndexes.Add(BreakpointIndexCalculation(pollutantAverages[6], 6));
 
-            //o3 8hr = 0, o3 1hr = 1, pm10 = 2, pm2.5 = 3, co = 4, so2 = 5, no2 = 6
-        }
+        //    //o3 8hr = 0, o3 1hr = 1, pm10 = 2, pm2.5 = 3, co = 4, so2 = 5, no2 = 6
+        //}
 
         public static double AQIEquation(double pollutantReading, int breakpointIndex, int pollutantIndex)
         {
@@ -190,33 +190,33 @@ namespace Aether.Controllers
             return airQuailtyIndex;
         }
 
-        public static void AQI()
-        {
-            if (pollutantAverages[1] < 0.125)
-            {
-                double O3AQI = Math.Round(CalculateAQI(pollutantAverages[0], breakPointIndexes[0], 0), 0);
-                pollutantAQIs.Add(O3AQI);
-            }
-            else
-            {
-                double O3AQI = Math.Round(CalculateAQI(pollutantAverages[1], breakPointIndexes[1], 1), 0);
-                pollutantAQIs.Add(O3AQI);
-            }
+        //public static void AQI()
+        //{
+        //    if (pollutantAverages[1] < 0.125)
+        //    {
+        //        double O3AQI = Math.Round(CalculateAQI(pollutantAverages[0], breakPointIndexes[0], 0), 0);
+        //        pollutantAQIs.Add(O3AQI);
+        //    }
+        //    else
+        //    {
+        //        double O3AQI = Math.Round(CalculateAQI(pollutantAverages[1], breakPointIndexes[1], 1), 0);
+        //        pollutantAQIs.Add(O3AQI);
+        //    }
 
-            double PM10AQI = Math.Round(CalculateAQI(pollutantAverages[2], breakPointIndexes[2], 2), 0);
-            double PM25AQI = Math.Round(CalculateAQI(pollutantAverages[3], breakPointIndexes[3], 3), 0);
-            double COAQI = Math.Round(CalculateAQI(pollutantAverages[4], breakPointIndexes[4], 4), 0);
-            double SO2AQI = Math.Round(CalculateAQI(pollutantAverages[5], breakPointIndexes[5], 5), 0);
-            double NO2AQI = Math.Round(CalculateAQI(pollutantAverages[6], breakPointIndexes[6], 6), 0);
+        //    double PM10AQI = Math.Round(CalculateAQI(pollutantAverages[2], breakPointIndexes[2], 2), 0);
+        //    double PM25AQI = Math.Round(CalculateAQI(pollutantAverages[3], breakPointIndexes[3], 3), 0);
+        //    double COAQI = Math.Round(CalculateAQI(pollutantAverages[4], breakPointIndexes[4], 4), 0);
+        //    double SO2AQI = Math.Round(CalculateAQI(pollutantAverages[5], breakPointIndexes[5], 5), 0);
+        //    double NO2AQI = Math.Round(CalculateAQI(pollutantAverages[6], breakPointIndexes[6], 6), 0);
 
-            pollutantAQIs.Add(PM10AQI);
-            pollutantAQIs.Add(PM25AQI);
-            pollutantAQIs.Add(COAQI);
-            pollutantAQIs.Add(SO2AQI);
-            pollutantAQIs.Add(NO2AQI);
+        //    pollutantAQIs.Add(PM10AQI);
+        //    pollutantAQIs.Add(PM25AQI);
+        //    pollutantAQIs.Add(COAQI);
+        //    pollutantAQIs.Add(SO2AQI);
+        //    pollutantAQIs.Add(NO2AQI);
 
-            //o3 8hr = 0, o3 1hr = 1, pm10 = 2, pm2.5 = 3, co = 4, so2 = 5, no2 = 6
-        }
+        //    //o3 8hr = 0, o3 1hr = 1, pm10 = 2, pm2.5 = 3, co = 4, so2 = 5, no2 = 6
+        //}
 
         public static double MaxAQI()
         {

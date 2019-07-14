@@ -9,9 +9,15 @@ namespace Aether.Models
 {
     public class PullOSTData
     {
+        public List<PollutantData> Data { get; set; }
 
         public PullOSTData()
         {
+        }
+
+        public PullOSTData(Sensor s, int hours, IConfiguration c)
+        {
+            Data = PullData(s, hours, c);
         }
 
         public List<PollutantData> PullData(Sensor s, int hours, IConfiguration c)

@@ -34,9 +34,9 @@ namespace Aether.Controllers
             
             //AQICalculations.SumAndAveragePollutantReadings(sensors[0]);
 
-            AQICalculations.BreakPointIndex();
+            //AQICalculations.BreakPointIndex();
 
-            AQICalculations.AQI();
+            //AQICalculations.AQI();
 
             DisplayToUserInformation rv = new DisplayToUserInformation
             {
@@ -56,10 +56,10 @@ namespace Aether.Controllers
                 //AQIPredicted5Day 
             };
 
-            List<double> futureAQIs = getFutureAQIs(AQICalculations.pollutantAverages[0]);
-            rv.AQIPredictedTomorrow = futureAQIs[0];
-            rv.AQIPredicted3Day = futureAQIs[1];
-            rv.AQIPredicted5Day = futureAQIs[2];
+            //List<double> futureAQIs = getFutureAQIs();
+            //rv.AQIPredictedTomorrow = futureAQIs[0];
+            //rv.AQIPredicted3Day = futureAQIs[1];
+            //rv.AQIPredicted5Day = futureAQIs[2];
 
             return View(rv);
         }
