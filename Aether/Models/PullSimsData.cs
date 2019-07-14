@@ -71,7 +71,7 @@ namespace Aether.Models
                 }
                 else
                 {
-                    pollutant.Pm25 = Math.Round((double)rdr["pm25"], 1); //ugm3
+                    pollutant.PM25 = Math.Round((double)rdr["pm25"], 1); //ugm3
                 }
 
                 pollutantData.Add(pollutant);

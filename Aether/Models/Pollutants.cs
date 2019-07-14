@@ -10,21 +10,27 @@ namespace Aether.Models
     {
         public double? O3Average { get; set; }
         public int O3BPIndex { get; set; }
+        public double O3AQI { get; set; }
 
         public double? PM25Average { get; set; }
         public int PM25BPIndex { get; set; }
+        public double PM25AQI { get; set; }
 
         public double? PM10Average { get; set; }
         public int PM10BPIndex { get; set; }
+        public double PM10AQI { get; set; }
 
         public double? COAverage { get; set; }
         public int COBPIndex { get; set; }
+        public double COAQI { get; set; }
 
         public double? NO2Average { get; set; }
         public int NO2BPIndex { get; set; }
+        public double NO2AQI { get; set; }
 
         public double? SO2Average { get; set; }
         public int SO2BPIndex { get; set; }
+        public double SO2AQI { get; set; }
 
         public Pollutants(List<PollutantData> PD)
         {
@@ -36,6 +42,10 @@ namespace Aether.Models
             SO2Average = AQICalculations.PollutantAverage(PD, x => x.SO2);
         }
 
+        //public double DataChecker(double data)
+        //{
+
+        //}
         //public static List<Pollutants> GetPollutantTypes()
         //{
         //    List<Pollutants> pollutants = new List<Pollutants>();

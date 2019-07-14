@@ -4,6 +4,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
+using Aether.Controllers;
 
 namespace Aether.Models
 {
@@ -56,9 +57,10 @@ namespace Aether.Models
                 pollutant.Dev_id = (string)rdr["dev_id"];
                 pollutant.Time = (DateTime)rdr["time"];
                 pollutant.Id = (int)rdr["id"];
+                pollutant.O3 = Math.Round(AQICalculations.UGM3ConvertToPPM((double)rdr["o3"], 48), 3);
                 if (hours >= 24)
                 {
-                    pollutant.Pm25 = Math.Round((double)rdr["pm25"], 1); //ugm3
+                    pollutant.PM25 = Math.Round((double)rdr["pm25"], 1); //ugm3
                     pollutant.PM10 = Math.Round((double)rdr["pm10Average"], 1); //ugm3
                 }
 

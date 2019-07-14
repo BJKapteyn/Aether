@@ -13,7 +13,7 @@ namespace Aether.Controllers
 {
     public class HomeController : Controller
     {
-        public static List<PollutantData> pollutantData1Hr = new List<PollutantData>();
+        //public static List<PollutantData> pollutantData1Hr = new List<PollutantData>();
         //public static List<PollutantData8Hr> pollutantData8Hr = new List<PollutantData8Hr>();
         //public static List<PollutantData24Hr> pollutantData24Hr = new List<PollutantData24Hr>();
         private readonly IConfiguration configuration;
@@ -28,6 +28,23 @@ namespace Aether.Controllers
         {
             //just put the default list in for now.
             List<Sensor> sensors = Geocode.OrderedSensors(address);
+            
+            if(sensors[0].Name.Contains("graq"))
+            {
+                //refactor this with linq and just pull 24hrs once and add all of the readings to one object
+                PullOSTData oneHrData = new PullOSTData(sensors[0], -1, configuration);
+                Pollutants Pollutants1hr = new Pollutants(oneHrData.Data);
+
+                PullOSTData eightHrData = new PullOSTData(sensors[0], -8, configuration);
+                Pollutants Pollutants8Hr = new Pollutants(eightHrData.Data);
+
+                PullOSTData fullDayData = new PullOSTData(sensors[0], -24, configuration);
+                Pollutants Pollutants24hr = new Pollutants(fullDayData.Data);
+            } 
+            else
+            {
+
+            }
             //Pull1hrData(sensors[0]);
             //Pull8hrData(sensors[0]);
             //Pull24hrData(sensors[0]);
