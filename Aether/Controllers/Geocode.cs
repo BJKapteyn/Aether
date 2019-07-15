@@ -48,9 +48,9 @@ namespace Aether.Controllers
             {
                 sensors[i].Distance = LatLongDistance(userLocation.Lat, userLocation.Lng, sensors[i].Lat, sensors[i].Long);
             }
-            List<Sensor> orderedSensors = sensors.OrderBy(x => x.Distance).ToList();
+            List<Sensor> finalList = sensors.OrderBy(x => x.Distance).ToList();
 
-            return orderedSensors;
+            return finalList;
         }
 
         public static async Task<UserLatLng> UserLocation(string address)
