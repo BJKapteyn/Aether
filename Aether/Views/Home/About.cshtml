@@ -6,7 +6,7 @@
 
     foreach (WeatherDataFromAPI w in wd)
     {
-        <p>@w.Clouds - @Math.Round(w.TemperatureC) °C - @Math.Round(w.WindSpeed) m/s</p>
+        <p>@w.Clouds - @Math.Round(w.TemperatureC) °C - @Math.Round(w.WindSpeed) m/s - @w.Humidity % Humidity</p>
     }
 }
 
