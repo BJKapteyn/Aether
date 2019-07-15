@@ -43,11 +43,12 @@ namespace Aether.Controllers
                 //flip flop
                 if(pollutants1hr.O3Average >= 0.125)
                 {
-                    UserInfo.AQIO3 = pollutants8Hr.O3AQI;
+                    UserInfo.AQIO3 = pollutants1hr.O3AQI;
                 }
                 else
                 {
-                    UserInfo.AQIO3 = pollutants1hr.O3AQI;
+                    UserInfo.AQIO3 = pollutants8Hr.O3AQI;
+                    UserInfo.O3Avg = (double)pollutants8Hr.O3Average;
                 }
 
                 PullOSTData fullDayData = new PullOSTData(sensors[i], -24, configuration);
@@ -62,10 +63,13 @@ namespace Aether.Controllers
                 PullSimsData oneHrData = new PullSimsData(sensors[i], -1, configuration);
                 Pollutants pollutants1Hr = new Pollutants(oneHrData.Data);
                 UserInfo.AQINO2 = pollutants1Hr.NO2AQI;
+                UserInfo.NO2Avg = (double)pollutants1Hr.NO2Average;
                 UserInfo.AQISO2 = pollutants1Hr.SO2AQI;
 
                 PullSimsData eightHrData = new PullSimsData(sensors[i], -8, configuration);
                 Pollutants pollutants8Hr = new Pollutants(eightHrData.Data);
+                UserInfo.AQICO = pollutants8Hr.COAQI;
+                UserInfo.COAvg = (double)pollutants8Hr.COAverage;
                 if(pollutants1Hr.O3Average >= 0.125)
                 {
                     UserInfo.AQIO3 = pollutants8Hr.O3AQI;
@@ -79,13 +83,9 @@ namespace Aether.Controllers
                 Pollutants pollutant24Hr = new Pollutants(fullDayData.Data);
 
             }
-            List<FutureAQIs> futureAQIs = getFutureAQIs(AQICalculations.pollutantAverages[0], AQICalculations.pollutantAverages[4], AQICalculations.pollutantAverages[6]);
+            List<FutureAQIs> futureAQIs = getFutureAQIs(UserInfo.O3Avg, UserInfo.COAvg, UserInfo.NO2Avg) ;
             UserInfo.FutureAQIs = futureAQIs; // sent to view as FutureAQIs object from DisplayToUserInformation model
                                         // 3x3 list index 0 = 1 day, index 1 = 3 day, index 2 = 5 day & .O3, .CO, .NO2
-            List<double> futureAQIs = getFutureAQIs(UserInfo.AQIO3);
-            UserInfo.AQIPredictedTomorrow = futureAQIs[1];
-            UserInfo.AQIPredicted3Day = futureAQIs[2];
-            UserInfo.AQIPredicted5Day = futureAQIs[3];
 
             return View(UserInfo);
         }
@@ -97,9 +97,9 @@ namespace Aether.Controllers
             int AQIIndex = getAQIIndexPosition(highestAQI);
 
 
-            //ViewBag.highestAQI = highestAQI;
-            //ViewBag.AQIColor = returnHexColor(AQIIndex);
-            //ViewBag.AQIList = AQIList;
+            ViewBag.highestAQI = highestAQI;
+            ViewBag.AQIColor = returnHexColor(AQIIndex);
+            ViewBag.AQIList = AQIList;
 
             return View();
         }
@@ -168,24 +168,24 @@ namespace Aether.Controllers
         }
 
 
-        //public static int getAQIIndexPosition(int highestAQI)
-        //{
-        //    int AQIIndex;
+        public static int getAQIIndexPosition(int highestAQI)
+        {
+            int AQIIndex;
 
-        //    if (highestAQI > 200)
-        //    {       
-        //        AQIIndex = (highestAQI - 1) / 100 + 2;
+            if (highestAQI > 200)
+            {
+                AQIIndex = (highestAQI - 1) / 100 + 2;
 
-        //        if (AQIIndex > 5) AQIIndex = 5;
-        //    }
-        //    else
-        //    {
-        //        AQIIndex = (highestAQI - 1) / 50;
-        //    }
+                if (AQIIndex > 5) AQIIndex = 5;
+            }
+            else
+            {
+                AQIIndex = (highestAQI - 1) / 50;
+            }
 
-        //    return AQIIndex;
+            return AQIIndex;
 
-        //}
+        }
 
 
         public static List<FutureAQIs> getFutureAQIs(double O3Average, double COAverage, double NO2Average)
