@@ -55,7 +55,7 @@ namespace Aether.Controllers
                 //AQIPredicted5Day 
             };
 
-            List<FutureAQIs> futureAQIs = getFutureAQIs(AQICalculations.pollutantAverages[0], AQICalculations.pollutantAverages[3], AQICalculations.pollutantAverages[5]);
+            List<FutureAQIs> futureAQIs = getFutureAQIs(AQICalculations.pollutantAverages[0], AQICalculations.pollutantAverages[4], AQICalculations.pollutantAverages[6]);
             rv.FutureAQIs = futureAQIs; // sent to view as FutureAQIs object from DisplayToUserInformation model
                                         // 3x3 list index 0 = 1 day, index 1 = 3 day, index 2 = 5 day & .O3, .CO, .NO2
             rv.SensorName = sensors[0].CrossStreet;
@@ -82,11 +82,11 @@ namespace Aether.Controllers
 
                 if (sensorLocation.Contains("graq"))
                 {
-                    sql = $"EXEC OSTSelectReadings @dev_id = '{sensorLocation}', @time = '2019-03-28 {pastTime}', @endtime = '2019-03-28 {currentHour}';";
-                }
+                    sql = $"EXEC OSTSelectReadings @dev_id = '{sensorLocation}', @time = '2019-05-27 {pastTime}', @endtime = '2019-05-27 {currentHour}';";
+                }                                                                // 03-28 being replaced by june 1
                 else
                 {
-                    sql = $"EXEC SimmsSelectReadings @dev_id = '{sensorLocation}', @time = '2019-03-28 {pastTime}', @endtime = '2019-03-28 {currentHour}';";
+                    sql = $"EXEC SimmsSelectReadings @dev_id = '{sensorLocation}', @time = '2019-06-04 01:00', @endtime = '2019-06-04 09:00';";
                 }
 
                 SqlCommand com = new SqlCommand(sql, connection);
@@ -143,7 +143,7 @@ namespace Aether.Controllers
             }
             else
             {
-                sql = $"EXEC SimmsSelectReadings @dev_id = '{sensorLocation}', @time = '2019-03-28 {pastTime}', @endtime = '2019-03-28 {currentHour}';";
+                sql = $"EXEC SimmsSelectReadings @dev_id = '{sensorLocation}', @time = '2019-06-04 08:00', @endtime = '2019-06-04 09:00';";
             }
 
             SqlCommand com = new SqlCommand(sql, connection);
@@ -235,7 +235,7 @@ namespace Aether.Controllers
         }
         public IActionResult Index()
         {
-            List<AQIs> AQIList = APIController.GetListAQI("48127");
+            List<AQIs> AQIList = APIController.GetListAQI("48127"); // GetHistoricAQI
             int highestAQI = getHighestAQI(AQIList);
             int AQIIndex = getAQIIndexPosition(highestAQI);
 

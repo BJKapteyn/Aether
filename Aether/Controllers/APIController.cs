@@ -30,7 +30,7 @@ namespace Aether.Controllers
         }
 
 
-        public static List<AQIs> GetHistoricAQI(string zipCode = "49503", string dateTime = "2019-07-04T00-0000")
+        public static List<AQIs> GetHistoricAQI(string zipCode = "49503", string dateTime = "2019-07-13T00-0000")
         {
             // GR 49503 - KZOO 49001 - DETROIT 48127
             string key = APIKeys.AirNowAPI;

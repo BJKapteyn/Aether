@@ -20,7 +20,7 @@ namespace Aether.Controllers
         public static void SumAndAveragePollutantReadings()
         {
             List<Sensor> sensors = Sensor.GetSensors();
-            string sensorLocation = sensors[1].Name;
+            string sensorLocation = sensors[6].Name;
 
             if (sensorLocation.Contains("graq"))
             {
@@ -216,7 +216,7 @@ namespace Aether.Controllers
         }
 
 
-        public static FutureAQIs AQIForecastEquation(List<WeatherDataFromAPI> weatherTime, int index, double eightHourO3, double eightHourCO, double eightHourNO2)
+        public static FutureAQIs AQIForecastEquation(List<WeatherDataFromAPI> weatherTime, int index, double eightHourO3, double eightHourCO, double oneHourNO2)
         {
             // R^2 = 0.75
             double FutureO3AQI = (double)(5.3 * weatherTime[index].WindSpeed) + (double)(0.4 * weatherTime[index].TemperatureC) +
@@ -226,9 +226,9 @@ namespace Aether.Controllers
             double FutureCOAQI = -(double)(0.03 * weatherTime[index].TemperatureC) +
                 (double)(0.01 * weatherTime[index].Humidity) + ((double)0.6 * eightHourCO);
 
-            // R^2 = 0.28
-            double FutureNO2AQI = 55.2 - (double)(17.5 * weatherTime[index].WindSpeed) -
-                (double)(1.6 * weatherTime[index].TemperatureC) + ((double)0.4 * eightHourNO2);
+            // R^2 = 0.28 -- lowered Windspeed effect by tenfold and NO2 AQIs seem to come out more reasonable
+            double FutureNO2AQI = 55.2 - (double)(1.75 * weatherTime[index].WindSpeed) -
+                (double)(1.6 * weatherTime[index].TemperatureC) + ((double)0.4 * oneHourNO2);
 
             FutureAQIs futureAQI3Pollutants = new FutureAQIs((int)Math.Round(FutureO3AQI), (int)Math.Round(FutureCOAQI), (int)Math.Round(FutureNO2AQI));
 
