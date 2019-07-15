@@ -63,15 +63,15 @@ namespace Aether.Controllers
             return View(rv);
         }
             //sensor s and number of hours past 
-        public void Pull8hrData()
+        public void Pull8hrData(Sensor s)
         {
                 DateTime nowDay = DateTime.Now;
                 string currentHour = nowDay.ToString("HH:MM");
                 DateTime pastHrs = nowDay.AddHours(-8);
                 string pastTime = pastHrs.ToString("HH:MM");
 
-                //pulls closest sensor name
-                string sensorLocation = "0004a30b0023acbc";
+            //pulls closest sensor name
+                string sensorLocation = s.Name;
                 string connectionstring = configuration.GetConnectionString("DefaultConnectionstring");
                 SqlConnection connection = new SqlConnection(connectionstring);
 
@@ -120,7 +120,7 @@ namespace Aether.Controllers
             connection.Close();
         }
 
-        public void Pull1hrData()
+        public void Pull1hrData(Sensor s)
         {
             DateTime nowDay = DateTime.Now;
             string currentHour = nowDay.ToString("HH:MM");
@@ -128,7 +128,7 @@ namespace Aether.Controllers
             string pastTime = pastHrs.ToString("HH:MM");
 
             //pulls closest sensor name
-            string sensorLocation = "0004a30b0023acbc";
+            string sensorLocation = s.Name;
             string connectionstring = configuration.GetConnectionString("DefaultConnectionstring");
             SqlConnection connection = new SqlConnection(connectionstring);
 
@@ -178,13 +178,13 @@ namespace Aether.Controllers
             connection.Close();
         }
 
-        public void Pull24hrData()
+        public void Pull24hrData(Sensor s)
         {
             DateTime nowDay = DateTime.Now;
             string currentHour = nowDay.ToString("HH:MM");
 
             //pulls closest sensor name
-            string sensorLocation = "0004a30b0023acbc";
+            string sensorLocation = s.Name;
             string connectionstring = configuration.GetConnectionString("DefaultConnectionstring");
             SqlConnection connection = new SqlConnection(connectionstring);
 
