@@ -12,17 +12,17 @@ namespace Aether.Models
         public string Dev_id { get; set; }
         public DateTime Time { get; set; }
 
-        public double? O3 { get; set; }
+        public double? O3 { get; set; } = 0;
 
-        public double? PM25 { get; set; }
+        public double? PM25 { get; set; } = 0;
 
-        public double? PM10 { get; set; }
+        public double? PM10 { get; set; } = 0;
 
-        public double? CO { get; set; }
+        public double? CO { get; set; } = 0;
 
-        public double? NO2 { get; set; }
+        public double? NO2 { get; set; } = 0;
 
-        public double? SO2 { get; set; }
+        public double? SO2 { get; set; } = 0;
 
         public PollutantData ()
         {

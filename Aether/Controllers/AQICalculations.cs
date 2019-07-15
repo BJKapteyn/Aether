@@ -18,12 +18,12 @@ namespace Aether.Controllers
 
         //stopped here ---------------------------------------------------------------------------------------------------
         //enter lambda expression under pollutantLamda to designate the pollutant you want averaged ex. x => x.O3
-        public static double PollutantAverage(List<PollutantData> PD, Func<PollutantData, IComparable> pollutantLamda)
+        public static double PollutantAverage(List<PollutantData> pollutants, Func<PollutantData, IComparable> pollutantLamda)
         {
             double pollutantAverage;
             double pollutantSum;
-
-            PD.RemoveAll(x => (double)pollutantLamda(x) == 0);
+            List<PollutantData> PD = new List<PollutantData>(pollutants);
+            PD.RemoveAll(x => ((double)pollutantLamda(x)) == 0);
 
             if(PD.Count > 0)
             {
@@ -125,7 +125,7 @@ namespace Aether.Controllers
         public static int BreakpointIndexCalculation(double Pollutant, BreakPointTable B)
         {
             int breakPointIndex = 0;
-            if (Pollutant == 0)
+            if (Pollutant != 0)
             {
                 for (int i = 0; i < 6; i++)
                 {

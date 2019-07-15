@@ -13,9 +13,6 @@ namespace Aether.Controllers
 {
     public class HomeController : Controller
     {
-        //public static List<PollutantData> pollutantData1Hr = new List<PollutantData>();
-        //public static List<PollutantData8Hr> pollutantData8Hr = new List<PollutantData8Hr>();
-        //public static List<PollutantData24Hr> pollutantData24Hr = new List<PollutantData24Hr>();
         private readonly IConfiguration configuration;
 
 
@@ -27,260 +24,78 @@ namespace Aether.Controllers
         public IActionResult AirQuality(string address)
         {
             //just put the default list in for now.
-            List<Sensor> sensors = Geocode.OrderedSensors(address);
+            //List<Sensor> sensors = Geocode.OrderedSensors(address);
+            List<Sensor> sensors = Sensor.GetSensors();
             Pollutants pollutantAQIs = new Pollutants();
-            
-            if(sensors[0].Name.Contains("graq"))
+            DisplayToUserInformation UserInfo = new DisplayToUserInformation();
+
+            //going to change this to a loop later, use i to test various sensors.
+            int i = 6;
+            if (sensors[i].Name.Contains("graq"))
             {
-                //refactor this with linq and just pull 24hrs once and add all of the readings to one object
-                PullOSTData oneHrData = new PullOSTData(sensors[0], -1, configuration);
+                //refactor this with linq and just pull 24hrs once and add all of the readings to one object--------
+                PullOSTData oneHrData = new PullOSTData(sensors[i], -1, configuration);
+                //grab the list of pollutantdata and generate aqis based on the hour
                 Pollutants pollutants1hr = new Pollutants(oneHrData.Data);
 
-                PullOSTData eightHrData = new PullOSTData(sensors[0], -8, configuration);
+                PullOSTData eightHrData = new PullOSTData(sensors[i], -8, configuration);
                 Pollutants pollutants8Hr = new Pollutants(eightHrData.Data);
 
                 if(pollutants1hr.O3Average >= 0.125)
                 {
-                    
+                    UserInfo.AQIO3 = pollutants8Hr.O3AQI;
+                }
+                else
+                {
+                    UserInfo.AQIO3 = pollutants1hr.O3AQI;
                 }
 
-                PullOSTData fullDayData = new PullOSTData(sensors[0], -24, configuration);
+                PullOSTData fullDayData = new PullOSTData(sensors[i], -24, configuration);
                 Pollutants pollutants24hr = new Pollutants(fullDayData.Data);
-                
-            } 
-            else
-            {
+
+                UserInfo.AQIPM10 = pollutants24hr.PM10AQI;
+                UserInfo.AQIPM25 = pollutants24hr.PM25AQI;
 
             }
-            //Pull1hrData(sensors[0]);
-            //Pull8hrData(sensors[0]);
-            //Pull24hrData(sensors[0]);
-            
-            //AQICalculations.SumAndAveragePollutantReadings(sensors[0]);
-
-            //AQICalculations.BreakPointIndex();
-
-            //AQICalculations.AQI();
-
-            DisplayToUserInformation rv = new DisplayToUserInformation
+            else
             {
+                PullSimsData oneHrData = new PullSimsData(sensors[i], -1, configuration);
+                Pollutants pollutants1Hr = new Pollutants(oneHrData.Data);
+                UserInfo.AQINO2 = pollutants1Hr.NO2AQI;
+                UserInfo.AQISO2 = pollutants1Hr.SO2AQI;
 
-                AQIO3 = AQICalculations.pollutantAQIs[0],
-                AQIPM10 = AQICalculations.pollutantAQIs[1],
-                AQIPM25 = AQICalculations.pollutantAQIs[2],
-                AQICO = AQICalculations.pollutantAQIs[3],
-                AQISO2 = AQICalculations.pollutantAQIs[4],
-                AQINO2 = AQICalculations.pollutantAQIs[5],
-                AQIToday = AQICalculations.MaxAQI()
+                PullSimsData eightHrData = new PullSimsData(sensors[i], -8, configuration);
+                Pollutants pollutants8Hr = new Pollutants(eightHrData.Data);
+                if(pollutants1Hr.O3Average >= 0.125)
+                {
+                    UserInfo.AQIO3 = pollutants8Hr.O3AQI;
+                }
+                else
+                {
+                    UserInfo.AQIO3 = pollutants1Hr.O3AQI;
+                }
 
-                //AQISecondO3
-                //AQIThirdO3
-                //AQIPredictedTomorrow
-                //AQIPredicted3Day
-                //AQIPredicted5Day 
-            };
+                PullSimsData fullDayData = new PullSimsData(sensors[i], -24, configuration);
+                Pollutants pollutant24Hr = new Pollutants(fullDayData.Data);
 
-            //List<double> futureAQIs = getFutureAQIs();
-            //rv.AQIPredictedTomorrow = futureAQIs[0];
-            //rv.AQIPredicted3Day = futureAQIs[1];
-            //rv.AQIPredicted5Day = futureAQIs[2];
+            }
+            List<double> futureAQIs = getFutureAQIs(UserInfo.AQIO3);
+            UserInfo.AQIPredictedTomorrow = futureAQIs[1];
+            UserInfo.AQIPredicted3Day = futureAQIs[2];
+            UserInfo.AQIPredicted5Day = futureAQIs[3];
 
-            return View(rv);
+            return View(UserInfo);
         }
-        //1hr
-        //                Dev_id = (string)rdr["dev_id"],
-        //                Time = (DateTime)rdr["time"],
-        //                O3 = Math.Round(AQICalculations.UGM3ConvertToPPM((double)rdr["o3"], 48), 3), //ppm
-        //                NO2 = Math.Round((double)rdr["no2"], 0), //ugm3
-        //                SO2 = Math.Round((double)rdr["so2"], 0), //ugm3
-        //                Id = (int)rdr["id"]
-        //8hr
-        //                    Dev_id = (string)rdr["dev_id"],
-        //                    Time = (DateTime)rdr["time"],
-        //                    //CO = (double?)rdr["co"],  //ugm3
-        //                    Id = (int)rdr["id"],
-        //24hr
-        //                Dev_id = (string)rdr["dev_id"],
-        //                Time = (DateTime)rdr["time"],
-        //                Id = (int)rdr["id"]
-        //public void Pull8hrData(Sensor s)
-        //{
-        //        DateTime nowDay = DateTime.Now;
-        //        string currentHour = nowDay.ToString("HH:MM");
-        //        DateTime pastHrs = nowDay.AddHours(-8);
-        //        string pastTime = pastHrs.ToString("HH:MM");
 
-        //        //pulls closest sensor name
-        //        string sensorLocation = s.Name;
-        //        string connectionstring = configuration.GetConnectionString("DefaultConnectionstring");
-        //        SqlConnection connection = new SqlConnection(connectionstring);
-
-        //        connection.Open();
-
-        //        string sql;
-
-        //        if (sensorLocation.Contains("graq"))
-        //        {
-        //            sql = $"EXEC OSTSelectReadings @dev_id = '{sensorLocation}', @time = '2019-03-28 {pastTime}', @endtime = '2019-03-28 {currentHour}';";
-        //        }
-        //        else
-        //        {
-        //            sql = $"EXEC SimmsSelectReadings @dev_id = '{sensorLocation}', @time = '2019-03-28 {pastTime}', @endtime = '2019-03-28 {currentHour}';";
-        //        }
-
-        //        SqlCommand com = new SqlCommand(sql, connection);
-        //        SqlDataReader rdr = com.ExecuteReader();
-        //        while (rdr.Read())
-        //        {
-        //            if (sensorLocation.Contains("graq"))
-        //            {
-        //                var pollutant = new PollutantData8Hr
-        //                {
-        //                    Dev_id = (string)rdr["dev_id"],
-        //                    Time = (DateTime)rdr["time"],
-        //                    O3 = Math.Round(AQICalculations.UGM3ConvertToPPM((double)rdr["o3"], 48), 3), //ppm
-        //                    Id = (int)rdr["id"]
-        //                };
-        //                pollutantData8Hr.Add(pollutant);
-        //            }
-        //            else
-        //            {
-        //                var pollutant = new PollutantData8Hr { 
-
-        //                    Dev_id = (string)rdr["dev_id"],
-        //                    Time = (DateTime)rdr["time"],
-        //                    O3 = Math.Round(AQICalculations.UGM3ConvertToPPM((double)rdr["o3"], 48), 3), //ppm
-        //                    //CO = (double?)rdr["co"],  //ugm3
-        //                    Id = (int)rdr["id"],
-        //                };
-
-        //                pollutantData8Hr.Add(pollutant);
-        //            }
-        //        }
-        //    connection.Close();
-        //}
-
-        //public void Pull1hrData(Sensor s)
-        //{
-        //    DateTime nowDay = DateTime.Now;
-        //    string currentHour = nowDay.ToString("HH:MM");
-        //    DateTime pastHrs = nowDay.AddHours(-1);
-        //    string pastTime = pastHrs.ToString("HH:MM");
-
-        //    //pulls closest sensor name
-        //    string sensorLocation = s.Name;
-        //    string connectionstring = configuration.GetConnectionString("DefaultConnectionstring");
-        //    SqlConnection connection = new SqlConnection(connectionstring);
-
-        //    connection.Open();
-
-        //    string sql;
-
-        //    if (sensorLocation.Contains("graq"))
-        //    {
-        //        sql = $"EXEC OSTSelectReadings @dev_id = '{sensorLocation}', @time = '2019-03-28 {pastTime}', @endtime = '2019-03-28 {currentHour}';";
-        //    }
-        //    else
-        //    {
-        //        sql = $"EXEC SimmsSelectReadings @dev_id = '{sensorLocation}', @time = '2019-03-28 {pastTime}', @endtime = '2019-03-28 {currentHour}';";
-        //    }
-
-        //    SqlCommand com = new SqlCommand(sql, connection);
-        //    SqlDataReader rdr = com.ExecuteReader();
-        //    while (rdr.Read())
-        //    {
-        //        if (sensorLocation.Contains("graq"))
-        //        {
-        //            var pollutant = new PollutantData
-        //            {
-        //                Dev_id = (string)rdr["dev_id"],
-        //                Time = (DateTime)rdr["time"],
-        //                O3 = Math.Round(AQICalculations.UGM3ConvertToPPM((double)rdr["o3"], 48), 3), //ppm
-        //                Id = (int)rdr["id"]
-        //            };
-        //            pollutantData1Hr.Add(pollutant);
-        //        }
-        //        else
-        //        {
-        //            var pollutant = new PollutantData
-        //            {
-        //                Dev_id = (string)rdr["dev_id"],
-        //                Time = (DateTime)rdr["time"],
-        //                O3 = Math.Round(AQICalculations.UGM3ConvertToPPM((double)rdr["o3"], 48), 3), //ppm
-        //                NO2 = Math.Round((double)rdr["no2"], 0), //ugm3
-        //                SO2 = Math.Round((double)rdr["so2"], 0), //ugm3
-        //                Id = (int)rdr["id"]
-        //            };
-
-        //            pollutantData1Hr.Add(pollutant);
-        //        }
-        //    }
-        //    connection.Close();
-        //}
-
-        //public void Pull24hrData(Sensor s)
-        //{
-        //    DateTime nowDay = DateTime.Now;
-        //    string currentHour = nowDay.ToString("HH:MM");
-
-        //    //pulls closest sensor name
-        //    string sensorLocation = s.Name;
-        //    string connectionstring = configuration.GetConnectionString("DefaultConnectionstring");
-        //    SqlConnection connection = new SqlConnection(connectionstring);
-
-        //    connection.Open();
-
-        //    string sql;
-
-        //    if (sensorLocation.Contains("graq"))
-        //    {
-        //        sql = $"EXEC OSTSelectReadings @dev_id = '{sensorLocation}', @time = '2019-03-27 {currentHour}', @endtime = '2019-03-28 {currentHour}';";
-        //    }
-        //    else
-        //    {
-        //        sql = $"EXEC SimmsSelectReadings @dev_id = '{sensorLocation}', @time = '2019-03-27 {currentHour}', @endtime = '2019-03-28 {currentHour}';";
-        //    }
-
-        //    SqlCommand com = new SqlCommand(sql, connection);
-        //    SqlDataReader rdr = com.ExecuteReader();
-        //    while (rdr.Read())
-        //    {
-        //        if (sensorLocation.Contains("graq"))
-        //        {
-        //            var pollutant = new PollutantData24Hr
-        //            {
-        //                Dev_id = (string)rdr["dev_id"],
-        //                Time = (DateTime)rdr["time"],
-        //                Pm25 = Math.Round((double)rdr["pm25"], 1), //ugm3
-        //                PM10 = Math.Round((double)rdr["pm10Average"], 1), //ugm3
-        //                Id = (int)rdr["id"]
-        //            };
-        //            pollutantData24Hr.Add(pollutant);
-        //        }
-        //        else
-        //        {
-        //            var pollutant = new PollutantData24Hr
-        //            {
-        //                Dev_id = (string)rdr["dev_id"],
-        //                Time = (DateTime)rdr["time"],
-        //                Pm25 = Math.Round((double)rdr["pm25"], 1), //ugm3
-        //                Id = (int)rdr["id"]
-        //            };
-
-        //            pollutantData24Hr.Add(pollutant);
-        //        }
-        //    }
-        //    connection.Close();
-        //}
         public IActionResult Index()
         {
-            List<AQIs> AQIList = APIController.GetListAQI("48127");
-            int highestAQI = getHighestAQI(AQIList);
-            int AQIIndex = getAQIIndexPosition(highestAQI);
+            //List<AQIs> AQIList = APIController.GetListAQI("48127");
+            //int highestAQI = getHighestAQI(AQIList);
+            ////int AQIIndex = getAQIIndexPosition(highestAQI);
 
-            ViewBag.highestAQI = highestAQI;
-            ViewBag.AQIColor = returnHexColor(AQIIndex);
-            ViewBag.AQIList = AQIList;
+            //ViewBag.highestAQI = highestAQI;
+            //ViewBag.AQIColor = returnHexColor(AQIIndex);
+            //ViewBag.AQIList = AQIList;
 
             return View();
         }
@@ -349,24 +164,24 @@ namespace Aether.Controllers
         }
 
 
-        public static int getAQIIndexPosition(int highestAQI)
-        {
-            int AQIIndex;
+        //public static int getAQIIndexPosition(int highestAQI)
+        //{
+        //    int AQIIndex;
 
-            if (highestAQI > 200)
-            {       
-                AQIIndex = (highestAQI - 1) / 100 + 2;
+        //    if (highestAQI > 200)
+        //    {       
+        //        AQIIndex = (highestAQI - 1) / 100 + 2;
 
-                if (AQIIndex > 5) AQIIndex = 5;
-            }
-            else
-            {
-                AQIIndex = (highestAQI - 1) / 50;
-            }
+        //        if (AQIIndex > 5) AQIIndex = 5;
+        //    }
+        //    else
+        //    {
+        //        AQIIndex = (highestAQI - 1) / 50;
+        //    }
 
-            return AQIIndex;
+        //    return AQIIndex;
 
-        }
+        //}
 
 
         public static List<double> getFutureAQIs(double O3Reading)
@@ -375,7 +190,7 @@ namespace Aether.Controllers
 
             List<double> futureAQIs = new List<double>();
 
-            for (int i = 0; i < 3; i++)
+            for (int i = 0; i < 4; i++)
             {
                 futureAQIs.Add(AQICalculations.WeatherForecastEquation(weatherForecast, i, O3Reading));
             }

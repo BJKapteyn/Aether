@@ -38,12 +38,13 @@ namespace Aether.Models
             connection.Open();
 
             //will change when implementing variable days/current time
-            if(hours >= 24)
+            if(hours <= -24)
             {
-                 sql = $"EXEC OSTSelectReadings @dev_id = '{sensorLocation}', @time = '2019-03-27 {currentHour}', @endtime = '2019-03-28 {currentHour}';";
+                sql = $"EXEC OSTSelectReadings @dev_id = '{sensorLocation}', @time = '2019-03-27 {currentHour}', @endtime = '2019-03-28 {currentHour}';";
             }
             else
             {
+
                 sql = $"EXEC OSTSelectReadings @dev_id = '{sensorLocation}', @time = '2019-03-28 {lasthour}', @endtime = '2019-03-28 {currentHour}';";
             }
 
@@ -58,7 +59,7 @@ namespace Aether.Models
                 pollutant.Time = (DateTime)rdr["time"];
                 pollutant.Id = (int)rdr["id"];
                 pollutant.O3 = Math.Round(AQICalculations.UGM3ConvertToPPM((double)rdr["o3"], 48), 3);
-                if (hours >= 24)
+                if (hours <= -24)
                 {
                     pollutant.PM25 = Math.Round((double)rdr["pm25"], 1); //ugm3
                     pollutant.PM10 = Math.Round((double)rdr["pm10Average"], 1); //ugm3

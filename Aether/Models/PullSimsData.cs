@@ -27,7 +27,7 @@ namespace Aether.Models
             List<PollutantData> pollutantData = new List<PollutantData>();
 
             DateTime nowDay = DateTime.Now;
-            string currentHour = nowDay.ToString("HH:MM");
+            string currentHour = nowDay.ToString("HH:mm");
             string lastHour = nowDay.AddHours(hours).ToString("HH:mm");
 
             //pulls closest sensor name
@@ -39,9 +39,9 @@ namespace Aether.Models
 
             string sql;
 
-            if (hours >= 24)
+            if (hours <= -24)
             {
-                sql = $"EXEC SimmsSelectReadings @dev_id = '{sensorLocation}', @time = '2019-03-28 {currentHour}', @endtime = '2019-03-28 {currentHour}';";
+                sql = $"EXEC SimmsSelectReadings @dev_id = '{sensorLocation}', @time = '2019-03-27 {currentHour}', @endtime = '2019-03-28 {currentHour}';";
             }
             else
             {
@@ -51,6 +51,7 @@ namespace Aether.Models
             SqlCommand com = new SqlCommand(sql, connection);
             SqlDataReader rdr = com.ExecuteReader();
 
+            //adds the pollutants based on the hour given as a param
             while (rdr.Read())
             {
                 var pollutant = new PollutantData();
@@ -59,13 +60,13 @@ namespace Aether.Models
                 pollutant.Time = (DateTime)rdr["time"];
                 pollutant.Id = (int)rdr["id"];
 
-                if(hours >= 1)
+                if(hours <= -1)
                 {
                     pollutant.O3 = Math.Round(AQICalculations.UGM3ConvertToPPM((double)rdr["o3"], 48), 3); //ppm
                     pollutant.NO2 = Math.Round((double)rdr["no2"], 0); //ugm3
                     pollutant.SO2 = Math.Round((double)rdr["so2"], 0); //ugm3
                 }
-                else if(hours >= 8)
+                else if(hours <= -8)
                 {
                     pollutant.O3 = Math.Round(AQICalculations.UGM3ConvertToPPM((double)rdr["o3"], 48), 3); //ppm
                 }
