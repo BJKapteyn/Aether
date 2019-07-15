@@ -30,7 +30,7 @@ namespace Aether.Controllers
         }
 
 
-        public static List<AQIs> GetHistoricAQI(string zipCode = "49503", string dateTime = "2019-07-04T00-0000")
+        public static List<AQIs> GetHistoricAQI(string zipCode = "49503", string dateTime = "2019-07-13T00-0000")
         {
             // GR 49503 - KZOO 49001 - DETROIT 48127
             string key = APIKeys.AirNowAPI;
@@ -59,7 +59,7 @@ namespace Aether.Controllers
 
             JToken jt = ParseAPI.APICall(URL);
 
-            // Forecast readings are every 3h: 8=1 day, 24=3days, 39=5days minus 3h
+            // Forecast readings are every 3h: 0=now, 8=1 day, 24=3days, 39=5days minus 3h
             List<int> indexes = new List<int>() { 0, 8, 24, 39 };
 
             List<WeatherDataFromAPI> weatherForecast = new List<WeatherDataFromAPI>();

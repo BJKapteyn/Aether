@@ -79,6 +79,9 @@ namespace Aether.Controllers
                 Pollutants pollutant24Hr = new Pollutants(fullDayData.Data);
 
             }
+            List<FutureAQIs> futureAQIs = getFutureAQIs(AQICalculations.pollutantAverages[0], AQICalculations.pollutantAverages[4], AQICalculations.pollutantAverages[6]);
+            UserInfo.FutureAQIs = futureAQIs; // sent to view as FutureAQIs object from DisplayToUserInformation model
+                                        // 3x3 list index 0 = 1 day, index 1 = 3 day, index 2 = 5 day & .O3, .CO, .NO2
             List<double> futureAQIs = getFutureAQIs(UserInfo.AQIO3);
             UserInfo.AQIPredictedTomorrow = futureAQIs[1];
             UserInfo.AQIPredicted3Day = futureAQIs[2];
@@ -89,9 +92,10 @@ namespace Aether.Controllers
 
         public IActionResult Index()
         {
-            //List<AQIs> AQIList = APIController.GetListAQI("48127");
-            //int highestAQI = getHighestAQI(AQIList);
-            ////int AQIIndex = getAQIIndexPosition(highestAQI);
+            List<AQIs> AQIList = APIController.GetListAQI("48127");
+            int highestAQI = getHighestAQI(AQIList);
+            int AQIIndex = getAQIIndexPosition(highestAQI);
+
 
             //ViewBag.highestAQI = highestAQI;
             //ViewBag.AQIColor = returnHexColor(AQIIndex);
@@ -184,18 +188,21 @@ namespace Aether.Controllers
         //}
 
 
-        public static List<double> getFutureAQIs(double O3Reading)
+        public static List<FutureAQIs> getFutureAQIs(double O3Average, double COAverage, double NO2Average)
         {
             List<WeatherDataFromAPI> weatherForecast = APIController.GetWeatherForcast();
 
-            List<double> futureAQIs = new List<double>();
+            List<FutureAQIs> futureAQIs = new List<FutureAQIs>();
 
-            for (int i = 0; i < 4; i++)
+            for (int i = 1; i < 4; i++)
             {
-                futureAQIs.Add(AQICalculations.WeatherForecastEquation(weatherForecast, i, O3Reading));
+                futureAQIs.Add(AQICalculations.AQIForecastEquation(weatherForecast, i, O3Average, COAverage, NO2Average));
+
             }
 
             return futureAQIs;
         }
+
     }
+
 }

@@ -1,4 +1,3 @@
-﻿
 @model DisplayToUserInformation
 
 <p>The Air Quality(AQI) For Your Location is @Model.AQIToday</p><br>
@@ -9,6 +8,14 @@
 <p>CO: @Model.AQICO</p><br>
 <p>SO2: @Model.AQISO2</p><br>
 <p>NO2: @Model.AQINO2</p>
-<p>Future: @Model.AQIPredictedTomorrow</p>
-<p>3: @Model.AQIPredicted3Day</p>
-<p>5: @Model.AQIPredicted5Day</p>
+<p>CO 1-Day: @Model.FutureAQIs[0].COAQI</p>
+<p>CO 3-Day: @Model.FutureAQIs[1].COAQI</p>
+<p>CO 5-Day: @Model.FutureAQIs[2].COAQI</p>
+<p>O3 1-Day: @Model.FutureAQIs[0].O3AQI</p>
+<p>O3 3-Day: @Model.FutureAQIs[1].O3AQI</p>
+<p>O3 5-Day: @Model.FutureAQIs[2].O3AQI</p>
+<p>NO2 1-Day: @Model.FutureAQIs[0].NO2AQI</p>
+<p>NO2 3-Day: @Model.FutureAQIs[1].NO2AQI</p>
+<p>NO2 5-Day: @Model.FutureAQIs[2].NO2AQI</p>
+
+<p>Sensor Name: @Model.SensorName</p>

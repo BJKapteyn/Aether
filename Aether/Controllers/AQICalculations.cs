@@ -225,14 +225,37 @@ namespace Aether.Controllers
             return maxAQI;
         }
 
-
-        public static int WeatherForecastEquation(List<WeatherDataFromAPI> weatherTime, int index, double eightHourO3)
+        // overload in case you only want to bring in O3 data -- NOT IMPLEMENTED IN CONTROLLER YET
+        public static FutureAQIs AQIForecastEquation(List<WeatherDataFromAPI> weatherTime, int index, double eightHourO3)
         {
 
-            double FutureAQI = (double)(5.3 * weatherTime[index].WindSpeed) + (double)(0.4 * weatherTime[index].TemperatureC) +
+            double FutureO3AQI = (double)(5.3 * weatherTime[index].WindSpeed) + (double)(0.4 * weatherTime[index].TemperatureC) +
                 (double)(0.1 * weatherTime[index].Humidity) + ((double)0.7 * eightHourO3);
 
-            return (int)Math.Round(FutureAQI);
+            FutureAQIs futureAQIO3Only = new FutureAQIs((int)Math.Round(FutureO3AQI), 0, 0);
+
+            return futureAQIO3Only;
+
+        }
+
+
+        public static FutureAQIs AQIForecastEquation(List<WeatherDataFromAPI> weatherTime, int index, double eightHourO3, double eightHourCO, double oneHourNO2)
+        {
+            // R^2 = 0.75
+            double FutureO3AQI = (double)(5.3 * weatherTime[index].WindSpeed) + (double)(0.4 * weatherTime[index].TemperatureC) +
+               (double)(0.1 * weatherTime[index].Humidity) + ((double)0.7 * eightHourO3);
+
+            // R^2 = 0.48
+            double FutureCOAQI = -(double)(0.03 * weatherTime[index].TemperatureC) +
+                (double)(0.01 * weatherTime[index].Humidity) + ((double)0.6 * eightHourCO);
+
+            // R^2 = 0.28 -- lowered Windspeed effect by tenfold and NO2 AQIs seem to come out more reasonable
+            double FutureNO2AQI = 55.2 - (double)(1.75 * weatherTime[index].WindSpeed) -
+                (double)(1.6 * weatherTime[index].TemperatureC) + ((double)0.4 * oneHourNO2);
+
+            FutureAQIs futureAQI3Pollutants = new FutureAQIs((int)Math.Round(FutureO3AQI), (int)Math.Round(FutureCOAQI), (int)Math.Round(FutureNO2AQI));
+
+            return futureAQI3Pollutants;
 
         }
 
