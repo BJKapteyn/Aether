@@ -30,7 +30,8 @@ namespace Aether.Models
             string currentHour = nowDay.ToString("HH:mm");
             string sql;
             //pulls closest sensor name
-            string sensorLocation = s.Name;
+            string dbSensorCall = "AVG" + s.Name;
+
             string connectionstring = c.GetConnectionString("DefaultConnectionstring");
 
             SqlConnection connection = new SqlConnection(connectionstring);
@@ -40,12 +41,12 @@ namespace Aether.Models
             //will change when implementing variable days/current time
             if(hours <= -24)
             {
-                sql = $"EXEC OSTSelectReadings @dev_id = '{sensorLocation}', @time = '2019-03-27 {currentHour}', @endtime = '2019-03-28 {currentHour}';";
+                sql = $"EXEC {dbSensorCall} @time = '2019-07-11T{currentHour}', @endtime = '2019-07-12T{currentHour}';";
             }
             else
             {
 
-                sql = $"EXEC OSTSelectReadings @dev_id = '{sensorLocation}', @time = '2019-03-28 {lasthour}', @endtime = '2019-03-28 {currentHour}';";
+                sql = $"EXEC {dbSensorCall} @time = '2019-07-12T{lasthour}', @endtime = '2019-07-12T{currentHour}';";
             }
 
             SqlCommand com = new SqlCommand(sql, connection);
@@ -54,15 +55,33 @@ namespace Aether.Models
             while (rdr.Read())
             {
                 PollutantData pollutant = new PollutantData();
+                try
+                {
+                    pollutant.O3 = Math.Round(AQICalculations.UGM3ConvertToPPM((double)rdr["o3"], 48), 3);
+                }
+                catch(InvalidCastException)
+                {
+                    pollutant.O3 = 0;
+                }
 
-                pollutant.Dev_id = (string)rdr["dev_id"];
-                pollutant.Time = (DateTime)rdr["time"];
-                pollutant.Id = (int)rdr["id"];
-                pollutant.O3 = Math.Round(AQICalculations.UGM3ConvertToPPM((double)rdr["o3"], 48), 3);
                 if (hours <= -24)
                 {
-                    pollutant.PM25 = Math.Round((double)rdr["pm25"], 1); //ugm3
-                    pollutant.PM10 = Math.Round((double)rdr["pm10Average"], 1); //ugm3
+                    try
+                    {
+                        pollutant.PM25 = Math.Round((double)rdr["pm25"], 1);
+                    }//ugm3
+                    catch(InvalidCastException)
+                    {
+                        pollutant.PM25 = 0;
+                    }
+                    try
+                    {
+                        pollutant.PM10 = Math.Round((double)rdr["pm10"], 1);
+                    }//ugm3
+                    catch(InvalidCastException)
+                    {
+                        pollutant.PM10 = 0;
+                    }
                 }
 
                 ostData.Add(pollutant);

@@ -24,13 +24,13 @@ namespace Aether.Controllers
         public IActionResult AirQuality(string address)
         {
             //just put the default list in for now.
-            //List<Sensor> sensors = Geocode.OrderedSensors(address);
-            List<Sensor> sensors = Sensor.GetSensors();
+            List<Sensor> sensors = Geocode.OrderedSensors(address);
+            //List<Sensor> sensors = Sensor.GetSensors();
             Pollutants pollutantAQIs = new Pollutants();
             DisplayToUserInformation UserInfo = new DisplayToUserInformation();
 
-            //going to change this to a loop later, use i to test various sensors.
-            int i = 6;
+            //going to change this to a loop later, use i to test various sensors.-----------------------------------
+            int i = 0;
             if (sensors[i].Name.Contains("graq"))
             {
                 //refactor this with linq and just pull 24hrs once and add all of the readings to one object--------
@@ -40,7 +40,7 @@ namespace Aether.Controllers
 
                 PullOSTData eightHrData = new PullOSTData(sensors[i], -8, configuration);
                 Pollutants pollutants8Hr = new Pollutants(eightHrData.Data);
-
+                //flip flop
                 if(pollutants1hr.O3Average >= 0.125)
                 {
                     UserInfo.AQIO3 = pollutants8Hr.O3AQI;
@@ -74,7 +74,7 @@ namespace Aether.Controllers
                 {
                     UserInfo.AQIO3 = pollutants1Hr.O3AQI;
                 }
-
+                //add pm stuff dummy
                 PullSimsData fullDayData = new PullSimsData(sensors[i], -24, configuration);
                 Pollutants pollutant24Hr = new Pollutants(fullDayData.Data);
 

@@ -29,7 +29,7 @@ namespace Aether.Models
             DateTime nowDay = DateTime.Now;
             string currentHour = nowDay.ToString("HH:mm");
             string lastHour = nowDay.AddHours(hours).ToString("HH:mm");
-
+            string dbSensorCall = "AVG" + s.Name;
             //pulls closest sensor name
             string sensorLocation = s.Name;
             string connectionstring = configuration.GetConnectionString("DefaultConnectionstring");
@@ -41,11 +41,11 @@ namespace Aether.Models
 
             if (hours <= -24)
             {
-                sql = $"EXEC SimmsSelectReadings @dev_id = '{sensorLocation}', @time = '2019-03-27 {currentHour}', @endtime = '2019-03-28 {currentHour}';";
+                sql = $"EXEC {dbSensorCall} @time = '2019-07-11T{currentHour}', @endtime = '2019-07-12T{currentHour}';";
             }
             else
             {
-                sql = $"EXEC SimmsSelectReadings @dev_id = '{sensorLocation}', @time = '2019-03-28 {lastHour}', @endtime = '2019-03-28 {currentHour}';";
+                sql = $"EXEC {dbSensorCall} @time = '2019-07-12T{lastHour}', @endtime = '2019-07-12T{currentHour}';";
             }
 
             SqlCommand com = new SqlCommand(sql, connection);
@@ -56,23 +56,54 @@ namespace Aether.Models
             {
                 var pollutant = new PollutantData();
 
-                pollutant.Dev_id = (string)rdr["dev_id"];
-                pollutant.Time = (DateTime)rdr["time"];
-                pollutant.Id = (int)rdr["id"];
-
                 if(hours <= -1)
                 {
-                    pollutant.O3 = Math.Round(AQICalculations.UGM3ConvertToPPM((double)rdr["o3"], 48), 3); //ppm
-                    pollutant.NO2 = Math.Round((double)rdr["no2"], 0); //ugm3
-                    pollutant.SO2 = Math.Round((double)rdr["so2"], 0); //ugm3
+                    try
+                    {
+                        pollutant.O3 = Math.Round(AQICalculations.UGM3ConvertToPPM((double)rdr["o3"], 48), 3);
+                    } //ppm
+                    catch(InvalidCastException)
+                    {
+                        pollutant.O3 = 0;
+                    }
+                    try
+                    {
+                        pollutant.NO2 = Math.Round((double)rdr["no2"], 0);
+                    }//ugm3
+                    catch (InvalidCastException)
+                    {
+                        pollutant.NO2 = 0;
+                    }
+                    try
+                    {
+                        pollutant.SO2 = Math.Round((double)rdr["so2"], 0); //ugm3
+                    }
+                    catch(InvalidCastException)
+                    {
+                        pollutant.SO2 = 0;
+                    }
                 }
                 else if(hours <= -8)
                 {
-                    pollutant.O3 = Math.Round(AQICalculations.UGM3ConvertToPPM((double)rdr["o3"], 48), 3); //ppm
+                    try
+                    {
+                        pollutant.O3 = Math.Round(AQICalculations.UGM3ConvertToPPM((double)rdr["o3"], 48), 3); //ppm
+                    }
+                    catch(InvalidCastException)
+                    {
+                        pollutant.O3 = 0;
+                    }
                 }
                 else
                 {
-                    pollutant.PM25 = Math.Round((double)rdr["pm25"], 1); //ugm3
+                    try
+                    {
+                        pollutant.PM25 = Math.Round((double)rdr["pm25"], 1); //ugm3
+                    }
+                    catch(InvalidCastException)
+                    {
+                        pollutant.PM25 = 0;
+                    }
                 }
 
                 pollutantData.Add(pollutant);
