@@ -10,11 +10,14 @@ namespace Aether.Models
         public string PollutantWarning { get; set; }
         public double AQIToday { get; set; }
         public double AQIO3 { get; set; }
+        public double O3Avg { get; set; }
         public double AQIPM10 { get; set; }
         public double AQIPM25 { get; set; }
         public double AQICO { get; set; }
+        public double COAvg { get; set; }
         public double AQISO2 { get; set; }
         public double AQINO2 { get; set; }
+        public double NO2Avg { get; set; }
         public double AQIPredicted1Day { get; set; }
         public double AQIPredicted3Day { get; set; }
         public double AQIPredicted5Day { get; set; }
