@@ -31,58 +31,77 @@ namespace Aether.Controllers
 
             //going to change this to a loop later, use i to test various sensors.-----------------------------------
             int i = 0;
-            if (sensors[i].Name.Contains("graq"))
-            {
-                //refactor this with linq and just pull 24hrs once and add all of the readings to one object--------
-                PullOSTData oneHrData = new PullOSTData(sensors[i], -1, configuration);
-                //grab the list of pollutantdata and generate aqis based on the hour
-                Pollutants pollutants1hr = new Pollutants(oneHrData.Data);
+            //if (sensors[i].Name.Contains("graq"))
+            //{
+            //    //refactor this with linq and just pull 24hrs once and add all of the readings to one object--------
+            //    PullOSTData oneHrData = new PullOSTData(sensors[i], -1, configuration);
+            //    //grab the list of pollutantdata and generate aqis based on the hour
+            //    Pollutants pollutants1hr = new Pollutants(oneHrData.Data);
+            //    PullOSTData eightHrData = new PullOSTData(sensors[i], -8, configuration);
+            //    Pollutants pollutants8Hr = new Pollutants(eightHrData.Data);
 
-                PullOSTData eightHrData = new PullOSTData(sensors[i], -8, configuration);
-                Pollutants pollutants8Hr = new Pollutants(eightHrData.Data);
-                //flip flop
-                if(pollutants1hr.O3Average >= 0.125)
-                {
-                    UserInfo.AQIO3 = pollutants1hr.O3AQI;
+            //    if(pollutants1hr.O3Average >= 0.125)
+            //    {
+            //        UserInfo.AQIO3 = pollutants1hr.O3AQI;
+            //    }
+            //    else
+            //    {
+            //        UserInfo.AQIO3 = pollutants8Hr.O3AQI;
+            //        UserInfo.O3Avg = (double)pollutants8Hr.O3Average;
+            //    }
+
+            //    PullOSTData fullDayData = new PullOSTData(sensors[i], -24, configuration);
+            //    Pollutants pollutants24hr = new Pollutants(fullDayData.Data);
+
+            //    UserInfo.AQIPM10 = pollutants24hr.PM10AQI;
+            //    UserInfo.AQIPM25 = pollutants24hr.PM25AQI;
+
+            //}
+            //else
+            //{
+                PullSimsData oneHrData = new PullSimsData(sensors[i], -1, configuration);
+                Pollutants pollutants1Hr = new Pollutants(oneHrData);
+                UserInfo.AQINO2 = pollutants1Hr.NO2AQI;
+                if (pollutants1Hr.NO2Average != null)
+                { 
+                    UserInfo.NO2Avg = (double)pollutants1Hr.NO2Average;
                 }
                 else
                 {
-                    UserInfo.AQIO3 = pollutants8Hr.O3AQI;
-                    UserInfo.O3Avg = (double)pollutants8Hr.O3Average;
+                    UserInfo.NO2Avg = 0;
                 }
 
-                PullOSTData fullDayData = new PullOSTData(sensors[i], -24, configuration);
-                Pollutants pollutants24hr = new Pollutants(fullDayData.Data);
-
-                UserInfo.AQIPM10 = pollutants24hr.PM10AQI;
-                UserInfo.AQIPM25 = pollutants24hr.PM25AQI;
-
-            }
-            else
-            {
-                PullSimsData oneHrData = new PullSimsData(sensors[i], -1, configuration);
-                Pollutants pollutants1Hr = new Pollutants(oneHrData.Data);
-                UserInfo.AQINO2 = pollutants1Hr.NO2AQI;
-                UserInfo.NO2Avg = (double)pollutants1Hr.NO2Average;
                 UserInfo.AQISO2 = pollutants1Hr.SO2AQI;
 
                 PullSimsData eightHrData = new PullSimsData(sensors[i], -8, configuration);
-                Pollutants pollutants8Hr = new Pollutants(eightHrData.Data);
+                Pollutants pollutants8Hr = new Pollutants(eightHrData);
                 UserInfo.AQICO = pollutants8Hr.COAQI;
-                UserInfo.COAvg = (double)pollutants8Hr.COAverage;
-                if(pollutants1Hr.O3Average >= 0.125)
+
+                if (pollutants1Hr.COAverage != null)
                 {
-                    UserInfo.AQIO3 = pollutants8Hr.O3AQI;
+                    UserInfo.COAvg = (double)pollutants8Hr.COAverage;
+                }
+                else
+                {
+                    UserInfo.COAvg = 0;
+                }
+
+                if (pollutants1Hr.O3Average >= 0.125)
+                {
+                        UserInfo.AQIO3 = pollutants8Hr.O3AQI;
                 }
                 else
                 {
                     UserInfo.AQIO3 = pollutants1Hr.O3AQI;
                 }
-                //add pm stuff dummy
-                PullSimsData fullDayData = new PullSimsData(sensors[i], -24, configuration);
-                Pollutants pollutant24Hr = new Pollutants(fullDayData.Data);
 
-            }
+                PullSimsData fullDayData = new PullSimsData(sensors[i], -24, configuration);
+                Pollutants pollutant24Hr = new Pollutants(fullDayData);
+
+                UserInfo.AQIPM10 = pollutant24Hr.PM10AQI;
+                UserInfo.AQIPM25 = pollutant24Hr.PM25AQI;
+
+            //}
             List<FutureAQIs> futureAQIs = getFutureAQIs(UserInfo.O3Avg, UserInfo.COAvg, UserInfo.NO2Avg) ;
             UserInfo.FutureAQIs = futureAQIs; // sent to view as FutureAQIs object from DisplayToUserInformation model
                                         // 3x3 list index 0 = 1 day, index 1 = 3 day, index 2 = 5 day & .O3, .CO, .NO2
@@ -144,8 +163,6 @@ namespace Aether.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
-
-
 
         public static string returnHexColor(int index)
         {

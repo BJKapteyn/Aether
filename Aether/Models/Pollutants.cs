@@ -37,9 +37,9 @@ namespace Aether.Models
 
         }
 
-        public Pollutants(List<PollutantData> PD)
+        public Pollutants(PullSimsData PD)
         {
-            O3Average = AQICalculations.PollutantAverage(PD, x => x.O3);
+            O3Average = PD.Data.O3;
             if(O3Average > 0)
             {
                 //if the reading is bad, the breakpoint index int will be high and out of range of the table
@@ -54,7 +54,7 @@ namespace Aether.Models
                 }
             }
 
-            PM25Average = AQICalculations.PollutantAverage(PD, x => x.PM25);
+            PM25Average = PD.Data.PM25;
             if(PM25Average > 0)
             {
                 try
@@ -69,7 +69,7 @@ namespace Aether.Models
 
             }
 
-            PM10Average = AQICalculations.PollutantAverage(PD, x => x.PM10);
+            PM10Average = PD.Data.PM10;
             if(PM10Average > 0)
             {
                 try
@@ -83,7 +83,7 @@ namespace Aether.Models
                 }
             }
 
-            COAverage = AQICalculations.PollutantAverage(PD, x => x.CO);
+            COAverage = PD.Data.CO;
             if(COAverage > 0)
             {
                 try
@@ -96,7 +96,7 @@ namespace Aether.Models
                     COAQI = 0;
                 }
             }
-            NO2Average = AQICalculations.PollutantAverage(PD, x => x.NO2);
+            NO2Average = PD.Data.NO2;
             if(NO2Average > 0)
             {
                 try
@@ -109,7 +109,7 @@ namespace Aether.Models
                     NO2AQI = 0;
                 }
             }
-            SO2Average = AQICalculations.PollutantAverage(PD, x => x.SO2);
+            SO2Average = PD.Data.SO2;
             if(SO2Average > 0)
             {
                 try
