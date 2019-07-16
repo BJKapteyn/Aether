@@ -8,9 +8,6 @@ namespace Aether.Models
 {
     public class PollutantData
     {
-        public int Id { get; set; }
-        public string Dev_id { get; set; }
-        public DateTime Time { get; set; }
 
         public double? O3 { get; set; } = 0;
 
