@@ -37,7 +37,6 @@ namespace Aether.Models
                 }
             }
         }
-
         private static string GoogleAddress(string streetAddress)
         {
             string[] addressArr = streetAddress.Split(' ');
@@ -45,6 +44,7 @@ namespace Aether.Models
 
             for (int i = 0; i < addressArr.Length; i++)
             {
+        //Fix--------------------------------------------------------------------------------don't want to add a + to the last word
                 googleAddress += addressArr[i] + "+";
             }
             googleAddress += ",+Grand+Rapids,+MI";
