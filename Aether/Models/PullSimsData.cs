@@ -55,17 +55,17 @@ namespace Aether.Models
             while (rdr.Read())
             {
 
-                if(hours <= -1)
+                if(hours >= -1)
                 {
                     try
                     {
                         if (sensorLocation.Contains("graq"))
                         { 
-                            pollutant.O3 = Math.Round(AQICalculations.UGM3ConvertToPPM((double)rdr["o3"], 48), 3); //ppm
+                            pollutant.O3 = AQICalculations.UGM3ConvertToPPM((double)rdr["o3"], 48); //ppm
                         }
                         else
                         {
-                            pollutant.O3 = Math.Round(AQICalculations.ConvertPPBtoPPM((double)rdr["o3"]), 3); //ppb
+                            pollutant.O3 = AQICalculations.ConvertPPBtoPPM((double)rdr["o3"]); //ppb
                         }
 
                     } 
@@ -75,7 +75,7 @@ namespace Aether.Models
                     }
                     try
                     {
-                        pollutant.NO2 = Math.Round((double)rdr["no2"], 0); //ppb
+                        pollutant.NO2 = (double)rdr["no2"]; //ppb
                     }//ugm3
                     catch (InvalidCastException)
                     {
@@ -87,7 +87,7 @@ namespace Aether.Models
                     }
                     try
                     {
-                        pollutant.SO2 = Math.Round((double)rdr["so2"], 0); //ppb
+                        pollutant.SO2 = (double)rdr["so2"]; //ppb
                     }
                     catch(InvalidCastException)
                     {
@@ -95,20 +95,20 @@ namespace Aether.Models
                     }
                     catch (IndexOutOfRangeException)
                     {
-                        pollutant.NO2 = 0;
+                        pollutant.SO2 = 0;
                     }
                 }
-                else if(hours <= -8)
+                else if(hours >= -8)
                 {
                     try
                     {
                         if (sensorLocation.Contains("graq"))
                         {
-                            pollutant.O3 = Math.Round(AQICalculations.UGM3ConvertToPPM((double)rdr["o3"], 48), 3); //ppm
+                            pollutant.O3 = AQICalculations.UGM3ConvertToPPM((double)rdr["o3"], 48); //ppm
                         }
                         else
                         {
-                            pollutant.O3 = Math.Round(AQICalculations.ConvertPPBtoPPM((double)rdr["o3"]), 3); //ppb
+                            pollutant.O3 = AQICalculations.ConvertPPBtoPPM((double)rdr["o3"]); //ppb
                         }
                     }
                     catch(InvalidCastException)
@@ -117,7 +117,7 @@ namespace Aether.Models
                     }
                     try
                     {
-                        pollutant.CO = Math.Round((double)rdr["co"], 1); //ppm
+                        pollutant.CO = (double)rdr["co"]; //ppm
                     }
                     catch (InvalidCastException)
                     {
@@ -125,14 +125,14 @@ namespace Aether.Models
                     }
                     catch (IndexOutOfRangeException)
                     {
-                        pollutant.NO2 = 0;
+                        pollutant.CO = 0;
                     }
                 }
                 else
                 {
                     try
                     {
-                        pollutant.PM10 = Math.Round((double)rdr["pm10"], 0); //ugm3
+                        pollutant.PM10 = (double)rdr["pm10"]; //ugm3
                     }
                     catch (InvalidCastException)
                     {
@@ -140,11 +140,11 @@ namespace Aether.Models
                     }
                     catch (IndexOutOfRangeException)
                     {
-                        pollutant.NO2 = 0;
+                        pollutant.PM10 = 0;
                     }
                     try
                     {
-                        pollutant.PM25 = Math.Round((double)rdr["pm25"], 1); //ugm3
+                        pollutant.PM25 = (double)rdr["pm25"]; //ugm3
                     }
                     catch(InvalidCastException)
                     {
