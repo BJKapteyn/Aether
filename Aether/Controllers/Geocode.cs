@@ -42,15 +42,23 @@ namespace Aether.Controllers
         public static List<Sensor> OrderedSensors(string address)
         {
             List<Sensor> sensors = Sensor.GetSensors();
-            var userLocation = UserLocation(address).Result;
-
-            for (int i = 0; i < sensors.Count; i++)
+            try
             {
-                sensors[i].Distance = LatLongDistance(userLocation.Lat, userLocation.Lng, sensors[i].Lat, sensors[i].Long);
-            }
-            List<Sensor> finalList = sensors.OrderBy(x => x.Distance).ToList();
+                var userLocation = UserLocation(address).Result;
+                
+                for (int i = 0; i < sensors.Count; i++)
+                {
+                    sensors[i].Distance = LatLongDistance(userLocation.Lat, userLocation.Lng, sensors[i].Lat, sensors[i].Long);
+                }
+                List<Sensor> finalList = sensors.OrderBy(x => x.Distance).ToList();
 
-            return finalList;
+                return finalList;
+            }
+            catch(AggregateException)
+            {
+                sensors.Clear();
+                return sensors;
+            }
         }
 
         public static async Task<UserLatLng> UserLocation(string address)

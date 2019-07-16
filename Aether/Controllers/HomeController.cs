@@ -24,7 +24,12 @@ namespace Aether.Controllers
         public IActionResult AirQuality(string address)
         {
             //just put the default list in for now.
+            if(address == "" || address == null)
+            {
+                return RedirectToAction("Test");
+            }
             List<Sensor> sensors = Geocode.OrderedSensors(address);
+
             //List<Sensor> sensors = Sensor.GetSensors();
             Pollutants pollutantAQIs = new Pollutants();
             DisplayToUserInformation UserInfo = new DisplayToUserInformation();
@@ -143,11 +148,7 @@ namespace Aether.Controllers
 
         public IActionResult Test()
         {
-            List<Sensor> sensors = Sensor.GetSensors();
-            PullOSTData pullData = new PullOSTData();
-            List<PollutantData> data = pullData.PullData(sensors[0], 8, configuration);
-
-            return View(data);
+            return View();
         }
 
         //public IActionResult Privacy()
