@@ -81,11 +81,12 @@ namespace Aether.Models
             while (rdr.Read())
             {
 
-                if(hours <= -1)
+                if(hours >= -1)
                 {
                     try
                     {
                         if (sensorLocation.Contains("graq"))
+
                         {
                             O3Average = Math.Round(AQICalculations.UGM3ConvertToPPM((double)rdr["o3"], 48), 3); //ppm
                         }
@@ -100,6 +101,7 @@ namespace Aether.Models
                     }
                     try
                     {
+
                         NO2Average = Math.Round((double)rdr["no2"], 0); //ppb
                     }//ugm3
                     catch (InvalidCastException)
@@ -112,6 +114,7 @@ namespace Aether.Models
                     }
                     try
                     {
+
                         SO2Average = Math.Round((double)rdr["so2"], 0); //ppb
                     }
                     catch(InvalidCastException)
@@ -120,10 +123,11 @@ namespace Aether.Models
                     }
                     catch (IndexOutOfRangeException)
                     {
+
                         SO2Average = 0;
                     }
                 }
-                else if(hours <= -8)
+                else if(hours >= -8)
                 {
                     try
                     {
@@ -150,6 +154,7 @@ namespace Aether.Models
                     }
                     catch (IndexOutOfRangeException)
                     {
+
                        COAverage = 0;
                     }
                 }
@@ -157,6 +162,7 @@ namespace Aether.Models
                 {
                     try
                     {
+
                         PM10Average = Math.Round((double)rdr["pm10"], 0); //ugm3
                     }
                     catch (InvalidCastException)

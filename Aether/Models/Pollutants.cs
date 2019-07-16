@@ -60,7 +60,7 @@ namespace Aether.Models
                 try
                 {
                     PM25BPIndex = AQICalculations.BreakpointIndexCalculation((double)PM25Average, BreakPointTable.PM2524hr);
-                    PM25AQI = AQICalculations.AQIEquation((double)O3Average, PM25BPIndex, BreakPointTable.PM2524hr);
+                    PM25AQI = AQICalculations.AQIEquation((double)PM25Average, PM25BPIndex, BreakPointTable.PM2524hr);
                 }
                 catch(IndexOutOfRangeException)
                 {

@@ -64,6 +64,7 @@ namespace Aether.Controllers
             //}
             //else
             //{
+                UserInfo.SensorName = sensors[i].Name;
                 PullSimsData oneHrData = new PullSimsData(sensors[i], -1, configuration);
                 Pollutants pollutants1Hr = new Pollutants(oneHrData);
                 UserInfo.AQINO2 = pollutants1Hr.NO2AQI;
