@@ -11,7 +11,33 @@ namespace Aether.Models
 {
     public class PullSimsData
     {
+
+        public double? O3Average { get; set; }
+        public int O3BPIndex { get; set; }
+        public double O3AQI { get; set; }
+
+        public double? PM25Average { get; set; }
+        public int PM25BPIndex { get; set; }
+        public double PM25AQI { get; set; } = 0;
+
+        public double? PM10Average { get; set; }
+        public int PM10BPIndex { get; set; }
+        public double PM10AQI { get; set; } = 0;
+
+        public double? COAverage { get; set; }
+        public int COBPIndex { get; set; }
+        public double COAQI { get; set; } = 0;
+
+        public double? NO2Average { get; set; }
+        public int NO2BPIndex { get; set; }
+        public double NO2AQI { get; set; } = 0;
+
+        public double? SO2Average { get; set; }
+        public int SO2BPIndex { get; set; }
+        public double SO2AQI { get; set; } = 0;
+
         public PollutantData Data {get; set;}
+
         public PullSimsData()
         {
 
@@ -60,42 +86,41 @@ namespace Aether.Models
                     try
                     {
                         if (sensorLocation.Contains("graq"))
-                        { 
-                            pollutant.O3 = Math.Round(AQICalculations.UGM3ConvertToPPM((double)rdr["o3"], 48), 3); //ppm
+                        {
+                            O3Average = Math.Round(AQICalculations.UGM3ConvertToPPM((double)rdr["o3"], 48), 3); //ppm
                         }
                         else
                         {
-                            pollutant.O3 = Math.Round(AQICalculations.ConvertPPBtoPPM((double)rdr["o3"]), 3); //ppb
+                            O3Average = Math.Round(AQICalculations.ConvertPPBtoPPM((double)rdr["o3"]), 3); //ppb
                         }
-
                     } 
                     catch(InvalidCastException)
                     {
-                        pollutant.O3 = 0;
+                        O3Average = 0;
                     }
                     try
                     {
-                        pollutant.NO2 = Math.Round((double)rdr["no2"], 0); //ppb
+                        NO2Average = Math.Round((double)rdr["no2"], 0); //ppb
                     }//ugm3
                     catch (InvalidCastException)
                     {
-                        pollutant.NO2 = 0;
+                        NO2Average = 0;
                     }
                     catch (IndexOutOfRangeException)
                     {
-                        pollutant.NO2 = 0;
+                        NO2Average = 0;
                     }
                     try
                     {
-                        pollutant.SO2 = Math.Round((double)rdr["so2"], 0); //ppb
+                        SO2Average = Math.Round((double)rdr["so2"], 0); //ppb
                     }
                     catch(InvalidCastException)
                     {
-                        pollutant.SO2 = 0;
+                        SO2Average = 0;
                     }
                     catch (IndexOutOfRangeException)
                     {
-                        pollutant.NO2 = 0;
+                        SO2Average = 0;
                     }
                 }
                 else if(hours <= -8)
@@ -104,51 +129,51 @@ namespace Aether.Models
                     {
                         if (sensorLocation.Contains("graq"))
                         {
-                            pollutant.O3 = Math.Round(AQICalculations.UGM3ConvertToPPM((double)rdr["o3"], 48), 3); //ppm
+                            O3Average = Math.Round(AQICalculations.UGM3ConvertToPPM((double)rdr["o3"], 48), 3); //ppm
                         }
                         else
                         {
-                            pollutant.O3 = Math.Round(AQICalculations.ConvertPPBtoPPM((double)rdr["o3"]), 3); //ppb
+                            O3Average = Math.Round(AQICalculations.ConvertPPBtoPPM((double)rdr["o3"]), 3); //ppb
                         }
                     }
                     catch(InvalidCastException)
                     {
-                        pollutant.O3 = 0;
+                        O3Average = 0;
                     }
                     try
                     {
-                        pollutant.CO = Math.Round((double)rdr["co"], 1); //ppm
+                        COAverage = Math.Round((double)rdr["co"], 1); //ppm
                     }
                     catch (InvalidCastException)
                     {
-                        pollutant.CO = 0;
+                        COAverage = 0;
                     }
                     catch (IndexOutOfRangeException)
                     {
-                        pollutant.NO2 = 0;
+                       COAverage = 0;
                     }
                 }
                 else
                 {
                     try
                     {
-                        pollutant.PM10 = Math.Round((double)rdr["pm10"], 0); //ugm3
+                        PM10Average = Math.Round((double)rdr["pm10"], 0); //ugm3
                     }
                     catch (InvalidCastException)
                     {
-                        pollutant.PM10 = 0;
+                        PM10Average = 0;
                     }
                     catch (IndexOutOfRangeException)
                     {
-                        pollutant.NO2 = 0;
+                        PM10Average = 0;
                     }
                     try
                     {
-                        pollutant.PM25 = Math.Round((double)rdr["pm25"], 1); //ugm3
+                        PM25Average = Math.Round((double)rdr["pm25"], 1); //ugm3
                     }
                     catch(InvalidCastException)
                     {
-                        pollutant.PM25 = 0;
+                        PM25Average = 0;
                     }
                 }
 
