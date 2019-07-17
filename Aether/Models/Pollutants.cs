@@ -39,7 +39,7 @@ namespace Aether.Models
 
         public Pollutants(PullSimsData PD)
         {
-            O3Average = PD.Data.O3;
+            O3Average = PD.O3Average;
             if(O3Average > 0)
             {
                 //if the reading is bad, the breakpoint index int will be high and out of range of the table
@@ -54,7 +54,7 @@ namespace Aether.Models
                 }
             }
 
-            PM25Average = PD.Data.PM25;
+            PM25Average = PD.PM25Average;
             if(PM25Average > 0)
             {
                 try

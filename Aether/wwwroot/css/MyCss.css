@@ -159,8 +159,9 @@ ul {
     width: 100vw;
 }
 
-.container {
-    margin: 50px auto;
+.navContainer {
+    /*margin: 50px auto;*/
+    height: auto;
     width: 35vw;
 }
 
@@ -282,4 +283,13 @@ a:hover {
 
 a:active {
     color: rgb(140, 183, 230);
+}
+
+#epaAQIGraph {
+    height: auto;
+    width: auto;
+}
+
+#searchForm {
+    margin-top: 10px;
 }
