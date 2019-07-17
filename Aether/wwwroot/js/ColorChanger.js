@@ -1,6 +1,6 @@
 ﻿let circle = document.getElementById("epaAQI");
 let circleNumber = circle.innerText;
-debugger;
+
 if (circleNumber <= 50 && circleNumber >= 0) {
     circle.style.backgroundColor = "green";
 }

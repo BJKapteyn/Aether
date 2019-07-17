@@ -284,3 +284,12 @@ a:hover {
 a:active {
     color: rgb(140, 183, 230);
 }
+
+#epaAQIGraph {
+    height: auto;
+    width: auto;
+}
+
+#searchForm {
+    margin-top: 10px;
+}

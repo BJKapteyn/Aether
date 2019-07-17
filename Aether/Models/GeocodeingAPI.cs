@@ -44,7 +44,11 @@ namespace Aether.Models
 
             for (int i = 0; i < addressArr.Length; i++)
             {
-        //Fix--------------------------------------------------------------------------------don't want to add a + to the last word
+                if(i == addressArr.Length-1)
+                {
+                    googleAddress += addressArr[i];
+                    break;
+                }
                 googleAddress += addressArr[i] + "+";
             }
             googleAddress += ",+Grand+Rapids,+MI";

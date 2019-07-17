@@ -1,7 +1,7 @@
 @model Aether.Models.AQIs
 @*@{
-    Layout = null;
-}*@
+        Layout = null;
+    }*@
 <head>
     <link rel="stylesheet" href="~/css/MyCss.css" />
     <link href="https://fonts.googleapis.com/css?family=Open+Sans%7CSyncopate:700&display=swap" rel="stylesheet">
@@ -15,7 +15,7 @@
 
                 if (theList.Count() != 0)
                 {
-                    <h1>Grand Rapids EPA AQI</h1>
+                    <h1 class="header">Grand Rapids EPA Air Qaility Index(AQI)</h1>
                     <div id="epaAQI" class="circle">@ViewBag.highestAQI</div>
                     <script src="~/js/ColorChanger.js"></script>
                     @*<h1 style="padding:10px; background-color:#@ViewBag.AQIColor"></h1>*@
@@ -50,6 +50,8 @@
 
                 <p>@currentTime</p>*@
         </div>
+        <div id="epaAQIGraph"></div>
+
 
         <div class="legend-box">
             <div class="column"><div class="legend green"><div>0-50</div></div><p>Good</p></div>
@@ -64,7 +66,7 @@
         <div class="search-container">
             <h3 class="text-center">Get Your Current Local Air Quality</h3>
             <div class="search">
-                <div>
+                <div id="searchForm">
                     <form action="~/Home/AirQuality">
                         <input ng-model="userInput" name="address" placeholder="Search an address" id="search-box" type="text" />
                         <button class="btn btn-primary">Search</button>
@@ -74,6 +76,46 @@
             </div>
         </div>
     </div>
-</main>/
+</main>
 
+<script>
+
+            var trace1 = {
+                x: [ 1, 2, 3, 4, 5 ],
+                y: [1, 2, 3, 5, 6],
+                @*x: [ @oneDayList[6][0].Date, @oneDayList[5][0].Date, @oneDayList[4][0].Date, @oneDayList[3][0].Date,
+                     @oneDayList[2][0].Date, @oneDayList[1][0].Date, @oneDayList[0][0].Date ],
+                y: [ @oneDayList[6][0].AQI, @oneDayList[5][0].AQI, @oneDayList[4][0].AQI, @oneDayList[3][0].AQI,
+                     @oneDayList[2][0].AQI, @oneDayList[1][0].AQI, @oneDayList[0][0].AQI ],*@
+                name: 'Ozone',
+                type: 'scatter'
+            };
+                @*var trace2 = {
+                x: [@oneDayList[6][0].Date, @oneDayList[5][0].Date, @oneDayList[4][0].Date, @oneDayList[3][0].Date,
+                     @oneDayList[2][0].Date, @oneDayList[1][0].Date, @oneDayList[0][0].Date ],
+                y: [@oneDayList[6][1].AQI, @oneDayList[5][1].AQI, @oneDayList[4][1].AQI, @oneDayList[3][1].AQI,
+                    @oneDayList[2][1].AQI, @oneDayList[1][1].AQI, @oneDayList[0][1].AQI ],
+                name: 'PM 2.5',
+                type: 'scatter'
+            };*@
+            var data = [trace1@*, trace2*@];
+            var layout = {
+                font: {
+                    color: "white",
+                },
+                width: 400,
+                height: 300,
+                paper_bgcolor: 'rgba(0,0,0,0)',
+                plot_bgcolor: 'rgba(0,0,0,0)',
+                title: "Past 7-Days AQIs",
+                xaxis: {
+                    title: "Date"
+                },
+                yaxis: {
+                    title: "AQIs"
+                }
+            };
+            Plotly.newPlot('epaAQIGraph', data, layout, { showSendToCloud: true });
+
+</script>
 
