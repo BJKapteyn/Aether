@@ -1,4 +1,7 @@
 @model Aether.Models.AQIs
+@*@{
+    Layout = null;
+}*@
 <head>
     <link rel="stylesheet" href="~/css/MyCss.css" />
     <link href="https://fonts.googleapis.com/css?family=Open+Sans%7CSyncopate:700&display=swap" rel="stylesheet">
@@ -15,37 +18,37 @@
                     <h1>Grand Rapids EPA AQI</h1>
                     <div class="circle">@ViewBag.highestAQI</div>
                     @*<h1 style="padding:10px; background-color:#@ViewBag.AQIColor"></h1>*@
-    }
-    else
-    {
-    <h1 style="color: red">Oops. The API didn't return anything.</h1>
-    }
-    }
-    <h4>@ViewBag.Message</h4>
-
-    @{
-        foreach (AQIs a in theList)
-        {
-            if (a.AQI == ViewBag.highestAQI)
-            {
-                <h2>Your air quality is @a.Rating</h2>
+                }
+                else
+                {
+                    <h1 style="color: red">Oops. The API didn't return anything.</h1>
+                }
             }
-        }
-    }
+            <h4>@ViewBag.Message</h4>
 
-
-    @*@{
-            foreach (AQIs a in theList)
-            {
-                <p>@a.Pollutant AQI: <b>@a.AQI</b></p>
+            @{
+                foreach (AQIs a in theList)
+                {
+                    if (a.AQI == ViewBag.highestAQI)
+                    {
+                        <h2>Your air quality is @a.Rating</h2>
+                    }
+                }
             }
 
-            string currentTime = DateTime.Now.ToString("yyyy-MM-ddTHH");
 
-        }
+            @*@{
+                    foreach (AQIs a in theList)
+                    {
+                        <p>@a.Pollutant AQI: <b>@a.AQI</b></p>
+                    }
 
-        <p>@currentTime</p>*@
-</div>
+                    string currentTime = DateTime.Now.ToString("yyyy-MM-ddTHH");
+
+                }
+
+                <p>@currentTime</p>*@
+        </div>
 
         <div class="legend-box">
             <div class="column"><div class="legend green"><div>0-50</div></div><p>Good</p></div>
@@ -62,15 +65,14 @@
             <div class="search">
                 <div>
                     <form action="~/Home/AirQuality">
-                        <input ng-model="userInput"name="address" placeholder="Search an address" id="search-box" type="text"/>
+                        <input ng-model="userInput" name="address" placeholder="Search an address" id="search-box" type="text" />
                         <button class="btn btn-primary">Search</button>
                     </form>
-                    </div>
-                <iframe src="https://www.google.com/maps/d/embed?mid=1_DPTiL1WmEPsVSvh1wVOYvSzAa7FZ9aF" width="100%" height="480";></iframe>
+                </div>
+                <iframe src="https://www.google.com/maps/d/embed?mid=1_DPTiL1WmEPsVSvh1wVOYvSzAa7FZ9aF" width="100%" height="480" ;></iframe>
             </div>
         </div>
     </div>
 </main>/
 
-        
-    
+

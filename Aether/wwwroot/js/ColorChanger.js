@@ -1,0 +1,1 @@
+﻿let circle = document.getElementsByClassName("circle");

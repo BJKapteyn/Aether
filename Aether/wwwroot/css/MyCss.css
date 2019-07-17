@@ -159,8 +159,9 @@ ul {
     width: 100vw;
 }
 
-.container {
-    margin: 50px auto;
+.navContainer {
+    /*margin: 50px auto;*/
+    height: auto;
     width: 35vw;
 }
 
