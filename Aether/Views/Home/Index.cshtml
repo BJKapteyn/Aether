@@ -16,7 +16,8 @@
                 if (theList.Count() != 0)
                 {
                     <h1>Grand Rapids EPA AQI</h1>
-                    <div class="circle">@ViewBag.highestAQI</div>
+                    <div id="epaAQI" class="circle">@ViewBag.highestAQI</div>
+                    <script src="~/js/ColorChanger.js"></script>
                     @*<h1 style="padding:10px; background-color:#@ViewBag.AQIColor"></h1>*@
                 }
                 else
