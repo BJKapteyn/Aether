@@ -1,45 +1,76 @@
-<form action="~/Home/AirQuality">
-    <input name="address" type="text" />
-    <input type="submit" />
-</form>
 @model Aether.Models.AQIs
+<head>
+    <link rel="stylesheet" href="~/css/MyCss.css" />
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans%7CSyncopate:700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Titillium+Web&display=swap" rel="stylesheet">
+</head>
+<main class="sky-image">
+    <div class="current data">
+        <div class="gr-data">
+            @{
+                List<AQIs> theList = (List<AQIs>)ViewBag.AQIList;
 
-<h1 style="color:red">@ViewBag.Message</h1>
-
-@{
-    List<AQIs> theList = (List<AQIs>)ViewBag.AQIList;
-
-    if (theList.Count() != 0)
-    {
-        <h1 style="padding:10px; background-color:#@ViewBag.AQIColor">The AQI for Grand Rapids is currently <b>@ViewBag.highestAQI</b></h1>
+                if (theList.Count() != 0)
+                {
+                    <h1>Grand Rapids EPA AQI</h1>
+                    <div class="circle">@ViewBag.highestAQI</div>
+                    @*<h1 style="padding:10px; background-color:#@ViewBag.AQIColor"></h1>*@
     }
     else
     {
-        <h1 style="color: red">Oops. The API didn't return anything.</h1>
+    <h1 style="color: red">Oops. The API didn't return anything.</h1>
     }
-}
+    }
+    <h4>@ViewBag.Message</h4>
 
-
-@{
-    foreach (AQIs a in theList)
-    {
-        if (a.AQI == ViewBag.highestAQI)
+    @{
+        foreach (AQIs a in theList)
         {
-            <h2>Your weather quality is @a.Rating</h2>
+            if (a.AQI == ViewBag.highestAQI)
+            {
+                <h2>Your air quality is @a.Rating</h2>
+            }
         }
     }
-}
 
 
-@{
-    foreach (AQIs a in theList)
-    {
-        <p>@a.Pollutant AQI: <b>@a.AQI</b></p>
-    }
+    @*@{
+            foreach (AQIs a in theList)
+            {
+                <p>@a.Pollutant AQI: <b>@a.AQI</b></p>
+            }
 
-    string currentTime = DateTime.Now.ToString("yyyy-MM-ddTHH");
+            string currentTime = DateTime.Now.ToString("yyyy-MM-ddTHH");
+
+        }
+
+        <p>@currentTime</p>*@
+</div>
+
+        <div class="legend-box">
+            <div class="column"><div class="legend green"><div>0-50</div></div><p>Good</p></div>
+            <div class="column"><div class="legend yellow"><div>51-100</div></div><p>Moderate</p></div>
+            <div class="column"><div class="legend orange"><div>101-150</div></div><p>Unhealthy for Sensitive Groups</p></div>
+            <div class="column"><div class="legend red"><div>151-200</div></div><p>Unhealthy</p></div>
+            <div class="column"><div class="legend purple"><div>201-300</div></div><p>Very Unhealthy</p></div>
+            <div class="column"><div class="legend dark-red"><div>301-500</div></div><p>Hazardous</p></div>
+        </div>
+    </div>
+    <div class="current mapside">
+        <div class="search-container">
+            <h3 class="text-center">Get Your Current Local Air Quality</h3>
+            <div class="search">
+                <div>
+                    <form action="~/Home/AirQuality">
+                        <input ng-model="userInput"name="address" placeholder="Search an address" id="search-box" type="text"/>
+                        <button class="btn btn-primary">Search</button>
+                    </form>
+                    </div>
+                <iframe src="https://www.google.com/maps/d/embed?mid=1_DPTiL1WmEPsVSvh1wVOYvSzAa7FZ9aF" width="100%" height="480";></iframe>
+            </div>
+        </div>
+    </div>
+</main>/
+
+        
     
-
-}
-
-<p>@currentTime</p>
