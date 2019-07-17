@@ -66,48 +66,48 @@ namespace Aether.Controllers
             //{
 
 
-                UserInfo.SensorName = sensors[i].Name;
-                PullSimsData oneHrData = new PullSimsData(sensors[i], -1, configuration);
-                Pollutants pollutants1Hr = new Pollutants(oneHrData);
-                UserInfo.AQINO2 = pollutants1Hr.NO2AQI;
-                if (pollutants1Hr.NO2Average != null)
-                { 
-                    UserInfo.NO2Avg = (double)pollutants1Hr.NO2Average;
-                }
-                else
-                {
-                    UserInfo.NO2Avg = 0;
-                }
+            UserInfo.SensorName = sensors[i].Name;
+            PullSimsData pollutants1Hr = new PullSimsData(sensors[i], -1, configuration);
+            pollutants1Hr.AddAQIs();
+            UserInfo.AQINO2 = pollutants1Hr.NO2AQI;
+            if (pollutants1Hr.NO2Average != null)
+            { 
+                UserInfo.NO2Avg = (double)pollutants1Hr.NO2Average;
+            }
+            else
+            {
+                UserInfo.NO2Avg = 0;
+            }
 
-                UserInfo.AQISO2 = pollutants1Hr.SO2AQI;
+            UserInfo.AQISO2 = pollutants1Hr.SO2AQI;
 
-                PullSimsData eightHrData = new PullSimsData(sensors[i], -8, configuration);
-                Pollutants pollutants8Hr = new Pollutants(eightHrData);
-                UserInfo.AQICO = pollutants8Hr.COAQI;
+            PullSimsData pollutants8Hr = new PullSimsData(sensors[i], -8, configuration);
+            pollutants8Hr.AddAQIs();
+            UserInfo.AQICO = pollutants8Hr.COAQI;
 
-                if (pollutants1Hr.COAverage != null)
-                {
-                    UserInfo.COAvg = (double)pollutants8Hr.COAverage;
-                }
-                else
-                {
-                    UserInfo.COAvg = 0;
-                }
+            if (pollutants1Hr.COAverage != null)
+            {
+                UserInfo.COAvg = (double)pollutants8Hr.COAverage;
+            }
+            else
+            {
+                UserInfo.COAvg = 0;
+            }
 
-                if (pollutants1Hr.O3Average >= 0.125)
-                {
-                        UserInfo.AQIO3 = pollutants8Hr.O3AQI;
-                }
-                else
-                {
-                    UserInfo.AQIO3 = pollutants1Hr.O3AQI;
-                }
+            if (pollutants1Hr.O3Average >= 0.125)
+            {
+                    UserInfo.AQIO3 = pollutants8Hr.O3AQI;
+            }
+            else
+            {
+                UserInfo.AQIO3 = pollutants1Hr.O3AQI;
+            }
 
-                PullSimsData fullDayData = new PullSimsData(sensors[i], -24, configuration);
-                Pollutants pollutant24Hr = new Pollutants(fullDayData);
+            PullSimsData pollutant24Hr = new PullSimsData(sensors[i], -24, configuration);
+            pollutant24Hr.AddAQIs();
 
-                UserInfo.AQIPM10 = pollutant24Hr.PM10AQI;
-                UserInfo.AQIPM25 = pollutant24Hr.PM25AQI;
+            UserInfo.AQIPM10 = pollutant24Hr.PM10AQI;
+            UserInfo.AQIPM25 = pollutant24Hr.PM25AQI;
 
             //}
             List<FutureAQIs> futureAQIs = getFutureAQIs(UserInfo.O3Avg, UserInfo.COAvg, UserInfo.NO2Avg) ;

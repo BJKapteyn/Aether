@@ -189,92 +189,86 @@ namespace Aether.Models
             return pollutant;
         }
         //left off here--------------------------------------------------------------------------
-        public PullSimsData AddAQIs(PullSimsData PD)
+        public void AddAQIs()
         {
-            if (PD.O3Average > 0 && !(PD.O3AQI > 0))
+            if (this.O3Average > 0 && !(this.O3AQI > 0))
             {
                 //if the reading is bad, the breakpoint index int will be high and out of range of the table
                 try
                 {
-                    PD.O3BPIndex = AQICalculations.BreakpointIndexCalculation((double)O3Average, BreakPointTable.O38hr);
-                    PD.O3AQI = AQICalculations.AQIEquation((double)O3Average, O3BPIndex, BreakPointTable.O38hr);
+                    this.O3BPIndex = AQICalculations.BreakpointIndexCalculation((double)O3Average, BreakPointTable.O38hr);
+                    this.O3AQI = AQICalculations.AQIEquation((double)O3Average, O3BPIndex, BreakPointTable.O38hr);
                 }
                 catch (IndexOutOfRangeException)
                 {
-                    PD.O3AQI = 0;
+                    this.O3AQI = 0;
                 }
             }
 
-            PM25Average = PD.PM25Average;
-            if (PM25Average > 0)
+            if (this.PM25Average > 0 && !(this.PM25AQI > 0))
             {
                 try
                 {
-                    PM25BPIndex = AQICalculations.BreakpointIndexCalculation((double)PM25Average, BreakPointTable.PM2524hr);
-                    PM25AQI = AQICalculations.AQIEquation((double)PM25Average, PM25BPIndex, BreakPointTable.PM2524hr);
+                    this.PM25BPIndex = AQICalculations.BreakpointIndexCalculation((double)PM25Average, BreakPointTable.PM2524hr);
+                    this.PM25AQI = AQICalculations.AQIEquation((double)PM25Average, PM25BPIndex, BreakPointTable.PM2524hr);
                 }
                 catch (IndexOutOfRangeException)
                 {
-                    PM25AQI = 0;
+                    this.PM25AQI = 0;
                 }
 
             }
 
-            PM10Average = PD.Data.PM10;
-            if (PM10Average > 0)
+            if (this.PM10Average > 0 && !(this.PM10AQI > 0) )
             {
                 try
                 {
-                    PM10BPIndex = AQICalculations.BreakpointIndexCalculation((double)PM10Average, BreakPointTable.PM1024hr);
-                    PM10AQI = AQICalculations.AQIEquation((double)PM10Average, PM10BPIndex, BreakPointTable.PM1024hr);
+                    this.PM10BPIndex = AQICalculations.BreakpointIndexCalculation((double)PM10Average, BreakPointTable.PM1024hr);
+                    this.PM10AQI = AQICalculations.AQIEquation((double)PM10Average, PM10BPIndex, BreakPointTable.PM1024hr);
                 }
                 catch (IndexOutOfRangeException)
                 {
-                    PM10AQI = 0;
+                    this.PM10AQI = 0;
                 }
             }
 
-            COAverage = PD.Data.CO;
-            if (COAverage > 0)
+            if (this.COAverage > 0 && !(this.COAQI > 0))
             {
                 try
                 {
-                    COBPIndex = AQICalculations.BreakpointIndexCalculation((double)COAverage, BreakPointTable.CO8hr);
-                    COAQI = AQICalculations.AQIEquation((double)COAverage, COBPIndex, BreakPointTable.CO8hr);
+                    this.COBPIndex = AQICalculations.BreakpointIndexCalculation((double)COAverage, BreakPointTable.CO8hr);
+                    this.COAQI = AQICalculations.AQIEquation((double)COAverage, COBPIndex, BreakPointTable.CO8hr);
                 }
                 catch (IndexOutOfRangeException)
                 {
-                    COAQI = 0;
+                    this.COAQI = 0;
                 }
             }
-            NO2Average = PD.Data.NO2;
-            if (NO2Average > 0)
+            if (this.NO2Average > 0 && !(this.NO2AQI > 0))
             {
                 try
                 {
-                    NO2BPIndex = AQICalculations.BreakpointIndexCalculation((double)NO2Average, BreakPointTable.NO21hr);
-                    NO2AQI = AQICalculations.AQIEquation((double)NO2Average, NO2BPIndex, BreakPointTable.NO21hr);
+                    this.NO2BPIndex = AQICalculations.BreakpointIndexCalculation((double)NO2Average, BreakPointTable.NO21hr);
+                    this.NO2AQI = AQICalculations.AQIEquation((double)NO2Average, NO2BPIndex, BreakPointTable.NO21hr);
                 }
                 catch (IndexOutOfRangeException)
                 {
-                    NO2AQI = 0;
+                    this.NO2AQI = 0;
                 }
             }
-            SO2Average = PD.Data.SO2;
-            if (SO2Average > 0)
+            if (this.SO2Average > 0 && !(this.SO2AQI > 0))
             {
                 try
                 {
-                    SO2BPIndex = AQICalculations.BreakpointIndexCalculation((double)SO2Average, BreakPointTable.SO21hr);
-                    SO2AQI = AQICalculations.AQIEquation((double)SO2Average, SO2BPIndex, BreakPointTable.SO21hr);
+                    this.SO2BPIndex = AQICalculations.BreakpointIndexCalculation((double)SO2Average, BreakPointTable.SO21hr);
+                    this.SO2AQI = AQICalculations.AQIEquation((double)SO2Average, SO2BPIndex, BreakPointTable.SO21hr);
                 }
                 catch (IndexOutOfRangeException)
                 {
-                    SO2AQI = 0;
+                    this.SO2AQI = 0;
                 }
             }
 
-            return PD;
         }
 
     }
