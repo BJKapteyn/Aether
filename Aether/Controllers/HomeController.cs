@@ -36,35 +36,6 @@ namespace Aether.Controllers
 
             //going to change this to a loop later, use i to test various sensors.-----------------------------------
             int i = 0;
-            //if (sensors[i].Name.Contains("graq"))
-            //{
-            //    //refactor this with linq and just pull 24hrs once and add all of the readings to one object--------
-            //    PullOSTData oneHrData = new PullOSTData(sensors[i], -1, configuration);
-            //    //grab the list of pollutantdata and generate aqis based on the hour
-            //    Pollutants pollutants1hr = new Pollutants(oneHrData.Data);
-            //    PullOSTData eightHrData = new PullOSTData(sensors[i], -8, configuration);
-            //    Pollutants pollutants8Hr = new Pollutants(eightHrData.Data);
-
-            //    if(pollutants1hr.O3Average >= 0.125)
-            //    {
-            //        UserInfo.AQIO3 = pollutants1hr.O3AQI;
-            //    }
-            //    else
-            //    {
-            //        UserInfo.AQIO3 = pollutants8Hr.O3AQI;
-            //        UserInfo.O3Avg = (double)pollutants8Hr.O3Average;
-            //    }
-
-            //    PullOSTData fullDayData = new PullOSTData(sensors[i], -24, configuration);
-            //    Pollutants pollutants24hr = new Pollutants(fullDayData.Data);
-
-            //    UserInfo.AQIPM10 = pollutants24hr.PM10AQI;
-            //    UserInfo.AQIPM25 = pollutants24hr.PM25AQI;
-
-            //}
-            //else
-            //{
-
 
             UserInfo.SensorName = sensors[i].Name;
             PullSimsData pollutants1Hr = new PullSimsData(sensors[i], -1, configuration);
@@ -128,7 +99,7 @@ namespace Aether.Controllers
 
         public IActionResult Index()
         {
-            List<AQIs> AQIList = APIController.GetListAQI("48127");
+            List<AQIs> AQIList = APIController.GetHistoricAQIList();
             int highestAQI = getHighestAQI(AQIList);
             int AQIIndex = getAQIIndexPosition(highestAQI);
 
@@ -191,20 +162,17 @@ namespace Aether.Controllers
             return hexColors[index];
         }
 
-
-
         public static int getHighestAQI(List<AQIs> AQIList)
         {
             int highestAQI = 0;
 
             foreach (AQIs a in AQIList)
             {
-                if (a.AQI > highestAQI) highestAQI = a.AQI;
+                if (a.O3AQI > highestAQI) highestAQI = a.O3AQI;
             }
 
             return highestAQI;
         }
-
 
         public static int getAQIIndexPosition(int highestAQI)
         {

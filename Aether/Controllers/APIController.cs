@@ -10,7 +10,7 @@ namespace Aether.Controllers
 {
     public class APIController : Controller
     {
-        public static List<AQIs> GetListAQI(string zipCode = "49503")
+        public static AQIs GetEPAAQI(string zipCode = "49503")
         {
             // GR 49503 - KZOO 49001 - DETROIT 48127
             string key = APIKeys.AirNowAPI;
@@ -19,18 +19,25 @@ namespace Aether.Controllers
 
             JToken jt = ParseAPI.APICall(URL);
 
-            List<AQIs> ListOfAQIs = new List<AQIs>();
+            AQIs aqi = new AQIs(jt);
 
-            for (int i = 0; i < jt.Count(); i++)
-            {
-                ListOfAQIs.Add(new AQIs(jt, i));
-            }
-
-            return ListOfAQIs;
+            return aqi;
         }
 
+        public static AQIs GetHistoricAQI(string zipCode = "49503", string dateTime = "2019-07-13T00-0000")
+        {
+            string key = APIKeys.AirNowAPI;
 
-        public static List<AQIs> GetHistoricAQI(string zipCode = "49503", string dateTime = "2019-07-13T00-0000")
+            string URL = $"http://www.airnowapi.org/aq/observation/zipCode/historical/?format=application/json&zipCode={zipCode}&date={dateTime}&distance=25&API_KEY={key}";
+
+            JToken jt = ParseAPI.APICall(URL);
+
+            AQIs aqi = new AQIs(jt);
+
+            return aqi;
+        }
+
+        public static List<AQIs> GetHistoricAQIList(string zipCode = "49503", string dateTime = "2019-07-13T00-0000")
         {
             // GR 49503 - KZOO 49001 - DETROIT 48127
             string key = APIKeys.AirNowAPI;
@@ -39,14 +46,16 @@ namespace Aether.Controllers
 
             JToken jt = ParseAPI.APICall(URL);
 
-            List<AQIs> ListOfAQIs = new List<AQIs>();
+            List<AQIs> listOfAQIs = new List<AQIs>();
 
-            for (int i = 0; i < jt.Count(); i++)
+            for (int i = 1; i < 8; i++)
             {
-                ListOfAQIs.Add(new AQIs(jt, i));
+                var pastDay = DateTime.Today.AddDays(-i);
+                dateTime = pastDay.ToString("yyyy-MM-dd") + "T00-0000";
+                listOfAQIs.Add(GetHistoricAQI("49503", dateTime));
             }
 
-            return ListOfAQIs;
+            return listOfAQIs;
         }
 
 
@@ -75,6 +84,6 @@ namespace Aether.Controllers
 
             return weatherForecast;
         }
-
     }
 }
+

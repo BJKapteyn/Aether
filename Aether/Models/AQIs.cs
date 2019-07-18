@@ -6,7 +6,8 @@ namespace Aether.Models
     public class AQIs
     {
         public string Pollutant { get; set; }
-        public int AQI { get; set; }
+        public int O3AQI { get; set; }
+        public int PM25AQI { get; set; }
         public string Rating { get; set; }
         public string City { get; set; }
         public string Date { get; set; }
@@ -17,14 +18,15 @@ namespace Aether.Models
         {
         }
 
-        public AQIs(JToken jt, int index)
+        public AQIs(JToken jt)
         {
-            Pollutant = jt[index]["ParameterName"].ToString();
-            AQI = (int)jt[index]["AQI"];
-            Rating = jt[index]["Category"]["Name"].ToString();
-            City = jt[index]["ReportingArea"].ToString();
-            Date = jt[index]["DateObserved"].ToString();
-            Hour = jt[index]["HourObserved"].ToString();
+            Pollutant = jt[0]["ParameterName"].ToString();
+            O3AQI = (int)jt[0]["AQI"];
+            PM25AQI = (int)jt[1]["AQI"];
+            Rating = jt[0]["Category"]["Name"].ToString();
+            City = jt[0]["ReportingArea"].ToString();
+            Date = jt[0]["DateObserved"].ToString();
+            Hour = jt[0]["HourObserved"].ToString();
         }
 
     }
