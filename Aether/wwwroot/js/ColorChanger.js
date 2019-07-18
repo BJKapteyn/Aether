@@ -4,7 +4,7 @@ function getColor(elementID) {
     let circleNumber = circle.innerText;
     debugger;
     if (circleNumber <= 50 && circleNumber >= 0) {
-        circle.style.backgroundColor = "rgba(0,255,0, 0.8)";
+        circle.style.backgroundColor = "rgba(27, 115, 48, 0.8)";
     }
     else if (circleNumber <= 100 && circleNumber >= 51) {
         circle.style.backgroundColor = "rgba(255,255,0,0.8)";

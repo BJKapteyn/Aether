@@ -44,16 +44,18 @@
             <li class="nav-item"><a href="#!/home">Contact</a></li>
         </ul>
     </nav>
+    <script src="~/js/ColorChanger.js"></script>
 
     <main class="sky-image">
 
         <div class="pulled-data current data">
             <h3>Your Results</h3>
-            <div class="circle">@Math.Round(Model.HighestAQI)</div>
+            <div id="highestAQI" class="circle">@Math.Round(Model.HighestAQI)</div>
             <h4>Taken from a sensor on @Model.Sensor.CrossStreet</h4>
-
+            <script>
+                getColor("highestAQI");
+            </script>
             <div class="air-quality">
-                <script src="~/js/ColorChanger.js"></script>
                 <div class="results-box">
                     @if (Model.AQICO > 0)
                     {
