@@ -30,6 +30,7 @@ namespace Aether.Controllers
             }
             DisplayToUserInformation UserInfo = new DisplayToUserInformation();
             UserLatLng userLatLng = Geocode.UserLocation(address).Result;
+
             List<Sensor> sensors = Geocode.OrderedSensors(userLatLng);
             UserInfo.UserLatitude = userLatLng.Lat;
             UserInfo.UserLongitude = userLatLng.Lng;
@@ -39,7 +40,6 @@ namespace Aether.Controllers
 
             //going to change this to a loop later, use i to test various sensors.-----------------------------------
             int i = 0;
-
 
             UserInfo.SensorName = sensors[i].Name;
             PullSimsData pollutants1Hr = new PullSimsData(sensors[i], -1, configuration);
@@ -84,19 +84,12 @@ namespace Aether.Controllers
             UserInfo.AQIPM10 = pollutant24Hr.PM10AQI;
             UserInfo.AQIPM25 = pollutant24Hr.PM25AQI;
 
-            //}
             List<FutureAQIs> futureAQIs = getFutureAQIs(UserInfo.O3Avg, UserInfo.COAvg, UserInfo.NO2Avg) ;
             UserInfo.FutureAQIs = futureAQIs; // sent to view as FutureAQIs object from DisplayToUserInformation model
                                               // 3x3 list index 0 = 1 day, index 1 = 3 day, index 2 = 5 day & .O3, .CO, .NO2
-
-            List<double> highestAQI = new List<double>();
-            highestAQI.Add(UserInfo.AQICO);
-            highestAQI.Add(UserInfo.AQIO3);
-            highestAQI.Add(UserInfo.AQIPM10);
-            highestAQI.Add(UserInfo.AQIPM25);
-            highestAQI.Add(UserInfo.AQINO2);
-            highestAQI.Add(UserInfo.AQISO2);
-            UserInfo.AQIToday = highestAQI.Max();
+            UserInfo.CalculateHighestAQI();
+            UserInfo.Sensor = sensors[0];
+            UserInfo.AddColor();
 
             return View(UserInfo);
         }
@@ -106,7 +99,6 @@ namespace Aether.Controllers
             List<AQIs> AQIList = APIController.GetHistoricAQIList();
             int highestAQI = getHighestAQI(AQIList);
             int AQIIndex = getAQIIndexPosition(highestAQI);
-
 
             ViewBag.highestAQI = highestAQI;
             ViewBag.AQIColor = returnHexColor(AQIIndex);
