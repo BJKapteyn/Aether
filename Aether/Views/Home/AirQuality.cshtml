@@ -1,6 +1,6 @@
 @model DisplayToUserInformation
 
-<p>The Air Quality(AQI) For Your Location is </p><br>
+@*<p>The Air Quality(AQI) For Your Location is </p><br>
 
 <p>O3: @Model.AQIO3</p><br>
 <p>PM 10: @Model.AQIPM10</p><br>
@@ -18,7 +18,7 @@
 <p>NO2 3-Day: @Model.FutureAQIs[1].NO2AQI</p>
 <p>NO2 5-Day: @Model.FutureAQIs[2].NO2AQI</p>
 
-<p>Sensor Name: @Model.SensorName</p>
+<p>Sensor Name: @Model.SensorName</p>*@
 <!DOCTYPE html>
 <head>
 
@@ -47,55 +47,129 @@
 
     <main class="sky-image">
 
-
         <div class="pulled-data current data">
             <h3>Your Results</h3>
-            <h4>From this and this cross street</h4>
-            <div class="circle">108</div>
-            <h4>Your aire quality is Unhealthy for Sensitive Groups</h4>
+            <div class="circle">@Math.Round(Model.HighestAQI)</div>
+            <h4>Taken from a sensor on @Model.Sensor.CrossStreet</h4>
 
             <div class="air-quality">
                 <div class="results-box">
-                    <div class="column">
-                        <div class="circles">
-                            <div>50</div>
+                    @if (Model.AQICO > 0)
+                    {
+                        <div class="column">
+                            <div class="circles">
+                                <div>@Math.Round(Model.AQICO)</div>
+                            </div>
+                            <p class="name">CO</p>
                         </div>
-                        <p class="name">CO</p>
-                    </div>
-                    <div class="column">
-                        <div class="circles">
-                            <div>100</div>
+                    }
+                    @if (Model.AQINO2 > 0)
+                    {
+                        <div class="column">
+                            <div class="circles">
+                                <div>@Math.Round(Model.AQINO2)</div>
+                            </div>
+                            <p class="name">NO2</p>
                         </div>
-                        <p class="name">NO2</p>
-                    </div>
-                    <div class="column">
-                        <div class="circles">
-                            <div>150</div>
+                    }
+                    @if (Model.AQIO3 > 0)
+                    {
+                        <div class="column">
+                            <div class="circles">
+                                <div>@Math.Round(Model.AQIO3)</div>
+                            </div>
+                            <p class="name">O3</p>
                         </div>
-                        <p class="name">O3</p>
-                    </div>
-                    <div class="column">
-                        <div class="circles">
-                            <div>200</div>
+                    }
+                    @if (Model.AQISO2 > 0)
+                    {
+                        <div class="column">
+                            <div class="circles">
+                                <div>@Math.Round(Model.AQISO2)</div>
+                            </div>
+                            <p class="name">SO2</p>
                         </div>
-                        <p class="name">SO2</p>
-                    </div>
-                    <div class="column">
-                        <div class="circles">
-                            <div>300</div>
+                    }
+                    @if (Model.AQIPM25 > 0)
+                    {
+                        <div class="column">
+                            <div class="circles">
+                                <div>@Math.Round(Model.AQIPM25)</div>
+                            </div>
+                            <p class="name">PM 2.5</p>
                         </div>
-                        <p class="name">PM 2.5</p>
-                    </div>
-                    <div class="column">
-                        <div class="circles">
-                            <div>500</div>
+                    }
+                    @if (Model.AQIPM10 > 0)
+                    {
+                        <div class="column">
+                            <div class="circles">
+                                <div>@Math.Round(Model.AQIPM10)</div>
+                            </div>
+                            <p class="name">PM 10</p>
                         </div>
-                        <p class="name">PM 10</p>
-                    </div>
+                    }
                 </div>
             </div>
 
             <div class="graph-location">
+             @{ 
+                @if (Model.AQINO2 > 0 && Model.AQICO > 0)
+                {
+                    <script type="text/javascript">
+                        var trace1 = {
+                            x: ["7/20", "7/22", "7/24"],
+                            y: [1, 2, 3],
+                            name: 'O3',
+                            type: 'scatter'
+                            };
+                        var trace2 = {
+                            x: ["7/20", "7/22", "7/24"],
+                            y: [1, 2, 3],
+                            name: 'NO2',
+                            type: 'scatter'
+                        };
+                        var trace1 = {
+                            x: ["7/20", "7/22", "7/24"],
+                            y: [1, 2, 3],
+                            name: 'CO',
+                            type: 'scatter'
+                        };
+
+                        var data = [trace1];
+                        var layout = {
+                            font: {
+                                color: "white",
+                            },
+                            width: 400,
+                            height: 300,
+                            paper_bgcolor: 'rgba(0,0,0,0)',
+                            plot_bgcolor: 'rgba(0,0,0,0)',
+                            title: "Future AQIs",
+                            xaxis: {
+                                title: "Date"
+                            },
+                            yaxis: {
+                                title: "AQIs"
+                            }
+                        };
+                        Plotly.newPlot('futureAQIGraph', data, layout, { showSendToCloud: true });
+                    </script>
+
+                }
+                else if (Model.AQICO > 0)
+                {
+
+                }
+                else if (Model.AQINO2 > 0)
+                {
+
+                }
+                else
+                {
+
+                }
+
+            }
                 <!-- CO 1-Day: @Model.FutureAQIs[0].COAQI -->
                 <!-- CO 3-Day: @Model.FutureAQIs[1].COAQI -->
                 <!-- CO 5-Day: @Model.FutureAQIs[2].COAQI -->
