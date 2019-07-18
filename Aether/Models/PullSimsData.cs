@@ -67,11 +67,11 @@ namespace Aether.Models
 
             if (hours <= -24)
             {
-                sql = $"EXEC {dbSensorCall} @time = '2019-07-11T{currentHour}', @endtime = '2019-07-12T{currentHour}';";
+                sql = $"EXEC {dbSensorCall} @time = '2019-07-16T{currentHour}', @endtime = '2019-07-17T{currentHour}';";
             }
             else
             {
-                sql = $"EXEC {dbSensorCall} @time = '2019-07-12T{lastHour}', @endtime = '2019-07-12T{currentHour}';";
+                sql = $"EXEC {dbSensorCall} @time = '2019-07-17T{lastHour}', @endtime = '2019-07-17T{currentHour}';";
             }
 
             SqlCommand com = new SqlCommand(sql, connection);

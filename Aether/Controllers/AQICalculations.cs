@@ -102,13 +102,29 @@ namespace Aether.Controllers
             double FutureO3AQI = (double)(5.3 * weatherTime[index].WindSpeed) + (double)(0.4 * weatherTime[index].TemperatureC) +
                (double)(0.1 * weatherTime[index].Humidity) + ((double)0.7 * eightHourO3);
 
+            double FutureCOAQI;
             // R^2 = 0.48
-            double FutureCOAQI = -(double)(0.03 * weatherTime[index].TemperatureC) +
+            if (eightHourCO == 0)
+            {
+                FutureCOAQI = 0;
+            }
+            else
+            {
+                FutureCOAQI = -(double)(0.03 * weatherTime[index].TemperatureC) +
                 (double)(0.01 * weatherTime[index].Humidity) + ((double)0.6 * eightHourCO);
+            }
 
+            double FutureNO2AQI;
             // R^2 = 0.28 -- lowered Windspeed effect by tenfold and NO2 AQIs seem to come out more reasonable
-            double FutureNO2AQI = 55.2 - (double)(1.75 * weatherTime[index].WindSpeed) -
+            if (oneHourNO2 == 0)
+            {
+                FutureNO2AQI = 0;
+            }
+            else
+            {
+                FutureNO2AQI = 55.2 - (double)(1.75 * weatherTime[index].WindSpeed) -
                 (double)(1.6 * weatherTime[index].TemperatureC) + ((double)0.4 * oneHourNO2);
+            }
 
             FutureAQIs futureAQI3Pollutants = new FutureAQIs((int)Math.Round(FutureO3AQI), (int)Math.Round(FutureCOAQI), (int)Math.Round(FutureNO2AQI));
 

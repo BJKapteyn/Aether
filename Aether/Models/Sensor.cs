@@ -48,12 +48,12 @@ namespace Aether.Models
             sensors.Add(new Sensor("graqm0111", "Burton and Lafayette", 42.92744, -85.6604877));
             sensors.Add(new Sensor("0004a30b00237bda", "Burton and Division", 42.927056, -85.666837));
             sensors.Add(new Sensor("0004a30b0024358c", "Eastern and Burton", 42.9273223, -85.6466512));
+            sensors.Add(new Sensor("0004a30b0023339e", "Hall and Madison", 42.9414937, -85.658029));
             //sensors.Add(new Sensor("graqm0101", "Leonard St and Monroe Ave OST", 42.984136, -85.671280));
             //sensors.Add(new Sensor("graqm0105", "B St and Godfrey", 42.9472356, -85.6822996));
             //sensors.Add(new Sensor("graqm0108", "Alger and Eastern", 42.9201462, -85.6476561));
             //sensors.Add(new Sensor("graqm0117", "Oxford and Godfrey", 42.9467373, -85.6843539));
             //sensors.Add(new Sensor("0004a30b00232915", "32nd and Broadmore", 42.904438, -85.5814071));
-            //sensors.Add(new Sensor("0004a30b0023339e", "Hall and Madison", 42.9414937, -85.658029));
             //sensors.Add(new Sensor("0004a30b0023acbc", "Leonard St and Monroe Ave Simms", 42.984136, -85.671280));
             return sensors;
         }

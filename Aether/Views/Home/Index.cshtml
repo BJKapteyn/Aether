@@ -94,17 +94,13 @@
             x: [ "7/12", "7/13", "7/14", "7/15", "7/16", "7/17", "7/18" ],
             y: [ @historicAQIs[6].O3AQI, @historicAQIs[5].O3AQI, @historicAQIs[4].O3AQI, @historicAQIs[3].O3AQI, @historicAQIs[2].O3AQI, @historicAQIs[1].O3AQI, @historicAQIs[0].O3AQI  ],
             name: 'Ozone',
-            type: 'scatter'
+            type: 'scatter',
+            line: {
+                color: "rgb(0, 0, 51)"
+            }
         };
-            @*var trace2 = {
-            x: [@oneDayList[6][0].Date, @oneDayList[5][0].Date, @oneDayList[4][0].Date, @oneDayList[3][0].Date,
-                    @oneDayList[2][0].Date, @oneDayList[1][0].Date, @oneDayList[0][0].Date ],
-            y: [@oneDayList[6][1].AQI, @oneDayList[5][1].AQI, @oneDayList[4][1].AQI, @oneDayList[3][1].AQI,
-                @oneDayList[2][1].AQI, @oneDayList[1][1].AQI, @oneDayList[0][1].AQI ],
-            name: 'PM 2.5',
-            type: 'scatter'
-        };*@
-        var data = [trace1@*, trace2*@];
+
+        var data = [trace1];
         var layout = {
             font: {
                 color: "white",
