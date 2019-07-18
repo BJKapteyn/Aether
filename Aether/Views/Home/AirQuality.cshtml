@@ -111,29 +111,168 @@
                 </div>
             </div>
 
-            <div class="graph-location">
+            <div id="futureAQIGraph" class="graph-location">
+
+            </div>
              @{ 
-                @if (Model.AQINO2 > 0 && Model.AQICO > 0)
+                if (Model.FutureAQIs[0].NO2AQI > 0 && Model.FutureAQIs[0].COAQI > 0)
                 {
                     <script type="text/javascript">
                         var trace1 = {
                             x: ["7/20", "7/22", "7/24"],
-                            y: [1, 2, 3],
+                            y: [@Model.FutureAQIs[0].O3AQI, @Model.FutureAQIs[1].O3AQI, @Model.FutureAQIs[2].O3AQI],
                             name: 'O3',
-                            type: 'scatter'
-                            };
+                            type: 'scatter',
+                            line: {
+                                color: "green"
+                            }
+                        };
+
                         var trace2 = {
                             x: ["7/20", "7/22", "7/24"],
-                            y: [1, 2, 3],
+                            y: [@Model.FutureAQIs[0].NO2AQI, @Model.FutureAQIs[1].NO2AQI, @Model.FutureAQIs[2].NO2AQI],
                             name: 'NO2',
-                            type: 'scatter'
+                            type: 'scatter',
+                            line: {
+                                color: "green"
+                            }
                         };
-                        var trace1 = {
+
+                        var trace3 = {
                             x: ["7/20", "7/22", "7/24"],
-                            y: [1, 2, 3],
+                            y: [@Model.FutureAQIs[0].COAQI, @Model.FutureAQIs[1].COAQI, @Model.FutureAQIs[2].COAQI],
                             name: 'CO',
-                            type: 'scatter'
+                            type: 'scatter',
+                            line: {
+                                color: "green"
+                            }
                         };
+
+                        var data = [trace1, trace2, trace3];
+
+                        var layout = {
+                            font: {
+                                color: "white",
+                            },
+                            width: 400,
+                            height: 300,
+                            paper_bgcolor: 'rgba(0,0,0,0)',
+                            plot_bgcolor: 'rgba(0,0,0,0)',
+                            title: "Future AQIs",
+                            xaxis: {
+                                title: "Date"
+                            },
+                            yaxis: {
+                                title: "AQIs"
+                            }
+                        };
+
+                        Plotly.newPlot('futureAQIGraph', data, layout, { showSendToCloud: true });
+                    </script>
+
+                }
+                else if (Model.FutureAQIs[0].COAQI > 0)
+                {
+                    <script>
+                     var trace1 = {
+                            x: ["7/20", "7/22", "7/24"],
+                            y: [@Model.FutureAQIs[0].O3AQI, @Model.FutureAQIs[1].O3AQI, @Model.FutureAQIs[2].O3AQI],
+                            name: 'O3',
+                            type: 'scatter',
+                            line: {
+                                 color: "green"
+                            }
+                        };
+
+                        var trace2 = {
+                            x: ["7/20", "7/22", "7/24"],
+                            y: [@Model.FutureAQIs[0].COAQI, @Model.FutureAQIs[1].COAQI, @Model.FutureAQIs[2].COAQI],
+                            name: 'CO',
+                            type: 'scatter',
+                            line: {
+                                color: "green"
+                            }
+                        };
+
+                        var data = [trace1, trace2];
+                        var layout = {
+                            font: {
+                                color: "white",
+                            },
+                            width: 400,
+                            height: 300,
+                            paper_bgcolor: 'rgba(0,0,0,0)',
+                            plot_bgcolor: 'rgba(0,0,0,0)',
+                            title: "Future AQIs",
+                            xaxis: {
+                                title: "Date"
+                            },
+                            yaxis: {
+                                title: "AQIs"
+                            }
+                        };
+
+                        Plotly.newPlot('futureAQIGraph', data, layout, { showSendToCloud: true });
+                    </script>
+                }
+                else if (Model.FutureAQIs[0].NO2AQI > 0)
+                {
+                    <script>
+                         var trace1 = {
+                            x: ["7/20", "7/22", "7/24"],
+                            y: [@Model.FutureAQIs[0].O3AQI, @Model.FutureAQIs[1].O3AQI, @Model.FutureAQIs[2].O3AQI],
+                            name: 'O3',
+                            type: 'scatter',
+                            line: {
+                                color: "green"
+                            }
+                        };
+
+                        var trace2 = {
+                            x: ["7/20", "7/22", "7/24"],
+                            y: [@Model.FutureAQIs[0].NO2AQI, @Model.FutureAQIs[1].NO2AQI, @Model.FutureAQIs[2].NO2AQI],
+                            name: 'NO2',
+                            type: 'scatter',
+                            line: {
+                                color: "green"
+                            }
+                        };
+
+                        var data = [trace1, trace2];
+
+                        var layout = {
+                            font: {
+                                color: "white",
+                            },
+                            width: 400,
+                            height: 300,
+                            paper_bgcolor: 'rgba(0,0,0,0)',
+                            plot_bgcolor: 'rgba(0,0,0,0)',
+                            title: "Future AQIs",
+                            xaxis: {
+                                title: "Date"
+                            },
+                            yaxis: {
+                                title: "AQIs"
+                            }
+                        };
+
+                        Plotly.newPlot('futureAQIGraph', data, layout, { showSendToCloud: true });
+                    </script>
+
+                }
+                else
+                {
+                    <script>
+                         var trace1 = {
+                            x: ["7/20", "7/22", "7/24"],
+                            y: [@Model.FutureAQIs[0].O3AQI, @Model.FutureAQIs[1].O3AQI, @Model.FutureAQIs[2].O3AQI],
+                            name: 'O3',
+                            type: 'scatter',
+                            line: {
+                                color: "green"
+                            }
+                            };
 
                         var data = [trace1];
                         var layout = {
@@ -156,18 +295,6 @@
                     </script>
 
                 }
-                else if (Model.AQICO > 0)
-                {
-
-                }
-                else if (Model.AQINO2 > 0)
-                {
-
-                }
-                else
-                {
-
-                }
 
             }
                 <!-- CO 1-Day: @Model.FutureAQIs[0].COAQI -->
@@ -179,7 +306,6 @@
                 <!-- NO2 1-Day: @Model.FutureAQIs[0].NO2AQI -->
                 <!-- NO2 3-Day: @Model.FutureAQIs[1].NO2AQI -->
                 <!-- NO2 5-Day: @Model.FutureAQIs[2].NO2AQI -->
-            </div>
 
             <div class="legend-box">
                 <div class="column column-legend ">
