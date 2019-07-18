@@ -1,0 +1,53 @@
+﻿@model Aether.Models.DisplayToUserInformation
+
+@{
+    double userLat = Convert.ToDouble(ViewData["UserLocationLat"]);
+    double userLng = Convert.ToDouble(ViewData["UserLocationLng"]);
+    double sensorLat = Convert.ToDouble(ViewData["SensorLocationLat"]);
+    double sensorLng = Convert.ToDouble(ViewData["SensorLocationLng"]);
+}
+
+<p>@userLat</p>
+<p>@userLng</p>
+<hr />
+<div id="map"></div>
+
+<script>
+
+
+    function initMap() {
+        var userLatLong = { lat: @userLat, lng: @userLng };
+        var sensorLatLong = { lat: @sensorLat, lng: @sensorLng };
+        var map = new google.maps.Map(
+            document.getElementById('map'),
+            { zoom: 12, center: userLatLong });
+
+        var iconBase = "http://maps.google.com/mapfiles/kml/pal2/";
+
+        var markerUser = new google.maps.Marker({
+            position: userLatLong,
+            icon: { url: iconBase + "icon10.png"},
+            map: map
+        });
+
+        var markerSensor = new google.maps.Marker({
+            position: sensorLatLong,
+            title: "",
+            label: { color: 'black', fontWeight: 'bold', fontSize: '20px', text: '@Model.AQIToday' },
+            icon: {
+                path: google.maps.SymbolPath.CIRCLE,
+                scale: 20,
+                fillColor: "@Model.AQIColor1",
+                fillOpacity: 1,
+                strokeWeight: 0
+            },
+            map: map
+        });
+    }
+
+</script>
+
+<hr />
+<script async defer
+        src="https://maps.googleapis.com/maps/api/js?key=@APIKeys.SteveGoogleMapAPI&callback=initMap">
+</script>

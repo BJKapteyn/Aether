@@ -98,6 +98,15 @@ namespace Aether.Controllers
             highestAQI.Add(UserInfo.AQISO2);
             UserInfo.AQIToday = highestAQI.Max();
 
+
+            int highAQI = Convert.ToInt32(UserInfo.AQIToday);
+            UserInfo.AQIColor1 = returnHexColor(getAQIIndexPosition(highAQI));
+            ViewData["UserLocationLat"] = userLatLng.Lat;
+            ViewData["UserLocationLng"] = userLatLng.Lng;
+            ViewData["SensorLocationLat"] = sensors[0].Lat;
+            ViewData["SensorLocationLat"] = sensors[0].Long;
+
+
             return View(UserInfo);
         }
 
@@ -141,6 +150,18 @@ namespace Aether.Controllers
 
         public IActionResult Test()
         {
+            return View();
+        }
+
+
+        public IActionResult Delete()
+        {
+            ViewData["UserLocationLat"] = 42.9634; //userLatLng.Lat;
+            ViewData["UserLocationLng"] = -85.6681; // userLatLng.Lng;
+            ViewData["SensorLocationLat"] = 42.9649; // sensors[0].Lat;
+            ViewData["SensorLocationLng"] = -85.6688; // sensors[0].Long;
+
+
             return View();
         }
 
