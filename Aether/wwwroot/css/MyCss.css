@@ -290,6 +290,11 @@ a:active {
     width: auto;
 }
 
+#futureAQIGraph {
+    height: auto;
+    width: auto;
+}
+
 #searchForm {
     margin-top: 10px;
 }
