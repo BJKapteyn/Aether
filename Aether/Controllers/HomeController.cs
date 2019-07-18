@@ -28,14 +28,18 @@ namespace Aether.Controllers
             {
                 return RedirectToAction("Test");
             }
-            List<Sensor> sensors = Geocode.OrderedSensors(address);
+            DisplayToUserInformation UserInfo = new DisplayToUserInformation();
+            UserLatLng userLatLng = Geocode.UserLocation(address).Result;
+            List<Sensor> sensors = Geocode.OrderedSensors(userLatLng);
+            UserInfo.UserLatitude = userLatLng.Lat;
+            UserInfo.UserLongitude = userLatLng.Lng;
 
             //List<Sensor> sensors = Sensor.GetSensors();
             Pollutants pollutantAQIs = new Pollutants();
-            DisplayToUserInformation UserInfo = new DisplayToUserInformation();
 
             //going to change this to a loop later, use i to test various sensors.-----------------------------------
             int i = 0;
+
 
             UserInfo.SensorName = sensors[i].Name;
             PullSimsData pollutants1Hr = new PullSimsData(sensors[i], -1, configuration);

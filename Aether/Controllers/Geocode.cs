@@ -39,12 +39,12 @@ namespace Aether.Controllers
             return deg * (Math.PI / 180);
         }
 
-        public static List<Sensor> OrderedSensors(string address)
+        public static List<Sensor> OrderedSensors(UserLatLng address)
         {
             List<Sensor> sensors = Sensor.GetSensors();
             try
             {
-                var userLocation = UserLocation(address).Result;
+                var userLocation = address;
                 
                 for (int i = 0; i < sensors.Count; i++)
                 {
@@ -71,15 +71,6 @@ namespace Aether.Controllers
             userLocation.Lng = double.Parse(jsonAddress["results"][0]["geometry"]["location"]["lng"].ToString());
 
             return userLocation;
-            //List<Sensor> sensors = Sensor.GetSensors();
-            //List<Sensor> shortSensors = new List<Sensor>();
-            //Changes the Address to a longitude and latitude coordinate from the google geocode API
-            //JToken jsonAddress = GoogleMapDAL.GoogleJson(address);
-
-            //double addressLat = double.Parse(jsonAddress["results"][0]["geometry"]["location"]["lat"].ToString());
-            //double addressLng = double.Parse(jsonAddress["results"][0]["geometry"]["location"]["lng"].ToString());
-
-            //{ addressLat, addressLng };
 
         }
 
