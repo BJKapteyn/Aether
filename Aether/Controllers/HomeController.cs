@@ -30,6 +30,7 @@ namespace Aether.Controllers
             }
             DisplayToUserInformation UserInfo = new DisplayToUserInformation();
             UserLatLng userLatLng = Geocode.UserLocation(address).Result;
+
             List<Sensor> sensors = Geocode.OrderedSensors(userLatLng);
             UserInfo.UserLatitude = userLatLng.Lat;
             UserInfo.UserLongitude = userLatLng.Lng;
@@ -88,6 +89,7 @@ namespace Aether.Controllers
                                               // 3x3 list index 0 = 1 day, index 1 = 3 day, index 2 = 5 day & .O3, .CO, .NO2
             UserInfo.CalculateHighestAQI();
             UserInfo.Sensor = sensors[0];
+            UserInfo.AddColor();
 
             return View(UserInfo);
         }

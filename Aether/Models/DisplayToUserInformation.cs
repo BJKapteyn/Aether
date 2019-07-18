@@ -65,5 +65,37 @@ namespace Aether.Models
 
             HighestAQI = highestAQI;
         }
+
+        public void AddColor()
+        {
+            double d = this.HighestAQI;
+            string[] hexColors = { "#00e400", "#ffff00", "#ff7e00", "#ff0000", "#8f3f97", "#7e0023" };
+            //                      Green     Yellow    Orange    Red       Purple    Maroon
+
+            if(d >= 0 && d <=50)
+            {
+                AQIColor1 = hexColors[0];
+            }
+            else if(d >= 51 && d <= 100)
+            {
+                AQIColor1 = hexColors[1];
+            }
+            else if(d >=101 && d <=150)
+            {
+                AQIColor1 = hexColors[2];
+            }
+            else if(d >= 151 && d <= 200)
+            {
+                AQIColor1 = hexColors[3];
+            }
+            else if(d >= 201 && d <= 300)
+            {
+                AQIColor1 = hexColors[4];
+            }
+            else
+            {
+                AQIColor1 = hexColors[5];
+            }
+        }
     }
 }

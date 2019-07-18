@@ -53,58 +53,77 @@
             <h4>Taken from a sensor on @Model.Sensor.CrossStreet</h4>
 
             <div class="air-quality">
+                <script src="~/js/ColorChanger.js"></script>
                 <div class="results-box">
                     @if (Model.AQICO > 0)
                     {
                         <div class="column">
-                            <div class="circles">
+                            <div id="coAQI" class="circles">
                                 <div>@Math.Round(Model.AQICO)</div>
                             </div>
                             <p class="name">CO</p>
+                            <script>
+                                getColor("coAQI");
+                            </script>
                         </div>
                     }
                     @if (Model.AQINO2 > 0)
                     {
                         <div class="column">
-                            <div class="circles">
+                            <div id="no2AQI" class="circles">
                                 <div>@Math.Round(Model.AQINO2)</div>
                             </div>
                             <p class="name">NO2</p>
+                            <script>
+                                getColor("no2AQI");
+                            </script>
                         </div>
                     }
                     @if (Model.AQIO3 > 0)
                     {
                         <div class="column">
-                            <div class="circles">
+                            <div id="o3AQI" class="circles">
                                 <div>@Math.Round(Model.AQIO3)</div>
                             </div>
                             <p class="name">O3</p>
+                            <script>
+                                getColor("o3AQI");
+                            </script>
                         </div>
                     }
                     @if (Model.AQISO2 > 0)
                     {
                         <div class="column">
-                            <div class="circles">
+                            <div id="so2" class="circles">
                                 <div>@Math.Round(Model.AQISO2)</div>
                             </div>
                             <p class="name">SO2</p>
+                            <script>
+                                getColor("so2AQI");
+                            </script>
                         </div>
                     }
                     @if (Model.AQIPM25 > 0)
                     {
                         <div class="column">
-                            <div class="circles">
+                            <div id="pm25AQI" class="circles">
                                 <div>@Math.Round(Model.AQIPM25)</div>
                             </div>
                             <p class="name">PM 2.5</p>
+                            <script>
+                                getColor("pm25AQI");
+                            </script>
                         </div>
                     }
                     @if (Model.AQIPM10 > 0)
                     {
                         <div class="column">
-                            <div class="circles">
+                            <div id="pm10AQI" class="circles">
                                 <div>@Math.Round(Model.AQIPM10)</div>
                             </div>
+                            <script>
+                                getColor("pm10AQI");
+                            </script>
                             <p class="name">PM 10</p>
                         </div>
                     }
@@ -348,10 +367,57 @@
         </div>
 
 
-        <div class="current mapside">
-            <iframe class="map-page2" src="https://www.google.com/maps/d/embed?mid=1_DPTiL1WmEPsVSvh1wVOYvSzAa7FZ9aF"
-                    width="100%" height="100%" ;></iframe>
+        <div id="map" class="current mapside">
+            @*<iframe class="map-page2" src="https://www.google.com/maps/d/embed?mid=1_DPTiL1WmEPsVSvh1wVOYvSzAa7FZ9aF"
+                    width="100%" height="100%" ;></iframe>*@
         </div>
+
+        <script>
+
+            function initMap() {
+
+            var userLatLong = { lat: @Model.UserLatitude, lng: @Model.UserLongitude };
+
+            var sensorLatLong = { lat: @Model.Sensor.Lat, lng: @Model.Sensor.Long };
+
+            var map = new google.maps.Map(
+                document.getElementById('map'),
+                    { zoom: 12, center: userLatLong });
+
+            var iconBase = "http://maps.google.com/mapfiles/kml/pal2/";
+
+            var markerUser = new google.maps.Marker({
+                position: userLatLong,
+                icon: { url: iconBase + "icon10.png"},
+                map: map
+            });
+
+            var markerSensor = new google.maps.Marker({
+                position: sensorLatLong,
+                title: "",
+                label: { color: 'black', fontWeight: 'bold', fontSize: '20px', text: '@Math.Round(Model.HighestAQI)' },
+                icon: {
+                    path: google.maps.SymbolPath.CIRCLE,
+                    scale: 20,
+                    fillColor: "@Model.AQIColor1",
+                    fillOpacity: 1,
+                    strokeWeight: 0
+                },
+                map: map
+            });
+        }
+        </script>
+
+
+
+        <hr />
+
+        <script async defer
+                src="https://maps.googleapis.com/maps/api/js?key=@APIKeys.SteveGoogleMapAPI&callback=initMap">
+
+        </script>
+
+
 
     </main>
 </body>

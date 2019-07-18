@@ -56,6 +56,12 @@ main {
     justify-content: center;
 }
 
+#map {
+    height: 400px;
+    margin: auto;
+    width: 555px;
+}
+
 .circle {
     font-family: 'Syncopate', sans-serif;
     height: 100px;
