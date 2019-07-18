@@ -64,53 +64,64 @@ namespace Aether.Controllers
             //}
             //else
             //{
-                UserInfo.SensorName = sensors[i].Name;
-                PullSimsData oneHrData = new PullSimsData(sensors[i], -1, configuration);
-                Pollutants pollutants1Hr = new Pollutants(oneHrData);
-                UserInfo.AQINO2 = pollutants1Hr.NO2AQI;
-                if (pollutants1Hr.NO2Average != null)
-                { 
-                    UserInfo.NO2Avg = (double)pollutants1Hr.NO2Average;
-                }
-                else
-                {
-                    UserInfo.NO2Avg = 0;
-                }
 
-                UserInfo.AQISO2 = pollutants1Hr.SO2AQI;
 
-                PullSimsData eightHrData = new PullSimsData(sensors[i], -8, configuration);
-                Pollutants pollutants8Hr = new Pollutants(eightHrData);
-                UserInfo.AQICO = pollutants8Hr.COAQI;
+            UserInfo.SensorName = sensors[i].Name;
+            PullSimsData pollutants1Hr = new PullSimsData(sensors[i], -1, configuration);
+            pollutants1Hr.AddAQIs();
+            UserInfo.AQINO2 = pollutants1Hr.NO2AQI;
+            if (pollutants1Hr.NO2Average != null)
+            { 
+                UserInfo.NO2Avg = (double)pollutants1Hr.NO2Average;
+            }
+            else
+            {
+                UserInfo.NO2Avg = 0;
+            }
 
-                if (pollutants1Hr.COAverage != null)
-                {
-                    UserInfo.COAvg = (double)pollutants8Hr.COAverage;
-                }
-                else
-                {
-                    UserInfo.COAvg = 0;
-                }
+            UserInfo.AQISO2 = pollutants1Hr.SO2AQI;
 
-                if (pollutants1Hr.O3Average >= 0.125)
-                {
-                        UserInfo.AQIO3 = pollutants8Hr.O3AQI;
-                }
-                else
-                {
-                    UserInfo.AQIO3 = pollutants1Hr.O3AQI;
-                }
+            PullSimsData pollutants8Hr = new PullSimsData(sensors[i], -8, configuration);
+            pollutants8Hr.AddAQIs();
+            UserInfo.AQICO = pollutants8Hr.COAQI;
 
-                PullSimsData fullDayData = new PullSimsData(sensors[i], -24, configuration);
-                Pollutants pollutant24Hr = new Pollutants(fullDayData);
+            if (pollutants1Hr.COAverage != null)
+            {
+                UserInfo.COAvg = (double)pollutants8Hr.COAverage;
+            }
+            else
+            {
+                UserInfo.COAvg = 0;
+            }
 
-                UserInfo.AQIPM10 = pollutant24Hr.PM10AQI;
-                UserInfo.AQIPM25 = pollutant24Hr.PM25AQI;
+            if (pollutants1Hr.O3Average >= 0.125)
+            {
+                    UserInfo.AQIO3 = pollutants8Hr.O3AQI;
+            }
+            else
+            {
+                UserInfo.AQIO3 = pollutants1Hr.O3AQI;
+            }
+
+            PullSimsData pollutant24Hr = new PullSimsData(sensors[i], -24, configuration);
+            pollutant24Hr.AddAQIs();
+
+            UserInfo.AQIPM10 = pollutant24Hr.PM10AQI;
+            UserInfo.AQIPM25 = pollutant24Hr.PM25AQI;
 
             //}
             List<FutureAQIs> futureAQIs = getFutureAQIs(UserInfo.O3Avg, UserInfo.COAvg, UserInfo.NO2Avg) ;
             UserInfo.FutureAQIs = futureAQIs; // sent to view as FutureAQIs object from DisplayToUserInformation model
-                                        // 3x3 list index 0 = 1 day, index 1 = 3 day, index 2 = 5 day & .O3, .CO, .NO2
+                                              // 3x3 list index 0 = 1 day, index 1 = 3 day, index 2 = 5 day & .O3, .CO, .NO2
+
+            List<double> highestAQI = new List<double>();
+            highestAQI.Add(UserInfo.AQICO);
+            highestAQI.Add(UserInfo.AQIO3);
+            highestAQI.Add(UserInfo.AQIPM10);
+            highestAQI.Add(UserInfo.AQIPM25);
+            highestAQI.Add(UserInfo.AQINO2);
+            highestAQI.Add(UserInfo.AQISO2);
+            UserInfo.AQIToday = highestAQI.Max();
 
             return View(UserInfo);
         }
@@ -146,6 +157,13 @@ namespace Aether.Controllers
             return View();
         }
 
+        public IActionResult EPA()
+        {
+
+
+            return View();
+        }
+
         public IActionResult Test()
         {
             return View();
@@ -172,6 +190,7 @@ namespace Aether.Controllers
             //                      Green     Yellow    Orange    Red       Purple    Maroon
             return hexColors[index];
         }
+
 
 
         public static int getHighestAQI(List<AQIs> AQIList)
@@ -205,7 +224,6 @@ namespace Aether.Controllers
             return AQIIndex;
 
         }
-
 
         public static List<FutureAQIs> getFutureAQIs(double O3Average, double COAverage, double NO2Average)
         {
