@@ -1,31 +1,80 @@
-<main class="sky-image">
-    <div class="current data">
-        <div class="gr-data">
-            <h1>Grand Rapids EPA AQI</h1>
-            <div class="circle">108</div>
-            <h4>Your aire quality is Unhealthy for Sensitive Groups</h4>
-        </div>
-        
-        <div class="legend-box">
-            <div class="column"><div class="legend green"><div>0-50</div></div><p>Good</p></div>
-            <div class="column"><div class="legend yellow"><div>51-100</div></div><p>Moderate</p></div>
-            <div class="column"><div class="legend orange"><div>101-150</div></div><p>Unhealthy for Sensitive Groups</p></div>
-            <div class="column"><div class="legend red"><div>151-200</div></div><p>Unhealthy</p></div>
-            <div class="column"><div class="legend purple"><div>201-300</div></div><p>Very Unhealthy</p></div>
-            <div class="column"><div class="legend dark-red"><div>301-500</div></div><p>Hazardous</p></div>
-        </div>
-    </div> 
+<body>
 
+    <nav class="nav-container">
 
-    <div class="current mapside">
-             <div class="search-container">
-        <h3 class="text-center">Get Your Current Local Air Quality</h3>
-        <div class="search">
-            <div>
-            <input ng-model="userInput" placeholder="Search an address" id="search-box"/>
-            <button class="btn btn-primary">Search</button>
+        <div>
+            <a class="logo" href="#!/home">Aether</a>
+        </div>
+
+        <ul class="nav-items">
+            <li class="nav-item"><a href="#!/home"> Home</a></li>
+            <li class="nav-item"><a href="#!/home"> About</a></li>
+            <li class="nav-item"><a href="#!/home">Contact</a></li>
+        </ul>
+    </nav>
+
+    <main class="sky-image">
+        <div class="current data">
+            <div class="gr-data">
+                <h1>Grand Rapids EPA AQI</h1>
+                <div class="circle">108</div>
+                <h4>Your aire quality is Unhealthy for Sensitive Groups</h4>
             </div>
-            <iframe src="https://www.google.com/maps/d/embed?mid=1_DPTiL1WmEPsVSvh1wVOYvSzAa7FZ9aF" width="100%" height="480";></iframe>
+
+            <div class="legend-box">
+                <div class="column column-legend ">
+                    <div class="legend green">
+                        <div>0-50</div>
+                    </div>
+                    <p class="description">Good</p>
+                </div>
+                <div class="column column-legend ">
+                    <div class="legend yellow">
+                        <div>51-100</div>
+                    </div>
+                    <p class="description">Moderate</p>
+                </div>
+                <div class="column column-legend ">
+                    <div class="legend orange">
+                        <div>101-150</div>
+                    </div>
+                    <p class="description">Unhealthy for Sensitive Groups</p>
+                </div>
+                <div class="column column-legend ">
+                    <div class="legend red">
+                        <div>151-200</div>
+                    </div>
+                    <p class="description">Unhealthy</p>
+                </div>
+                <div class="column column-legend ">
+                    <div class="legend purple">
+                        <div>201-300</div>
+                    </div>
+                    <p class="description">Very Unhealthy</p>
+                </div>
+                <div class="column column-legend ">
+                    <div class="legend dark-red">
+                        <div>301-500</div>
+                    </div>
+                    <p class="description">Hazardous</p>
+                </div>
+            </div>
         </div>
-    </div>
-</main>
+
+
+        <div class="current mapside">
+            <div class="search-container">
+                <h3 class="text-center">Get Your Current Local Air Quality</h3>
+                <div class="search">
+                    <div>
+                        <input ng-model="userInput" placeholder="Search an address" id="search-box" />
+                        <button class="btn btn-primary">Search</button>
+                    </div>
+                    <iframe class="map-page1"
+                        src="https://www.google.com/maps/d/embed?mid=1_DPTiL1WmEPsVSvh1wVOYvSzAa7FZ9aF" width="100%"
+                        height="80%" ;></iframe>
+                </div>
+            </div>
+    </main>
+
+</body>
