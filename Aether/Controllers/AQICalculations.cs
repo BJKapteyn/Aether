@@ -29,27 +29,14 @@ namespace Aether.Controllers
 
         //    return 0;
         //}
+
         public static double ConvertPPBtoPPM(double PollutantPPB)
         {
             //1000 ppm = 1000 ppb
             double PollutantPPM = PollutantPPB / 1000;
             return PollutantPPM;
         }
-        //public static double ConvertPPMtoPPB(double PollutantPPM)
-        //{
-        //    //1 ppm = 1000 ppb
-        //    double PollutantPPB = PollutantPPM * 1000;
-        //    return PollutantPPB;
-        //}
 
-        //public static double PPMConvertToUGM3(double PPM, double moleWeight)
-        //{
-        //    //0.0409 is a conversion constant
-        //    double UGM3 = (PPM * 1000) * 0.0409 * moleWeight;
-        //    return UGM3;
-        //}
-
-        // converts to PPM
         public static double UGM3ConvertToPPM(double UGM3, double moleWeight)
         {
             double PPM = (UGM3 / (0.0409 * moleWeight)) / 1000;
@@ -128,6 +115,7 @@ namespace Aether.Controllers
             return futureAQI3Pollutants;
 
         }
+
 
     }
 }

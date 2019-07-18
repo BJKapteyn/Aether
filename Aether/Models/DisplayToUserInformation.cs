@@ -8,7 +8,6 @@ namespace Aether.Models
     public class DisplayToUserInformation
     {
         public string PollutantWarning { get; set; }
-        public double AQIToday { get; set; }
         public double AQIO3 { get; set; }
         public double O3Avg { get; set; }
         public double AQIPM10 { get; set; }
@@ -33,6 +32,8 @@ namespace Aether.Models
         public string AQIColor3 { get; set; }
         public double Distance { get; set; }
         public string Suggestion { get; set; }
+        public double HighestAQI { get; set; }
+        public Sensor Sensor { get; set; }
         //public List<WeatherDataFromAPI> Weather { get; set; }
         //public List<Sensor> TwoClosestSensors { get; set; }
 
@@ -43,5 +44,26 @@ namespace Aether.Models
 
         public List<FutureAQIs> FutureAQIs { get; set; } // index 0 = 1 day, index 1 = 3 day, index 2 = 5 day
         //                                                  .O3AQI, .COAQI, .NO2AQI
+        public void CalculateHighestAQI()
+        {
+            double highestAQI = 0;
+            List<double> aqis = new List<double>();
+            aqis.Add(AQIO3);
+            aqis.Add(AQIPM25);
+            aqis.Add(AQIPM10);
+            aqis.Add(AQISO2);
+            aqis.Add(AQINO2);
+            aqis.Add(AQICO);
+
+            foreach(double d in aqis)
+            {
+                if(d > highestAQI)
+                {
+                    highestAQI = d;
+                }
+            }
+
+            HighestAQI = highestAQI;
+        }
     }
 }

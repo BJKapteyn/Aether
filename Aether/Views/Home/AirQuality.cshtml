@@ -1,6 +1,6 @@
 @model DisplayToUserInformation
 
-<p>The Air Quality(AQI) For Your Location is @Model.AQIToday</p><br>
+<p>The Air Quality(AQI) For Your Location is </p><br>
 
 <p>O3: @Model.AQIO3</p><br>
 <p>PM 10: @Model.AQIPM10</p><br>
@@ -19,3 +19,139 @@
 <p>NO2 5-Day: @Model.FutureAQIs[2].NO2AQI</p>
 
 <p>Sensor Name: @Model.SensorName</p>
+<!DOCTYPE html>
+<head>
+
+    <title>Aether</title>
+    <link rel="stylesheet" href="~/css/MyCss.css" />
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans%7CSyncopate:700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Titillium+Web&display=swap" rel="stylesheet">
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+
+</head>
+
+<body>
+
+    <nav class="nav-container">
+
+        <div>
+            <a class="logo" href="#!/home">Aether</a>
+        </div>
+
+        <ul class="nav-items">
+            <li class="nav-item"><a href="#!/home"> Home</a></li>
+            <li class="nav-item"><a href="#!/home"> About</a></li>
+            <li class="nav-item"><a href="#!/home">Contact</a></li>
+        </ul>
+    </nav>
+
+    <main class="sky-image">
+
+
+        <div class="pulled-data current data">
+            <h3>Your Results</h3>
+            <h4>From this and this cross street</h4>
+            <div class="circle">108</div>
+            <h4>Your aire quality is Unhealthy for Sensitive Groups</h4>
+
+            <div class="air-quality">
+                <div class="results-box">
+                    <div class="column">
+                        <div class="circles">
+                            <div>50</div>
+                        </div>
+                        <p class="name">CO</p>
+                    </div>
+                    <div class="column">
+                        <div class="circles">
+                            <div>100</div>
+                        </div>
+                        <p class="name">NO2</p>
+                    </div>
+                    <div class="column">
+                        <div class="circles">
+                            <div>150</div>
+                        </div>
+                        <p class="name">O3</p>
+                    </div>
+                    <div class="column">
+                        <div class="circles">
+                            <div>200</div>
+                        </div>
+                        <p class="name">SO2</p>
+                    </div>
+                    <div class="column">
+                        <div class="circles">
+                            <div>300</div>
+                        </div>
+                        <p class="name">PM 2.5</p>
+                    </div>
+                    <div class="column">
+                        <div class="circles">
+                            <div>500</div>
+                        </div>
+                        <p class="name">PM 10</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="graph-location">
+                <!-- CO 1-Day: @Model.FutureAQIs[0].COAQI -->
+                <!-- CO 3-Day: @Model.FutureAQIs[1].COAQI -->
+                <!-- CO 5-Day: @Model.FutureAQIs[2].COAQI -->
+                <!-- O3 1-Day: @Model.FutureAQIs[0].O3AQI -->
+                <!-- O3 3-Day: @Model.FutureAQIs[1].O3AQI -->
+                <!-- O3 5-Day: @Model.FutureAQIs[2].O3AQI -->
+                <!-- NO2 1-Day: @Model.FutureAQIs[0].NO2AQI -->
+                <!-- NO2 3-Day: @Model.FutureAQIs[1].NO2AQI -->
+                <!-- NO2 5-Day: @Model.FutureAQIs[2].NO2AQI -->
+            </div>
+
+            <div class="legend-box">
+                <div class="column column-legend ">
+                    <div class="legend green">
+                        <div>0-50</div>
+                    </div>
+                    <p class="description">Good</p>
+                </div>
+                <div class="column column-legend ">
+                    <div class="legend yellow">
+                        <div>51-100</div>
+                    </div>
+                    <p class="description">Moderate</p>
+                </div>
+                <div class="column column-legend ">
+                    <div class="legend orange">
+                        <div>101-150</div>
+                    </div>
+                    <p class="description">Unhealthy for Sensitive Groups</p>
+                </div>
+                <div class="column column-legend ">
+                    <div class="legend red">
+                        <div>151-200</div>
+                    </div>
+                    <p class="description">Unhealthy</p>
+                </div>
+                <div class="column column-legend ">
+                    <div class="legend purple">
+                        <div>201-300</div>
+                    </div>
+                    <p class="description">Very Unhealthy</p>
+                </div>
+                <div class="column column-legend ">
+                    <div class="legend dark-red">
+                        <div>301-500</div>
+                    </div>
+                    <p class="description">Hazardous</p>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="current mapside">
+            <iframe class="map-page2" src="https://www.google.com/maps/d/embed?mid=1_DPTiL1WmEPsVSvh1wVOYvSzAa7FZ9aF"
+                    width="100%" height="100%" ;></iframe>
+        </div>
+
+    </main>
+</body>

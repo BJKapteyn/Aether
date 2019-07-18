@@ -86,15 +86,7 @@ namespace Aether.Controllers
             List<FutureAQIs> futureAQIs = getFutureAQIs(UserInfo.O3Avg, UserInfo.COAvg, UserInfo.NO2Avg) ;
             UserInfo.FutureAQIs = futureAQIs; // sent to view as FutureAQIs object from DisplayToUserInformation model
                                               // 3x3 list index 0 = 1 day, index 1 = 3 day, index 2 = 5 day & .O3, .CO, .NO2
-
-            List<double> highestAQI = new List<double>();
-            highestAQI.Add(UserInfo.AQICO);
-            highestAQI.Add(UserInfo.AQIO3);
-            highestAQI.Add(UserInfo.AQIPM10);
-            highestAQI.Add(UserInfo.AQIPM25);
-            highestAQI.Add(UserInfo.AQINO2);
-            highestAQI.Add(UserInfo.AQISO2);
-            UserInfo.AQIToday = highestAQI.Max();
+            UserInfo.CalculateHighestAQI();
 
             return View(UserInfo);
         }
