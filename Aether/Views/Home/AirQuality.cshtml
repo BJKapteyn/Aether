@@ -1,24 +1,8 @@
 @model DisplayToUserInformation
+@{ 
+    Layout = null;
+}
 
-@*<p>The Air Quality(AQI) For Your Location is </p><br>
-
-<p>O3: @Model.AQIO3</p><br>
-<p>PM 10: @Model.AQIPM10</p><br>
-<p>PM 2.5: @Model.AQIPM25</p><br>
-<p>CO: @Model.AQICO</p><br>
-<p>SO2: @Model.AQISO2</p><br>
-<p>NO2: @Model.AQINO2</p>
-<p>CO 1-Day: @Model.FutureAQIs[0].COAQI</p>
-<p>CO 3-Day: @Model.FutureAQIs[1].COAQI</p>
-<p>CO 5-Day: @Model.FutureAQIs[2].COAQI</p>
-<p>O3 1-Day: @Model.FutureAQIs[0].O3AQI</p>
-<p>O3 3-Day: @Model.FutureAQIs[1].O3AQI</p>
-<p>O3 5-Day: @Model.FutureAQIs[2].O3AQI</p>
-<p>NO2 1-Day: @Model.FutureAQIs[0].NO2AQI</p>
-<p>NO2 3-Day: @Model.FutureAQIs[1].NO2AQI</p>
-<p>NO2 5-Day: @Model.FutureAQIs[2].NO2AQI</p>
-
-<p>Sensor Name: @Model.SensorName</p>*@
 <!DOCTYPE html>
 <head>
 
@@ -49,13 +33,13 @@
     <main class="sky-image">
 
         <div class="pulled-data current data">
-            <h3>Your Air Quality Results</h3>
+            <h3>Your Air Quality Index(AQI) Results</h3>
             <h4>Taken from a sensor on @Model.Sensor.CrossStreet</h4>
             <div id="highestAQI" class="circle">@Math.Round(Model.HighestAQI)</div>
             <script>
                 getColor("highestAQI");
             </script>
-            <h4>Pollutants that make up your Air Quality Index(AQI)</h4>
+            <h4>Pollutants that make up your AQI</h4>
             <div class="air-quality">
                 <div class="results-box">
                     @if (Model.AQICO > 0)
@@ -64,7 +48,10 @@
                             <div id="coAQI" class="circles">
                                 <div>@Math.Round(Model.AQICO)</div>
                             </div>
-                            <p class="name">CO</p>
+                            <p class="name">
+                                Carbon Monoxide<br />
+                                (CO)
+                            </p>
                             <script>
                                 getColor("coAQI");
                             </script>
@@ -76,7 +63,11 @@
                             <div id="no2AQI" class="circles">
                                 <div>@Math.Round(Model.AQINO2)</div>
                             </div>
-                            <p class="name">NO2</p>
+
+                            <p class="name">
+                                Nitrogen Dioxide<br />
+                                (NO2)
+                            </p>
                             <script>
                                 getColor("no2AQI");
                             </script>
@@ -88,7 +79,10 @@
                             <div id="o3AQI" class="circles">
                                 <div>@Math.Round(Model.AQIO3)</div>
                             </div>
-                            <p class="name">O3</p>
+                            <p class="name">
+                                Ozone<br />
+                                (O3)
+                            </p>
                             <script>
                                 getColor("o3AQI");
                             </script>
@@ -100,7 +94,10 @@
                             <div id="so2AQI" class="circles">
                                 <div>@Math.Round(Model.AQISO2)</div>
                             </div>
-                            <p class="name">SO2</p>
+                            <p class="name">
+                                Sulfur Dioxide<br />
+                                (SO2)
+                            </p>
                             <script>
                                 getColor("so2AQI");
                             </script>
@@ -112,7 +109,9 @@
                             <div id="pm25AQI" class="circles">
                                 <div>@Math.Round(Model.AQIPM25)</div>
                             </div>
-                            <p class="name">PM 2.5</p>
+                            <p class="name">
+                                PM 2.5
+                            </p>
                             <script>
                                 getColor("pm25AQI");
                             </script>
@@ -127,12 +126,13 @@
                             <script>
                                 getColor("pm10AQI");
                             </script>
-                            <p class="name">PM 10</p>
+                            <p class="name">
+                                PM 10
+                            </p>
                         </div>
                     }
                 </div>
             </div>
-
             <div id="futureAQIGraph" class="graph-location">
 
             </div>
@@ -319,53 +319,53 @@
                 }
 
             }
-
-
-            <div class="legend-box">
-                <div class="column column-legend ">
-                    <div class="legend green">
-                        <div>0-50</div>
-                    </div>
-                    <p class="description">Good</p>
-                </div>
-                <div class="column column-legend ">
-                    <div class="legend yellow">
-                        <div>51-100</div>
-                    </div>
-                    <p class="description">Moderate</p>
-                </div>
-                <div class="column column-legend ">
-                    <div class="legend orange">
-                        <div>101-150</div>
-                    </div>
-                    <p class="description">Unhealthy for Sensitive Groups</p>
-                </div>
-                <div class="column column-legend ">
-                    <div class="legend red">
-                        <div>151-200</div>
-                    </div>
-                    <p class="description">Unhealthy</p>
-                </div>
-                <div class="column column-legend ">
-                    <div class="legend purple">
-                        <div>201-300</div>
-                    </div>
-                    <p class="description">Very Unhealthy</p>
-                </div>
-                <div class="column column-legend ">
-                    <div class="legend dark-red">
-                        <div>301-500</div>
-                    </div>
-                    <p class="description">Hazardous</p>
-                </div>
-            </div>
         </div>
 
+        <div class="current mapside">
+                <div class="legend-box">
+                    <div class="column column-legend ">
+                        <div class="legend green">
+                            <div>0-50</div>
+                        </div>
+                        <p class="description">Good</p>
+                    </div>
+                    <div class="column column-legend ">
+                        <div class="legend yellow">
+                            <div>51-100</div>
+                        </div>
+                        <p class="description">Moderate</p>
+                    </div>
+                    <div class="column column-legend ">
+                        <div class="legend orange">
+                            <div>101-150</div>
+                        </div>
+                        <p class="description">Unhealthy for Sensitive Groups</p>
+                    </div>
+                    <div class="column column-legend ">
+                        <div class="legend red">
+                            <div>151-200</div>
+                        </div>
+                        <p class="description">Unhealthy</p>
+                    </div>
+                    <div class="column column-legend ">
+                        <div class="legend purple">
+                            <div>201-300</div>
+                        </div>
+                        <p class="description">Very Unhealthy</p>
+                    </div>
+                    <div class="column column-legend ">
+                        <div class="legend dark-red">
+                            <div>301-500</div>
+                        </div>
+                        <p class="description">Hazardous</p>
+                    </div>
+                </div>
+            <h3>Sensor Location:</h3>
+            <div id="map"></div>
+        </div>
 
-        <div id="map" class="current mapside">
             @*<iframe class="map-page2" src="https://www.google.com/maps/d/embed?mid=1_DPTiL1WmEPsVSvh1wVOYvSzAa7FZ9aF"
                     width="100%" height="100%" ;></iframe>*@
-        </div>
 
         <script>
 

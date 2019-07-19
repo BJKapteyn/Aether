@@ -12,6 +12,10 @@ body {
     overflow: hidden;
 }
 
+h3 {
+    text-align: center;
+}
+
 main {
     margin: 0 auto;
     border: none;
@@ -40,6 +44,8 @@ main {
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    margin: auto;
+    width: 100%;
 }
 
 .current {
@@ -120,7 +126,8 @@ main {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    /* width: 580px; */
+    width: 100%;
+    margin: auto;
     text-align: center;
     padding: 10px;
 }
@@ -128,7 +135,7 @@ main {
 .legend {
     height: 50px;
     width: 50px;
-    font-size: 11px;
+    font-size: 12px;
     color: black;
     opacity: .60;
     border-radius: 100%;
@@ -153,6 +160,7 @@ main {
     margin: 3px;
     padding: 3px;
     align-content: center;
+    width: 60px;
 }
 
 .column-legend {
@@ -165,6 +173,7 @@ main {
 
 .name {
     font-size: 12px;
+    width: 60px;
 }
 
 .green {
@@ -342,6 +351,14 @@ a:active {
     html,
     body {
         overflow: visible;
+        background: rgb(94, 134, 158);
+    }
+    footer {
+        display: none;
+    }
+
+    .mapside {
+        margin-top: 50px;
     }
 
     .sky-image {

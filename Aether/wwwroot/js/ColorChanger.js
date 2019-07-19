@@ -2,7 +2,7 @@
 function getColor(elementID) {
     let circle = document.getElementById(elementID);
     let circleNumber = circle.innerText;
-    debugger;
+
     if (circleNumber <= 50 && circleNumber >= 0) {
         circle.style.backgroundColor = "rgba(27, 115, 48, 0.8)";
     }
