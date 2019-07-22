@@ -12,6 +12,7 @@ namespace Aether.Models
         public string Clouds { get; set; }
         public double WindSpeed { get; set; }
         public double WindDirection { get; set; }
+        public int IconCode { get; set; }
 
 
         public WeatherDataFromAPI()
@@ -26,6 +27,7 @@ namespace Aether.Models
             Clouds = weather["list"][index]["weather"][0]["description"].ToString(); // sky conditions
             WindSpeed = (double)weather["list"][index]["wind"]["speed"];
             WindDirection = (double)weather["list"][index]["wind"]["deg"];
+            IconCode = (int)weather["list"][index]["main"]["weather"][0]["id"];
         }
 
     }
