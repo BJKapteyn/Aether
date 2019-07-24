@@ -70,7 +70,7 @@ namespace Aether.Models
         {
             double d = this.HighestAQI;
             string[] hexColors = { "#1b7330", "#ffff00", "#ff7e00", "#ff0000", "#8f3f97", "#7e0023" };
-            //                      Green     Yellow    Orange    Red       Purple    Maroon
+            //                      Green      Yellow     Orange     Red        Purple     Maroon
 
             if(d >= 0 && d <=50)
             {

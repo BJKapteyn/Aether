@@ -1,4 +1,4 @@
-@model Aether.Models.AQIs
+﻿@model Aether.Models.AQIs
 @using Aether.Controllers
 @using Aether.Models
 
@@ -33,61 +33,72 @@
         <div class="current data">
             <div class="gr-data">
                 @{
-                    List<AQIs> theList = (List<AQIs>)ViewBag.AQIList;
+                List<AQIs> theList = (List<AQIs>)ViewBag.AQIList;
 
-                    if (theList.Count() != 0)
-                    {
-                        <h1 class="header">Grand Rapids EPA Air Qaility Index(AQI)</h1>
-                        <div id="epaAQI" class="circle">@ViewBag.highestAQI</div>
-                        <script type="text/javascript" src="~/js/ColorChanger.js"></script>
-                        <script>
-                            getColor("epaAQI");
-                        </script>
-                    }
-                    else
-                    {
-                        <h1 style="color: red">Oops. The API didn't return anything.</h1>
-                    }
+                if (theList.Count() != 0)
+                {
+                    <h1 class="header">Grand Rapids EPA Air Qaility Index(AQI)</h1>
+                    <div id="epaAQI" class="circle">@ViewBag.highestAQI</div>
+                    <script type="text/javascript" src="~/js/ColorChanger.js"></script>
+                    <script>getColor("epaAQI");</script>
+            }
+            else
+            {
+                <h1 style="color: red">Oops. The API didn't return anything.</h1>
+        }
                 }
                 <h4>@ViewBag.Message</h4>
 
                 @{
-                    foreach (AQIs a in theList)
+                foreach (AQIs a in theList)
+                {
+                    if (a.O3AQI == ViewBag.highestAQI)
                     {
-                        if (a.O3AQI == ViewBag.highestAQI)
-                        {
-                            <h2>Your air quality is @a.Rating</h2>
-                        }
-                    }
+                        <h2>Your air quality is @a.Rating</h2>
+                }
+            }
                 }
             </div>
-        <div id="epaAQIGraph"></div>
+            <div id="epaAQIGraph"></div>
 
-        <div class="legend-box">
-            <div class="column"><div class="legend green"><div>0-50</div></div><p>Good</p></div>
-            <div class="column"><div class="legend yellow"><div>51-100</div></div><p>Moderate</p></div>
-            <div class="column"><div class="legend orange"><div>101-150</div></div><p>Unhealthy 
-                <br />for Sensitive Groups</p></div>
-            <div class="column"><div class="legend red"><div>151-200</div></div><p>Unhealthy</p></div>
-            <div class="column"><div class="legend purple"><div>201-300</div></div><p>Very Unhealthy</p></div>
-            <div class="column"><div class="legend dark-red"><div>301-500</div></div><p>Hazardous</p></div>
-        </div>
-        </div>
-    <div class="current mapside">
-        <div class="search-container">
-            <h3 class="text-center">Get Your Current Local Air Quality</h3>
-            <div class="search">
-                <div id="searchForm">
-                    <form action="~/Home/AirQuality">
-                        <input ng-model="userInput" name="address" placeholder="Search an address" id="search-box" type="text" />
-                        <button class="btn btn-primary">Search</button>
-                    </form>
+            <div class="legend-box">
+                <div class="column"><div class="legend green"><div>0-50</div></div><p>Good</p></div>
+                <div class="column"><div class="legend yellow"><div>51-100</div></div><p>Moderate</p></div>
+                <div class="column">
+                    <div class="legend orange"><div>101-150</div></div><p>
+                        Unhealthy
+                        <br />for Sensitive Groups
+                    </p>
                 </div>
-                <iframe src="https://www.google.com/maps/d/embed?mid=1_DPTiL1WmEPsVSvh1wVOYvSzAa7FZ9aF" width="100%" height="480" ;></iframe>
+                <div class="column"><div class="legend red"><div>151-200</div></div><p>Unhealthy</p></div>
+                <div class="column"><div class="legend purple"><div>201-300</div></div><p>Very Unhealthy</p></div>
+                <div class="column"><div class="legend dark-red"><div>301-500</div></div><p>Hazardous</p></div>
             </div>
         </div>
-    </div>
+        <div class="current mapside">
+            <div class="search-container">
+                <h3 class="text-center">Get Your Current Local Air Quality</h3>
+                <div class="search">
+                    <div id="searchForm">
+                        <form action="~/Home/GetCoordinatesFromAddress">
+                            <input ng-model="userInput" name="address" placeholder="Search an address" id="search-box" type="text" />
+                            <button class="btn btn-primary">Search</button>
+                        </form>
+                    </div>
+                    <iframe src="https://www.google.com/maps/d/embed?mid=1_DPTiL1WmEPsVSvh1wVOYvSzAa7FZ9aF" height="480" ;></iframe>
+                </div>
+            </div>
+        </div>
+
+        <form action="~/Home/TryThis" id="submitForm">
+            <input type="hidden" name="latt" id="latitude" />
+            <input type="hidden" name="lngg" id="longitude" />
+            <input type="submit" style="visibility: hidden;" />
+        </form>
+
     </main>
+
+
     <script>
 
         var trace1 = {

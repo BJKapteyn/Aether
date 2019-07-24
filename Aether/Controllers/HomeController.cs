@@ -21,19 +21,49 @@ namespace Aether.Controllers
             this.configuration = config;
         }
 
-        public IActionResult AirQuality(string address)
+        //public IActionResult AirQuality(string address)
+        //{
+        //    //just put the default list in for now.
+        //    if(address == "" || address == null)
+        //    {
+        //        return RedirectToAction("Test");
+        //    }
+        //    DisplayToUserInformation UserInfo = new DisplayToUserInformation();
+        //    UserLatLng userLatLng = Geocode.UserLocation(address).Result;
+
+        //    List<Sensor> sensors = Geocode.OrderedSensors(userLatLng);
+
+        public IActionResult GetCoordinatesFromAddress(string address)
         {
-            //just put the default list in for now.
-            if(address == "" || address == null)
-            {
-                return RedirectToAction("Test");
-            }
-            DisplayToUserInformation UserInfo = new DisplayToUserInformation();
+            //if (address == "" || address == null)
+            //{
+            //    return RedirectToAction("Test");
+            //}
+
             UserLatLng userLatLng = Geocode.UserLocation(address).Result;
+            double latitude = userLatLng.Lat;
+            double longitude = userLatLng.Lng;
+
+            ViewBag.Lat = latitude;
+            ViewBag.Lng = longitude;
+
+            return View();
+
+            //AirQuality(latitude, longitude);
+        }
+
+        public IActionResult AirQuality(double latitude, double longitude)
+        {
+            DisplayToUserInformation UserInfo = new DisplayToUserInformation();
+
+            UserLatLng userLatLng = new UserLatLng();
+            userLatLng.Lat = latitude;
+            userLatLng.Lng = longitude;
 
             List<Sensor> sensors = Geocode.OrderedSensors(userLatLng);
-            UserInfo.UserLatitude = userLatLng.Lat;
-            UserInfo.UserLongitude = userLatLng.Lng;
+
+            UserInfo.UserLatitude = latitude;
+            UserInfo.UserLongitude = longitude;
 
             //List<Sensor> sensors = Sensor.GetSensors();
             Pollutants pollutantAQIs = new Pollutants();
@@ -106,6 +136,7 @@ namespace Aether.Controllers
 
             return View();
         }
+
 
 
         public IActionResult About()
