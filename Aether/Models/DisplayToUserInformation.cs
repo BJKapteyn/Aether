@@ -44,6 +44,7 @@ namespace Aether.Models
 
         public List<FutureAQIs> FutureAQIs { get; set; } // index 0 = 1 day, index 1 = 3 day, index 2 = 5 day
         //                                                  .O3AQI, .COAQI, .NO2AQI
+        public List<string> PastDates { get; set; }
         public void CalculateHighestAQI()
         {
             double highestAQI = 0;
