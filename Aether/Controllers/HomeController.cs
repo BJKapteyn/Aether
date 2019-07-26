@@ -96,15 +96,17 @@ namespace Aether.Controllers
 
         public IActionResult Index()
         {
+            List<string> pastDates = DateController.PastSevenDates();
             List<AQIs> AQIList = APIController.GetHistoricAQIList();
             int highestAQI = getHighestAQI(AQIList);
             int AQIIndex = getAQIIndexPosition(highestAQI);
 
+            ViewBag.DateList = DateController.PastSevenDates();
             ViewBag.highestAQI = highestAQI;
             ViewBag.AQIColor = returnHexColor(AQIIndex);
             ViewBag.AQIList = AQIList;
 
-            return View();
+            return View(pastDates);
         }
 
 
