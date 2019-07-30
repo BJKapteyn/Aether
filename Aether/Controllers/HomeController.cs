@@ -44,13 +44,24 @@ namespace Aether.Controllers
             double latitude = userLatLng.Lat;
             double longitude = userLatLng.Lng;
 
+            //ViewBag.Lat = latitude;
+            //ViewBag.Lng = longitude;
+
+            //return View();
+
+            return RedirectToAction("AirQuality", new { latitude = latitude, longitude = longitude } );
+        }
+
+
+        public IActionResult AirQuality2(double latitude, double longitude)
+        {
             ViewBag.Lat = latitude;
             ViewBag.Lng = longitude;
 
-            return View();
 
-            //AirQuality(latitude, longitude);
+            return View();
         }
+
 
         public IActionResult AirQuality(double latitude, double longitude)
         {
@@ -76,7 +87,7 @@ namespace Aether.Controllers
             pollutants1Hr.AddAQIs();
             UserInfo.AQINO2 = pollutants1Hr.NO2AQI;
             if (pollutants1Hr.NO2Average != null)
-            { 
+            {
                 UserInfo.NO2Avg = (double)pollutants1Hr.NO2Average;
             }
             else
@@ -101,7 +112,7 @@ namespace Aether.Controllers
 
             if (pollutants1Hr.O3Average >= 0.125)
             {
-                    UserInfo.AQIO3 = pollutants8Hr.O3AQI;
+                UserInfo.AQIO3 = pollutants8Hr.O3AQI;
             }
             else
             {
@@ -114,7 +125,7 @@ namespace Aether.Controllers
             UserInfo.AQIPM10 = pollutant24Hr.PM10AQI;
             UserInfo.AQIPM25 = pollutant24Hr.PM25AQI;
 
-            List<FutureAQIs> futureAQIs = getFutureAQIs(UserInfo.O3Avg, UserInfo.COAvg, UserInfo.NO2Avg) ;
+            List<FutureAQIs> futureAQIs = getFutureAQIs(UserInfo.O3Avg, UserInfo.COAvg, UserInfo.NO2Avg);
             UserInfo.FutureAQIs = futureAQIs; // sent to view as FutureAQIs object from DisplayToUserInformation model
                                               // 3x3 list index 0 = 1 day, index 1 = 3 day, index 2 = 5 day & .O3, .CO, .NO2
             UserInfo.CalculateHighestAQI();

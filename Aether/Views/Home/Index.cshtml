@@ -84,20 +84,32 @@
                             <input ng-model="userInput" name="address" placeholder="Search an address" id="search-box" type="text" />
                             <button class="btn btn-primary">Search</button>
                         </form>
+                        <p></p>
+                        <p>Or Click Your Location On The Map Below</p>
+                        <p></p>
+
+                    <div id="map"></div>
                     </div>
-                    <iframe src="https://www.google.com/maps/d/embed?mid=1_DPTiL1WmEPsVSvh1wVOYvSzAa7FZ9aF" height="480" ;></iframe>
+                    @*<iframe src="https://www.google.com/maps/d/embed?mid=1_DPTiL1WmEPsVSvh1wVOYvSzAa7FZ9aF" height="480" ;></iframe>*@
                 </div>
             </div>
         </div>
 
-        <form action="~/Home/TryThis" id="submitForm">
-            <input type="hidden" name="latt" id="latitude" />
-            <input type="hidden" name="lngg" id="longitude" />
+        <form action="~/Home/AirQuality" id="submitForm">
+            <input type="hidden" name="latitude" id="latitude" />
+            <input type="hidden" name="longitude" id="longitude" />
             <input type="submit" style="visibility: hidden;" />
         </form>
 
     </main>
 
+    <script>
+        function initMap() {             var position = { lat: 42.9634, lng: -85.6681 };             var map = new google.maps.Map(                 document.getElementById('map'),                 { zoom: 12, center: position });              map.setOptions({ draggableCursor: 'crosshair' });               google.maps.event.addListener(map, 'click', function (event) {                 document.getElementById("latitude").value = event.latLng.lat();                 document.getElementById("longitude").value = event.latLng.lng();                  document.getElementById("submitForm").submit();             });          }
+    </script>
+
+
+    <script async defer         src="https://maps.googleapis.com/maps/api/js?key=@APIKeys.SteveGoogleMapAPI&callback=initMap">
+    </script>
 
     <script>
 

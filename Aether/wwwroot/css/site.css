@@ -321,3 +321,8 @@ a:hover {
 a:active {
     color: rgb(140, 183, 230);
 }
+
+#map {
+    height: 480px;
+    width: 360px;
+}
